@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_dns_record Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_dns_record Resource - Airtel Cloud"
 subcategory: "DNS"
 description: |-
   Manages an Airtel Cloud DNS record within a DNS zone.
 ---
 
-# airtelcloud_dns_record (Resource)
+# airtelcloudgcc_dns_record (Resource)
 
 Manages a DNS record within an Airtel Cloud DNS zone. Supports A, AAAA, CNAME, MX, TXT, NS, SRV, CAA, PTR, and other record types.
 
@@ -14,8 +14,8 @@ Manages a DNS record within an Airtel Cloud DNS zone. Supports A, AAAA, CNAME, M
 ### A Record
 
 ```terraform
-resource "airtelcloud_dns_record" "web" {
-  zone_id     = airtelcloud_dns_zone.example.id
+resource "airtelcloudgcc_dns_record" "web" {
+  zone_id     = airtelcloudgcc_dns_zone.example.id
   owner       = "www"
   record_type = "A"
   data        = "192.168.1.10"
@@ -27,8 +27,8 @@ resource "airtelcloud_dns_record" "web" {
 ### AAAA Record
 
 ```terraform
-resource "airtelcloud_dns_record" "web_ipv6" {
-  zone_id     = airtelcloud_dns_zone.example.id
+resource "airtelcloudgcc_dns_record" "web_ipv6" {
+  zone_id     = airtelcloudgcc_dns_zone.example.id
   owner       = "www"
   record_type = "AAAA"
   data        = "2001:db8::1"
@@ -40,8 +40,8 @@ resource "airtelcloud_dns_record" "web_ipv6" {
 ### CNAME Record
 
 ```terraform
-resource "airtelcloud_dns_record" "blog" {
-  zone_id     = airtelcloud_dns_zone.example.id
+resource "airtelcloudgcc_dns_record" "blog" {
+  zone_id     = airtelcloudgcc_dns_zone.example.id
   owner       = "blog"
   record_type = "CNAME"
   data        = "www.example.com."
@@ -53,8 +53,8 @@ resource "airtelcloud_dns_record" "blog" {
 ### MX Record
 
 ```terraform
-resource "airtelcloud_dns_record" "mail" {
-  zone_id     = airtelcloud_dns_zone.example.id
+resource "airtelcloudgcc_dns_record" "mail" {
+  zone_id     = airtelcloudgcc_dns_zone.example.id
   owner       = "@"
   record_type = "MX"
   data        = "mail.example.com."
@@ -67,8 +67,8 @@ resource "airtelcloud_dns_record" "mail" {
 ### TXT Record (SPF)
 
 ```terraform
-resource "airtelcloud_dns_record" "spf" {
-  zone_id     = airtelcloud_dns_zone.example.id
+resource "airtelcloudgcc_dns_record" "spf" {
+  zone_id     = airtelcloudgcc_dns_zone.example.id
   owner       = "@"
   record_type = "TXT"
   data        = "v=spf1 include:_spf.example.com ~all"
@@ -81,17 +81,17 @@ resource "airtelcloud_dns_record" "spf" {
 
 ```terraform
 output "record_id" {
-  value = airtelcloud_dns_record.web.id
+  value = airtelcloudgcc_dns_record.web.id
 }
 
 output "record_details" {
   value = {
-    zone_name  = airtelcloud_dns_record.web.zone_name
-    org_name   = airtelcloud_dns_record.web.org_name
-    org_id     = airtelcloud_dns_record.web.org_id
-    created_by = airtelcloud_dns_record.web.created_by
-    created_at = airtelcloud_dns_record.web.created_at
-    updated_at = airtelcloud_dns_record.web.updated_at
+    zone_name  = airtelcloudgcc_dns_record.web.zone_name
+    org_name   = airtelcloudgcc_dns_record.web.org_name
+    org_id     = airtelcloudgcc_dns_record.web.org_id
+    created_by = airtelcloudgcc_dns_record.web.created_by
+    created_at = airtelcloudgcc_dns_record.web.created_at
+    updated_at = airtelcloudgcc_dns_record.web.updated_at
   }
 }
 ```
@@ -128,5 +128,5 @@ In addition to all arguments above, the following attributes are exported:
 DNS records are imported using the zone ID and record ID separated by a slash (`<zone-id>/<record-id>`):
 
 ```shell
-terraform import airtelcloud_dns_record.web <zone-id>/<record-id>
+terraform import airtelcloudgcc_dns_record.web <zone-id>/<record-id>
 ```

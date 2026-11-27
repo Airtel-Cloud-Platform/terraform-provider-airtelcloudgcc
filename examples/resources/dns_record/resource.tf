@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,15 +45,15 @@ variable "resource_prefix" {
 }
 
 # Create a DNS zone first
-resource "airtelcloud_dns_zone" "tfas" {
+resource "airtelcloudgcc_dns_zone" "tfas" {
   zone_name   = "${var.resource_prefix}-domain.com"
   zone_type   = "forward"
   description = "Example DNS zone"
 }
 
 # Create an A record for the apex domain
-resource "airtelcloud_dns_record" "apex" {
-  zone_id     = airtelcloud_dns_zone.tfas.id
+resource "airtelcloudgcc_dns_record" "apex" {
+  zone_id     = airtelcloudgcc_dns_zone.tfas.id
   owner       = "apex"
   record_type = "A"
   data        = "192.168.1.10"
@@ -62,8 +62,8 @@ resource "airtelcloud_dns_record" "apex" {
 }
 
 # Create a TXT record for SPF
-resource "airtelcloud_dns_record" "spf" {
-  zone_id     = airtelcloud_dns_zone.tfas.id
+resource "airtelcloudgcc_dns_record" "spf" {
+  zone_id     = airtelcloudgcc_dns_zone.tfas.id
   owner       = "spf"
   record_type = "TXT"
   data        = "v=spf1 include:_spf.tfas.com ~all"
@@ -72,8 +72,8 @@ resource "airtelcloud_dns_record" "spf" {
 }
 
 # Create an AAAA record for IPv6
-resource "airtelcloud_dns_record" "ipv6" {
-  zone_id     = airtelcloud_dns_zone.tfas.id
+resource "airtelcloudgcc_dns_record" "ipv6" {
+  zone_id     = airtelcloudgcc_dns_zone.tfas.id
   owner       = "www"
   record_type = "AAAA"
   data        = "2001:db8::1"
@@ -82,8 +82,8 @@ resource "airtelcloud_dns_record" "ipv6" {
 }
 
 # Create an A record pointing to web server
-#resource "airtelcloud_dns_record" "web" {
-#  zone_id     = airtelcloud_dns_zone.tfas.id
+#resource "airtelcloudgcc_dns_record" "web" {
+#  zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #  owner       = "www"
 #  record_type = "A"
 #  data        = "192.168.1.10"
@@ -92,8 +92,8 @@ resource "airtelcloud_dns_record" "ipv6" {
 #}
 
 # Create a CNAME record
-#resource "airtelcloud_dns_record" "blog" {
-#  zone_id     = airtelcloud_dns_zone.tfas.id
+#resource "airtelcloudgcc_dns_record" "blog" {
+#  zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #  owner       = "blog"
 #  record_type = "CNAME"
 #  data        = "www.tfas.com."
@@ -102,8 +102,8 @@ resource "airtelcloud_dns_record" "ipv6" {
 #}
 
 # Create an MX record for email
-#resource "airtelcloud_dns_record" "mail" {
-#  zone_id     = airtelcloud_dns_zone.tfas.id
+#resource "airtelcloudgcc_dns_record" "mail" {
+#  zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #  owner       = "@"
 #  record_type = "MX"
 #  data        = "mail.tfas.com."
@@ -115,25 +115,25 @@ resource "airtelcloud_dns_record" "ipv6" {
 # Output DNS record details
 output "apex_record_id" {
   description = "ID of the apex DNS record"
-  value       = airtelcloud_dns_record.apex.id
+  value       = airtelcloudgcc_dns_record.apex.id
 }
 
 output "spf_record_id" {
   description = "ID of the SPF DNS record"
-  value       = airtelcloud_dns_record.spf.id
+  value       = airtelcloudgcc_dns_record.spf.id
 }
 
 output "ipv6_record_id" {
   description = "ID of the IPv6 DNS record"
-  value       = airtelcloud_dns_record.ipv6.id
+  value       = airtelcloudgcc_dns_record.ipv6.id
 }
 
 #output "web_record_id" {
 #  description = "ID of the web server DNS record"
-#  value       = airtelcloud_dns_record.web.id
+#  value       = airtelcloudgcc_dns_record.web.id
 #}
 
 #output "mail_record_id" {
 #  description = "ID of the mail MX record"
-#  value       = airtelcloud_dns_record.mail.id
+#  value       = airtelcloudgcc_dns_record.mail.id
 #}

@@ -1,10 +1,10 @@
 # ACP Terraform Provider — Developer Guide
 
-A comprehensive guide for adding new resources to the `terraform-provider-airtelcloud` provider.
+A comprehensive guide for adding new resources to the `terraform-provider-airtelcloudgcc` provider.
 
 **Framework**: Terraform Plugin Framework v1.16.1 (not SDKv2)
 **Go version**: 1.24+
-**Module**: `github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud`
+**Module**: `github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc`
 
 ---
 
@@ -256,7 +256,7 @@ import (
     "fmt"
     "time"
 
-    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // basePath returns the base URL path for {name} endpoints
@@ -525,7 +525,7 @@ func (r *{Name}Resource) Metadata(ctx context.Context, req resource.MetadataRequ
 }
 ```
 
-The `ProviderTypeName` is `"airtelcloud"`, so the full resource name becomes `airtelcloud_{resource_name}`.
+The `ProviderTypeName` is `"airtelcloudgcc"`, so the full resource name becomes `airtelcloudgcc_{resource_name}`.
 
 #### Schema Method
 
@@ -832,7 +832,7 @@ func (r *{Name}Resource) ImportState(ctx context.Context, req resource.ImportSta
 }
 ```
 
-Usage: `terraform import airtelcloud_{name}.example <uuid>`
+Usage: `terraform import airtelcloudgcc_{name}.example <uuid>`
 
 **Pattern 2: Integer ID** (Security Group, Volume)
 
@@ -853,7 +853,7 @@ func (r *{Name}Resource) ImportState(ctx context.Context, req resource.ImportSta
 }
 ```
 
-Usage: `terraform import airtelcloud_{name}.example 123`
+Usage: `terraform import airtelcloudgcc_{name}.example 123`
 
 **Reference**: `internal/provider/security_group_resource.go:196`
 
@@ -889,7 +889,7 @@ func (r *{Name}Resource) ImportState(ctx context.Context, req resource.ImportSta
 }
 ```
 
-Usage: `terraform import airtelcloud_{name}.example 42/10`
+Usage: `terraform import airtelcloudgcc_{name}.example 42/10`
 
 **Reference**: `internal/provider/security_group_rule_resource.go:280`
 
@@ -950,7 +950,7 @@ func (p *AirtelCloudProvider) Resources(ctx context.Context) []func() resource.R
 Create `examples/resources/{name}/main.tf`:
 
 ```hcl
-resource "airtelcloud_{name}" "example" {
+resource "airtelcloudgcc_{name}" "example" {
   name        = "my-resource"
   description = "Created by Terraform"
 }
@@ -976,8 +976,8 @@ import (
     "strings"
     "testing"
 
-    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client/testutil"
-    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client/testutil"
+    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 func TestCreate{Name}(t *testing.T) {
@@ -1159,7 +1159,7 @@ import (
     "testing"
     "time"
 
-    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+    "github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 func Test{Name}Integration_CreateGetDelete(t *testing.T) {
@@ -1237,16 +1237,16 @@ func TestAcc{Name}Resource(t *testing.T) {
                 Config: testAcc{Name}ResourceConfig("test-resource"),
                 Check: resource.ComposeAggregateTestCheckFunc(
                     resource.TestCheckResourceAttr(
-                        "airtelcloud_{name}.test", "name", "test-resource"),
+                        "airtelcloudgcc_{name}.test", "name", "test-resource"),
                     resource.TestCheckResourceAttrSet(
-                        "airtelcloud_{name}.test", "id"),
+                        "airtelcloudgcc_{name}.test", "id"),
                     resource.TestCheckResourceAttrSet(
-                        "airtelcloud_{name}.test", "status"),
+                        "airtelcloudgcc_{name}.test", "status"),
                 ),
             },
             // Step 2: Import
             {
-                ResourceName:      "airtelcloud_{name}.test",
+                ResourceName:      "airtelcloudgcc_{name}.test",
                 ImportState:       true,
                 ImportStateVerify: true,
             },
@@ -1255,7 +1255,7 @@ func TestAcc{Name}Resource(t *testing.T) {
                 Config: testAcc{Name}ResourceConfigUpdated("test-resource-updated"),
                 Check: resource.ComposeAggregateTestCheckFunc(
                     resource.TestCheckResourceAttr(
-                        "airtelcloud_{name}.test", "name", "test-resource-updated"),
+                        "airtelcloudgcc_{name}.test", "name", "test-resource-updated"),
                 ),
             },
             // Delete is automatic at end of TestCase
@@ -1266,7 +1266,7 @@ func TestAcc{Name}Resource(t *testing.T) {
 // Config helper — returns raw HCL
 func testAcc{Name}ResourceConfig(name string) string {
     return fmt.Sprintf(`
-resource "airtelcloud_{name}" "test" {
+resource "airtelcloudgcc_{name}" "test" {
   name = %[1]q
 }
 `, name)
@@ -1395,7 +1395,7 @@ strings.Trim(string(volume.VolumeTypeID), `"`)
 
 ## 6. Complete Worked Example — Load Balancer
 
-This section walks through adding a hypothetical `airtelcloud_load_balancer` resource end-to-end. The Load Balancer:
+This section walks through adding a hypothetical `airtelcloudgcc_load_balancer` resource end-to-end. The Load Balancer:
 - Uses JSON encoding
 - Has a string UUID ID
 - Supports Create, Read, Update, Delete
@@ -1447,7 +1447,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 func (c *Client) loadBalancerBasePath() string {
@@ -1532,8 +1532,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 var _ resource.Resource = &LoadBalancerResource{}
@@ -1870,8 +1870,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client/testutil"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client/testutil"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 func TestCreateLoadBalancer(t *testing.T) {
@@ -2008,21 +2008,21 @@ func TestAccLoadBalancerResource(t *testing.T) {
 				Config: testAccLoadBalancerConfig("test-lb", 80),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"airtelcloud_load_balancer.test", "name", "test-lb"),
+						"airtelcloudgcc_load_balancer.test", "name", "test-lb"),
 					resource.TestCheckResourceAttr(
-						"airtelcloud_load_balancer.test", "port", "80"),
+						"airtelcloudgcc_load_balancer.test", "port", "80"),
 					resource.TestCheckResourceAttr(
-						"airtelcloud_load_balancer.test", "algorithm", "round_robin"),
+						"airtelcloudgcc_load_balancer.test", "algorithm", "round_robin"),
 					resource.TestCheckResourceAttrSet(
-						"airtelcloud_load_balancer.test", "id"),
+						"airtelcloudgcc_load_balancer.test", "id"),
 					resource.TestCheckResourceAttrSet(
-						"airtelcloud_load_balancer.test", "status"),
+						"airtelcloudgcc_load_balancer.test", "status"),
 					resource.TestCheckResourceAttrSet(
-						"airtelcloud_load_balancer.test", "vip"),
+						"airtelcloudgcc_load_balancer.test", "vip"),
 				),
 			},
 			{
-				ResourceName:      "airtelcloud_load_balancer.test",
+				ResourceName:      "airtelcloudgcc_load_balancer.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
@@ -2030,9 +2030,9 @@ func TestAccLoadBalancerResource(t *testing.T) {
 				Config: testAccLoadBalancerConfigUpdated("test-lb", 80),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"airtelcloud_load_balancer.test", "algorithm", "least_connections"),
+						"airtelcloudgcc_load_balancer.test", "algorithm", "least_connections"),
 					resource.TestCheckResourceAttr(
-						"airtelcloud_load_balancer.test", "health_check_path", "/health"),
+						"airtelcloudgcc_load_balancer.test", "health_check_path", "/health"),
 				),
 			},
 		},
@@ -2041,7 +2041,7 @@ func TestAccLoadBalancerResource(t *testing.T) {
 
 func testAccLoadBalancerConfig(name string, port int) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_load_balancer" "test" {
+resource "airtelcloudgcc_load_balancer" "test" {
   name   = %[1]q
   port   = %[2]d
   vpc_id = "vpc-1"
@@ -2051,7 +2051,7 @@ resource "airtelcloud_load_balancer" "test" {
 
 func testAccLoadBalancerConfigUpdated(name string, port int) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_load_balancer" "test" {
+resource "airtelcloudgcc_load_balancer" "test" {
   name              = %[1]q
   port              = %[2]d
   vpc_id            = "vpc-1"
@@ -2065,12 +2065,12 @@ resource "airtelcloud_load_balancer" "test" {
 ### 6.8 Example Config — `examples/resources/load_balancer/main.tf`
 
 ```hcl
-resource "airtelcloud_load_balancer" "web" {
+resource "airtelcloudgcc_load_balancer" "web" {
   name              = "web-lb"
   port              = 80
   algorithm         = "round_robin"
   health_check_path = "/health"
-  vpc_id            = airtelcloud_vpc.main.id
+  vpc_id            = airtelcloudgcc_vpc.main.id
 }
 ```
 

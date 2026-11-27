@@ -1,19 +1,19 @@
 ---
-page_title: "airtelcloud_lb_certificate Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_lb_certificate Resource - Airtel Cloud"
 subcategory: "Networking"
 description: |-
   Manages an SSL certificate for an Airtel Cloud Load Balancer Service. Certificates are immutable; any change requires replacement.
 ---
 
-# airtelcloud_lb_certificate (Resource)
+# airtelcloudgcc_lb_certificate (Resource)
 
 Manages an SSL certificate for an Airtel Cloud Load Balancer Service. Certificates are immutable; any change requires replacement.
 
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_lb_certificate" "example" {
-  lb_service_id   = airtelcloud_lb_service.example.id
+resource "airtelcloudgcc_lb_certificate" "example" {
+  lb_service_id   = airtelcloudgcc_lb_service.example.id
   name            = "my-ssl-cert"
   ssl_cert        = file("cert.pem")
   ssl_private_key = file("key.pem")

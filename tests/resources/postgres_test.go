@@ -15,18 +15,18 @@ func TestAccPostgresResource(t *testing.T) {
 			{
 				Config: testAccPostgresResourceConfig("test-pg"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_postgres.test", "cluster_name", "test-pg"),
-					resource.TestCheckResourceAttr("airtelcloud_postgres.test", "version", "17"),
-					resource.TestCheckResourceAttr("airtelcloud_postgres.test", "database_name", "terra"),
-					resource.TestCheckResourceAttr("airtelcloud_postgres.test", "high_availability", "true"),
-					resource.TestCheckResourceAttr("airtelcloud_postgres.test", "num_replicas", "1"),
-					resource.TestCheckResourceAttrSet("airtelcloud_postgres.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_postgres.test", "status"),
-					resource.TestCheckResourceAttrSet("airtelcloud_postgres.test", "topology"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_postgres.test", "cluster_name", "test-pg"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_postgres.test", "version", "17"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_postgres.test", "database_name", "terra"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_postgres.test", "high_availability", "true"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_postgres.test", "num_replicas", "1"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_postgres.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_postgres.test", "status"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_postgres.test", "topology"),
 				),
 			},
 			{
-				ResourceName:      "airtelcloud_postgres.test",
+				ResourceName:      "airtelcloudgcc_postgres.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -39,7 +39,7 @@ func TestAccPostgresResource(t *testing.T) {
 
 func testAccPostgresResourceConfig(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_postgres" "test" {
+resource "airtelcloudgcc_postgres" "test" {
   cluster_name      = %[1]q
   version           = "17"
   database_name     = "terra"

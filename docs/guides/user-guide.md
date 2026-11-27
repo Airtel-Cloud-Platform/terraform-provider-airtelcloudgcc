@@ -7,7 +7,7 @@ description: |-
 
 # Airtel Cloud Terraform Provider - User Guide
 
-This guide is a complete reference for managing Airtel Cloud infrastructure using the Terraform provider. It covers all resources demonstrated in the [complete example](https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/tree/main/examples/complete), with argument references, working HCL examples, and import instructions.
+This guide is a complete reference for managing Airtel Cloud infrastructure using the Terraform provider. It covers all resources demonstrated in the [complete example](https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/tree/main/examples/complete), with argument references, working HCL examples, and import instructions.
 
 -> **First time?** See the [Getting Started Guide](getting-started) for installation, build-from-source, and initial setup.
 
@@ -24,9 +24,9 @@ This guide is a complete reference for managing Airtel Cloud infrastructure usin
 ```terraform
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
@@ -49,8 +49,8 @@ variable "project_name" {
   type = string
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -65,7 +65,7 @@ provider "airtelcloud" {
 |---|---|---|---|---|
 | `api_key` | String | Yes | — | API key for HMAC-SHA256 authentication. Sensitive. |
 | `api_secret` | String | Yes | — | API secret for HMAC-SHA256 authentication. Sensitive. |
-| `api_endpoint` | String | No | `https://south.cloud.airtel.in` | Airtel Cloud API endpoint URL. |
+| `api_endpoint` | String | No | `https://gcc-south.cloud.airtel.in` | Airtel Cloud API endpoint URL. |
 | `region` | String | No | `south` | Airtel Cloud region. |
 | `organization` | String | No | — | Organization name or domain. |
 | `project_name` | String | No | — | Project name for API calls. |
@@ -77,14 +77,14 @@ Credentials can also be provided via environment variables `AIRTEL_API_KEY` and 
 
 ## Networking & Security
 
-### airtelcloud_security_group
+### airtelcloudgcc_security_group
 
 Manages a security group (firewall group). Security groups are immutable after creation -- any change requires replacement.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_security_group" "web" {
+resource "airtelcloudgcc_security_group" "web" {
   security_group_name = "sg-http-servers"
   availability_zone   = "S2"
 }
@@ -112,20 +112,20 @@ resource "airtelcloud_security_group" "web" {
 #### Import
 
 ```bash
-terraform import airtelcloud_security_group.web <numeric-id>
+terraform import airtelcloudgcc_security_group.web <numeric-id>
 ```
 
 ---
 
-### airtelcloud_security_group_rule
+### airtelcloudgcc_security_group_rule
 
 Manages a security group rule. All attributes force replacement on change -- rules cannot be updated in-place.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_security_group_rule" "ssh" {
-  security_group_id = airtelcloud_security_group.web.id
+resource "airtelcloudgcc_security_group_rule" "ssh" {
+  security_group_id = airtelcloudgcc_security_group.web.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "22"
@@ -135,8 +135,8 @@ resource "airtelcloud_security_group_rule" "ssh" {
   description       = "Allow SSH from internal network"
 }
 
-resource "airtelcloud_security_group_rule" "http" {
-  security_group_id = airtelcloud_security_group.web.id
+resource "airtelcloudgcc_security_group_rule" "http" {
+  security_group_id = airtelcloudgcc_security_group.web.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "8080"
@@ -174,19 +174,19 @@ resource "airtelcloud_security_group_rule" "http" {
 #### Import
 
 ```bash
-terraform import airtelcloud_security_group_rule.ssh <security_group_id>/<rule_id>
+terraform import airtelcloudgcc_security_group_rule.ssh <security_group_id>/<rule_id>
 ```
 
 ---
 
-### airtelcloud_subnet
+### airtelcloudgcc_subnet
 
 Manages a VPC subnet with configurable timeouts.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_subnet" "private" {
+resource "airtelcloudgcc_subnet" "private" {
   network_id         = "029ac9b8-d93e-4691-a7cb-2f651c607cfe"
   name               = "private-subnet"
   ipv4_address_space = "10.1.19.0/24"
@@ -234,19 +234,19 @@ resource "airtelcloud_subnet" "private" {
 #### Import
 
 ```bash
-terraform import airtelcloud_subnet.private <network_id>/<subnet_id>
+terraform import airtelcloudgcc_subnet.private <network_id>/<subnet_id>
 ```
 
 ---
 
-### airtelcloud_public_ip
+### airtelcloudgcc_public_ip
 
 Allocates a reserved public IP. Attach it to a VM or load balancer by name, then add policy rules.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_public_ip" "web1_public" {
+resource "airtelcloudgcc_public_ip" "web1_public" {
   object_name       = "web1-public-ip"
   description       = "web1 public IP"
   availability_zone = "S1"
@@ -257,10 +257,10 @@ resource "airtelcloud_public_ip" "web1_public" {
   }
 }
 
-resource "airtelcloud_public_ip_attachment" "web1_public" {
-  public_ip_name = airtelcloud_public_ip.web1_public.object_name
+resource "airtelcloudgcc_public_ip_attachment" "web1_public" {
+  public_ip_name = airtelcloudgcc_public_ip.web1_public.object_name
   resource_type  = "vm"
-  resource_name  = airtelcloud_vm.web1.instance_name
+  resource_name  = airtelcloudgcc_vm.web1.instance_name
 }
 ```
 
@@ -269,17 +269,17 @@ resource "airtelcloud_public_ip_attachment" "web1_public" {
 Destroy the attachment to detach the public IP. The reservation stays allocated. Remove policy rules on this address first.
 
 ```terraform
-resource "airtelcloud_public_ip" "web1_public" {
+resource "airtelcloudgcc_public_ip" "web1_public" {
   object_name       = "web1-public-ip"
   description       = "web1 public IP"
   availability_zone = "S1"
 }
 
-# Remove airtelcloud_public_ip_attachment.web1_public, then apply.
+# Remove airtelcloudgcc_public_ip_attachment.web1_public, then apply.
 ```
 
 ```shell
-terraform destroy -target=airtelcloud_public_ip_attachment.web1_public
+terraform destroy -target=airtelcloudgcc_public_ip_attachment.web1_public
 ```
 
 #### Attachment Argument Reference
@@ -323,12 +323,12 @@ terraform destroy -target=airtelcloud_public_ip_attachment.web1_public
 #### Import
 
 ```bash
-terraform import airtelcloud_public_ip.web1_public <uuid>
+terraform import airtelcloudgcc_public_ip.web1_public <uuid>
 ```
 
 ---
 
-### airtelcloud_public_ip_policy_rule
+### airtelcloudgcc_public_ip_policy_rule
 
 Manages a NAT policy rule on a public IP. The public IP must already be in `attached` state; reserved IPs cannot receive policies.
 
@@ -341,8 +341,8 @@ Use **either** `source` **or** `source_config`, and **either** `services` **or**
 Simple:
 
 ```terraform
-resource "airtelcloud_public_ip_policy_rule" "web_traffic" {
-  public_ip_name = airtelcloud_public_ip_attachment.web1_public.public_ip_name
+resource "airtelcloudgcc_public_ip_policy_rule" "web_traffic" {
+  public_ip_name = airtelcloudgcc_public_ip_attachment.web1_public.public_ip_name
   rule_name      = "allow-http-https"
   source         = "any"
   services       = ["HTTP", "HTTPS"]
@@ -353,7 +353,7 @@ resource "airtelcloud_public_ip_policy_rule" "web_traffic" {
 Detailed (`for_each` + `source_config` / `service_config`):
 
 ```terraform
-resource "airtelcloud_public_ip_policy_rule" "this" {
+resource "airtelcloudgcc_public_ip_policy_rule" "this" {
   for_each = var.public_ip_policy_rules
 
   public_ip_name = each.value.public_ip_name
@@ -390,21 +390,21 @@ resource "airtelcloud_public_ip_policy_rule" "this" {
 #### Import
 
 ```bash
-terraform import airtelcloud_public_ip_policy_rule.web_traffic <public_ip_id>/<target_vip>/<public_ip>/<rule_id>
+terraform import airtelcloudgcc_public_ip_policy_rule.web_traffic <public_ip_id>/<target_vip>/<public_ip>/<rule_id>
 ```
 
 ---
 
 ## Compute
 
-### airtelcloud_vm
+### airtelcloudgcc_vm
 
 Manages a virtual machine (compute instance). Supports name-based or ID-based lookup for flavors, images, VPCs, subnets, security groups, and keypairs.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_vm" "web1" {
+resource "airtelcloudgcc_vm" "web1" {
   instance_name     = "web-server-1"
   os_type           = "linux"
   flavor_name       = "ccd.Large"
@@ -419,7 +419,7 @@ resource "airtelcloud_vm" "web1" {
   description       = "Web server behind load balancer"
 }
 
-resource "airtelcloud_vm" "web1_keypair" {
+resource "airtelcloudgcc_vm" "web1_keypair" {
   instance_name       = "web-server-1-keypair"
   os_type             = "linux"
   flavor_name         = "ccd.Large"
@@ -488,12 +488,12 @@ resource "airtelcloud_vm" "web1_keypair" {
 #### Import
 
 ```bash
-terraform import airtelcloud_vm.web1 <compute-id>
+terraform import airtelcloudgcc_vm.web1 <compute-id>
 ```
 
 ---
 
-### airtelcloud_asg
+### airtelcloudgcc_asg
 
 Manages an autoscaling group. Create, read, import, and delete are supported. Changing configuration forces a new group.
 
@@ -502,7 +502,7 @@ Provide exactly one of `flavor_id` / `flavor_name`, exactly one image source (`i
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_asg" "example" {
+resource "airtelcloudgcc_asg" "example" {
   name              = "app-asg"
   vpc_name          = "copper-vpc1"
   subnet            = "subnet1213"
@@ -580,21 +580,21 @@ Timeouts: create (15m default), delete (15m default).
 #### Import
 
 ```bash
-terraform import airtelcloud_asg.example <asg-uuid>
+terraform import airtelcloudgcc_asg.example <asg-uuid>
 ```
 
 ---
 
 ## Storage
 
-### airtelcloud_storage_bucket
+### airtelcloudgcc_storage_bucket
 
 Manages an S3-compatible object storage bucket.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_storage_bucket" "private_bucket" {
+resource "airtelcloudgcc_storage_bucket" "private_bucket" {
   name              = "my-private-bucket"
   replication_type  = "Local"
   replication_tag   = "south_S1"
@@ -628,19 +628,19 @@ resource "airtelcloud_storage_bucket" "private_bucket" {
 #### Import
 
 ```bash
-terraform import airtelcloud_storage_bucket.private_bucket <bucket-name>
+terraform import airtelcloudgcc_storage_bucket.private_bucket <bucket-name>
 ```
 
 ---
 
-### airtelcloud_volume
+### airtelcloudgcc_volume
 
 Manages a block storage volume. Attach with `compute_name`. Changing the name detaches and re-attaches in place.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_volume" "data_volume" {
+resource "airtelcloudgcc_volume" "data_volume" {
   name              = "storage-volume"
   size              = 50
   type              = "Standard Performance"
@@ -683,21 +683,21 @@ resource "airtelcloud_volume" "data_volume" {
 #### Import
 
 ```bash
-terraform import airtelcloud_volume.data_volume <volume-uuid>
+terraform import airtelcloudgcc_volume.data_volume <volume-uuid>
 ```
 
 -> **Note:** Import uses the volume `uuid`, not the numeric `id`.
 
 ---
 
-### airtelcloud_file_storage
+### airtelcloudgcc_file_storage
 
 Manages an NFS file storage volume.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_file_storage" "basic" {
+resource "airtelcloudgcc_file_storage" "basic" {
   name              = "basic-nfs"
   size              = "300"
   availability_zone = "S2"
@@ -728,12 +728,12 @@ resource "airtelcloud_file_storage" "basic" {
 #### Import
 
 ```bash
-terraform import airtelcloud_file_storage.basic <id>
+terraform import airtelcloudgcc_file_storage.basic <id>
 ```
 
 ---
 
-### airtelcloud_postgres
+### airtelcloudgcc_postgres
 
 Manages a PostgreSQL cluster. v1 supports create, read, import, and delete. Changing configuration forces a new cluster.
 
@@ -745,7 +745,7 @@ variable "postgres_password" {
   sensitive = true
 }
 
-resource "airtelcloud_postgres" "app" {
+resource "airtelcloudgcc_postgres" "app" {
   cluster_name      = "app-db"
   version           = "17"
   database_name     = "app"
@@ -813,22 +813,22 @@ resource "airtelcloud_postgres" "app" {
 #### Import
 
 ```bash
-terraform import airtelcloud_postgres.app <cluster-uuid>
+terraform import airtelcloudgcc_postgres.app <cluster-uuid>
 ```
 
 -> **Note:** The API does not return the admin password, VPC, or subnet. Import cannot populate those values.
 
 ---
 
-### airtelcloud_file_storage_export_path
+### airtelcloudgcc_file_storage_export_path
 
 Manages an NFS export path (mount point) for a file storage volume.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_file_storage_export_path" "nfsv4_export" {
-  volume              = airtelcloud_file_storage.basic.name
+resource "airtelcloudgcc_file_storage_export_path" "nfsv4_export" {
+  volume              = airtelcloudgcc_file_storage.basic.name
   description         = "NFSv4 export for application servers"
   protocol            = "NFSv4"
   availability_zone   = "S2"
@@ -862,27 +862,27 @@ resource "airtelcloud_file_storage_export_path" "nfsv4_export" {
 #### Import
 
 ```bash
-terraform import airtelcloud_file_storage_export_path.nfsv4_export <path-id>
+terraform import airtelcloudgcc_file_storage_export_path.nfsv4_export <path-id>
 ```
 
 ---
 
 ## DNS
 
-### airtelcloud_dns_zone
+### airtelcloudgcc_dns_zone
 
 Manages a DNS zone (DNSaaS). Zone names and types are immutable after creation.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_dns_zone" "main" {
+resource "airtelcloudgcc_dns_zone" "main" {
   zone_name   = "example-domain.com"
   zone_type   = "forward"
   description = "Primary DNS zone"
 }
 
-resource "airtelcloud_dns_zone" "internal" {
+resource "airtelcloudgcc_dns_zone" "internal" {
   zone_name   = "internal.example-domain.com"
   zone_type   = "forward"
   description = "Internal services DNS zone"
@@ -912,12 +912,12 @@ resource "airtelcloud_dns_zone" "internal" {
 #### Import
 
 ```bash
-terraform import airtelcloud_dns_zone.main <zone-uuid>
+terraform import airtelcloudgcc_dns_zone.main <zone-uuid>
 ```
 
 ---
 
-### airtelcloud_dns_record
+### airtelcloudgcc_dns_record
 
 Manages a DNS record within a zone. Supports A, AAAA, CNAME, MX, TXT, NS, SRV, CAA, and PTR record types.
 
@@ -925,8 +925,8 @@ Manages a DNS record within a zone. Supports A, AAAA, CNAME, MX, TXT, NS, SRV, C
 
 ```terraform
 # A record
-resource "airtelcloud_dns_record" "apex" {
-  zone_id     = airtelcloud_dns_zone.main.id
+resource "airtelcloudgcc_dns_record" "apex" {
+  zone_id     = airtelcloudgcc_dns_zone.main.id
   owner       = "apex"
   record_type = "A"
   data        = "192.168.1.10"
@@ -935,8 +935,8 @@ resource "airtelcloud_dns_record" "apex" {
 }
 
 # TXT record (SPF)
-resource "airtelcloud_dns_record" "spf" {
-  zone_id     = airtelcloud_dns_zone.main.id
+resource "airtelcloudgcc_dns_record" "spf" {
+  zone_id     = airtelcloudgcc_dns_zone.main.id
   owner       = "spf"
   record_type = "TXT"
   data        = "v=spf1 include:_spf.example.com ~all"
@@ -945,8 +945,8 @@ resource "airtelcloud_dns_record" "spf" {
 }
 
 # AAAA record (IPv6)
-resource "airtelcloud_dns_record" "ipv6" {
-  zone_id     = airtelcloud_dns_zone.main.id
+resource "airtelcloudgcc_dns_record" "ipv6" {
+  zone_id     = airtelcloudgcc_dns_zone.main.id
   owner       = "www"
   record_type = "AAAA"
   data        = "2001:db8::1"
@@ -982,7 +982,7 @@ resource "airtelcloud_dns_record" "ipv6" {
 #### Import
 
 ```bash
-terraform import airtelcloud_dns_record.apex <zone_id>/<record_id>
+terraform import airtelcloudgcc_dns_record.apex <zone_id>/<record_id>
 ```
 
 ---
@@ -991,14 +991,14 @@ terraform import airtelcloud_dns_record.apex <zone_id>/<record_id>
 
 Load balancer resources form a dependency chain: **LB Service** -> **LB VIP** -> **LB Virtual Server**.
 
-### airtelcloud_lb_service
+### airtelcloudgcc_lb_service
 
 Manages a load balancer service. All user-settable attributes are immutable -- any change requires replacement.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_lb_service" "web_lb" {
+resource "airtelcloudgcc_lb_service" "web_lb" {
   name        = "web-lb"
   description = "Load balancer for web tier"
   network_id  = "862f1f29-f4d2-4bcb-afdd-3bd96c0ef66e"
@@ -1047,20 +1047,20 @@ resource "airtelcloud_lb_service" "web_lb" {
 #### Import
 
 ```bash
-terraform import airtelcloud_lb_service.web_lb <lb-service-id>
+terraform import airtelcloudgcc_lb_service.web_lb <lb-service-id>
 ```
 
 ---
 
-### airtelcloud_lb_vip
+### airtelcloudgcc_lb_vip
 
 Manages a VIP (Virtual IP) port for a load balancer service. Only requires the parent LB service ID -- the VIP is allocated automatically.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_lb_vip" "web_vip" {
-  lb_service_id = airtelcloud_lb_service.web_lb.id
+resource "airtelcloudgcc_lb_vip" "web_vip" {
+  lb_service_id = airtelcloudgcc_lb_service.web_lb.id
 }
 ```
 
@@ -1084,22 +1084,22 @@ resource "airtelcloud_lb_vip" "web_vip" {
 #### Import
 
 ```bash
-terraform import airtelcloud_lb_vip.web_vip <lb_service_id>/<vip_id>
+terraform import airtelcloudgcc_lb_vip.web_vip <lb_service_id>/<vip_id>
 ```
 
 ---
 
-### airtelcloud_lb_virtual_server
+### airtelcloudgcc_lb_virtual_server
 
 Manages a virtual server on a load balancer service. Defines L4/L7 load balancing rules with backend nodes. Supports in-place updates for routing algorithm, persistence settings, and forwarding options.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_lb_virtual_server" "http" {
-  lb_service_id     = airtelcloud_lb_service.web_lb.id
+resource "airtelcloudgcc_lb_virtual_server" "http" {
+  lb_service_id     = airtelcloudgcc_lb_service.web_lb.id
   name              = "http-vs"
-  vip               = airtelcloud_lb_vip.web_vip.fixed_ips
+  vip               = airtelcloudgcc_lb_vip.web_vip.fixed_ips
   protocol          = "HTTP"
   port              = 80
   routing_algorithm = "ROUND_ROBIN"
@@ -1109,8 +1109,8 @@ resource "airtelcloud_lb_virtual_server" "http" {
   nodes = [
     {
      # VM member (default). Reference by name or by id (UUID) — mutually exclusive.
-      compute_name = airtelcloud_vm.web1.instance_name
-      compute_ip   = airtelcloud_vm.web1.private_ip
+      compute_name = airtelcloudgcc_vm.web1.instance_name
+      compute_ip   = airtelcloudgcc_vm.web1.private_ip
       port         = 8080
       weight       = 50
     },
@@ -1135,14 +1135,14 @@ resource "airtelcloud_lb_virtual_server" "http" {
 }
 ```
 
- **Note:** `vip_port_id` is now computed. Set `vip` to the VIP's fixed IP (e.g. `airtelcloud_lb_vip.web_vip.fixed_ips`) and the provider resolves it to the port ID.
+ **Note:** `vip_port_id` is now computed. Set `vip` to the VIP's fixed IP (e.g. `airtelcloudgcc_lb_vip.web_vip.fixed_ips`) and the provider resolves it to the port ID.
 
 #### Argument Reference
 
 | Argument | Type | Required | Description |
 |---|---|---|---|
  `lb_service_id` | String | Yes | Parent LB service ID. Forces new resource. |
-| `vip` | String | Yes | VIP fixed IP to bind to (from `airtelcloud_lb_vip.<name>.fixed_ips`). Resolved to `vip_port_id`. Forces new resource. |
+| `vip` | String | Yes | VIP fixed IP to bind to (from `airtelcloudgcc_lb_vip.<name>.fixed_ips`). Resolved to `vip_port_id`. Forces new resource. |
 | `protocol` | String | Yes | Protocol (e.g., `HTTP`, `HTTPS`, `TCP`). Forces new resource. |
 | `port` | Int64 | Yes | Listening port. Forces new resource. |
 | `routing_algorithm` | String | Yes | Algorithm (e.g., `ROUND_ROBIN`, `LEAST_CONNECTION`). Updatable. |
@@ -1191,14 +1191,14 @@ resource "airtelcloud_lb_virtual_server" "http" {
 #### Import
 
 ```bash
-terraform import airtelcloud_lb_virtual_server.http <lb_service_id>/<virtual_server_id>
+terraform import airtelcloudgcc_lb_virtual_server.http <lb_service_id>/<virtual_server_id>
 ```
 
 ---
 
 ## Backup & Protection
 
-### airtelcloud_protection_plan
+### airtelcloudgcc_protection_plan
 
 Manages a backup protection plan that defines schedule and retention policies.
 
@@ -1209,10 +1209,10 @@ Set `vm_name` to an existing VM. AZ (`selector_value`) and subnet header come fr
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_protection_plan" "daily" {
+resource "airtelcloudgcc_protection_plan" "daily" {
   name              = "test"
   description       = "Daily backup with 30-day retention"
-  vm_name           = airtelcloud_vm.web1.instance_name
+  vm_name           = airtelcloudgcc_vm.web1.instance_name
   recurrence        = 1
   recurrence_period = "daily"
   retention         = 30
@@ -1241,22 +1241,22 @@ All arguments force replacement on change (protection plans are immutable).
 #### Import
 
 ```bash
-terraform import airtelcloud_protection_plan.daily <plan-id>
+terraform import airtelcloudgcc_protection_plan.daily <plan-id>
 ```
 
 ---
 
-### airtelcloud_protection
+### airtelcloudgcc_protection
 
 Manages a backup protection policy for a compute instance. Links a VM to a protection plan with scheduling options. Supports in-place updates for name, description, schedule, and plan assignment.
 
 #### Example Usage
 
 ```terraform
-resource "airtelcloud_protection" "web_server" {
+resource "airtelcloudgcc_protection" "web_server" {
   description     = "Backup policy for web server"
-  vm_name         = airtelcloud_vm.web1.instance_name
-  protection_plan = airtelcloud_protection_plan.daily.id
+  vm_name         = airtelcloudgcc_vm.web1.instance_name
+  protection_plan = airtelcloudgcc_protection_plan.daily.id
   start_date      = "10/06/2026"
   start_time      = "02:00 AM"
 }
@@ -1291,7 +1291,7 @@ Policy `name` is the VM name. `compute_id` is looked up from `vm_name`.
 #### Import
 
 ```bash
-terraform import airtelcloud_protection.web_server <protection-id>
+terraform import airtelcloudgcc_protection.web_server <protection-id>
 ```
 
 ---
@@ -1300,12 +1300,12 @@ terraform import airtelcloud_protection.web_server <protection-id>
 
 The following resources are available in the provider but were not included in the main walkthrough because they require specific prerequisites.
 
-### airtelcloud_vpc_peering
+### airtelcloudgcc_vpc_peering
 
 Creates a peering connection between two VPCs. Requires two existing VPCs.
 
 ```terraform
-resource "airtelcloud_vpc_peering" "example" {
+resource "airtelcloudgcc_vpc_peering" "example" {
   name            = "vpc-peering"
   description     = "VPC peering between two networks"
   vpc_source_name = "vpc-1"
@@ -1335,17 +1335,17 @@ resource "airtelcloud_vpc_peering" "example" {
 | `allowed_subnet_list` | List of String | No | Allowed subnet IDs (only when `is_pcl_enabled = true`). |
 | `blocked_subnet_list` | List of String | No | Blocked subnet IDs (only when `is_pcl_enabled = true`). |
 
-Timeouts: create (5m default), delete (5m default). Import: `terraform import airtelcloud_vpc_peering.example <id>`
+Timeouts: create (5m default), delete (5m default). Import: `terraform import airtelcloudgcc_vpc_peering.example <id>`
 
 ---
 
-### airtelcloud_compute_snapshot
+### airtelcloudgcc_compute_snapshot
 
 Creates an immutable point-in-time snapshot of a VM. Requires an existing compute instance.
 
 ```terraform
-resource "airtelcloud_compute_snapshot" "web_snapshot" {
-  compute_id    = airtelcloud_vm.web1.id
+resource "airtelcloudgcc_compute_snapshot" "web_snapshot" {
+  compute_id    = airtelcloudgcc_vm.web1.id
   snapshot_name = "web1-snapshot"
 
   timeouts {
@@ -1355,7 +1355,7 @@ resource "airtelcloud_compute_snapshot" "web_snapshot" {
 }
 
 # Alternatively, reference the compute by name (resolved to compute_id at apply):
-resource "airtelcloud_compute_snapshot" "web_snapshot_by_name" {
+resource "airtelcloudgcc_compute_snapshot" "web_snapshot_by_name" {
   compute_name  = "web1"
   snapshot_name = "web1-snapshot"
 }
@@ -1372,21 +1372,21 @@ Computed: `id` (UUID), `name`, `status`, `is_active`, `is_image`, `image_id`, `c
 Import with either the snapshot UUID alone, or `<compute_id>:<snapshot_uuid>` (which skips a project-wide lookup):
 
 ```shell
-terraform import airtelcloud_compute_snapshot.web_snapshot <snapshot_uuid>
-terraform import airtelcloud_compute_snapshot.web_snapshot <compute_id>:<snapshot_uuid>
+terraform import airtelcloudgcc_compute_snapshot.web_snapshot <snapshot_uuid>
+terraform import airtelcloudgcc_compute_snapshot.web_snapshot <compute_id>:<snapshot_uuid>
 ```
 
 -> **Note:** Snapshots are immutable and cannot be updated.
 
 ---
 
-### airtelcloud_lb_certificate
+### airtelcloudgcc_lb_certificate
 
 Uploads an SSL certificate to a load balancer service for HTTPS termination. Requires PEM-encoded certificate files.
 
 ```terraform
-resource "airtelcloud_lb_certificate" "web_cert" {
-  lb_service_id   = airtelcloud_lb_service.web_lb.id
+resource "airtelcloudgcc_lb_certificate" "web_cert" {
+  lb_service_id   = airtelcloudgcc_lb_service.web_lb.id
   name            = "web-cert"
   ssl_cert        = file("${path.module}/certs/server.pem")
   ssl_private_key = file("${path.module}/certs/server-key.pem")
@@ -1401,7 +1401,7 @@ resource "airtelcloud_lb_certificate" "web_cert" {
 | `ssl_private_key` | String | Yes | PEM-encoded private key. Sensitive. Forces new resource. |
 | `ca_cert` | String | No | PEM-encoded CA certificate. Sensitive. Forces new resource. |
 
-Computed: `id`, `status`. Import: `terraform import airtelcloud_lb_certificate.web_cert <lb_service_id>/<certificate_id>`
+Computed: `id`, `status`. Import: `terraform import airtelcloudgcc_lb_certificate.web_cert <lb_service_id>/<certificate_id>`
 
 -> **Note:** Certificate content is write-only and cannot be read back from the API.
 
@@ -1447,28 +1447,28 @@ terraform import <resource_type>.<name> <import_id>
 
 | Resource | Import ID Format | Example |
 |---|---|---|
-| `airtelcloud_security_group` | `<numeric-id>` | `42` |
-| `airtelcloud_security_group_rule` | `<sg_id>/<rule_id>` | `42/10` |
-| `airtelcloud_subnet` | `<network_id>/<subnet_id>` | `029a.../35df...` |
-| `airtelcloud_public_ip` | `<uuid>` | `a1b2c3d4-...` |
-| `airtelcloud_public_ip_policy_rule` | `<public_ip_id>/<target_vip>/<public_ip>/<rule_id>` | `uuid/10.1.1.5/203.0.113.5/uuid` |
-| `airtelcloud_vm` | `<compute-id>` | `b603ccb5-...` |
-| `airtelcloud_asg` | `<asg-uuid>` | `a1b2c3d4-...` |
-| `airtelcloud_storage_bucket` | `<bucket-name>` | `my-bucket` |
-| `airtelcloud_volume` | `<uuid>` | `a1b2c3d4-...` |
-| `airtelcloud_file_storage` | `<id>` | `fs-abc123` |
-| `airtelcloud_postgres` | `<cluster-uuid>` | `e9953b5d-...` |
-| `airtelcloud_file_storage_export_path` | `<path-id>` | `exp-xyz789` |
-| `airtelcloud_dns_zone` | `<zone-uuid>` | `a1b2c3d4-...` |
-| `airtelcloud_dns_record` | `<zone_id>/<record_id>` | `zone-uuid/record-uuid` |
-| `airtelcloud_lb_service` | `<lb-service-id>` | `lb-svc-1` |
-| `airtelcloud_lb_vip` | `<lb_service_id>/<vip_id>` | `lb-svc-1/vip-1` |
-| `airtelcloud_lb_virtual_server` | `<lb_service_id>/<vs_id>` | `lb-svc-1/vs-1` |
-| `airtelcloud_lb_certificate` | `<lb_service_id>/<cert_id>` | `lb-svc-1/cert-1` |
-| `airtelcloud_protection_plan` | `<plan-id>` | `1` |
-| `airtelcloud_protection` | `<protection-id>` | `5` |
-| `airtelcloud_vpc_peering` | `<peering-id>` | `peer-abc123` |
-| `airtelcloud_compute_snapshot` | `<snapshot-uuid>` | `snap-uuid-1234` |
+| `airtelcloudgcc_security_group` | `<numeric-id>` | `42` |
+| `airtelcloudgcc_security_group_rule` | `<sg_id>/<rule_id>` | `42/10` |
+| `airtelcloudgcc_subnet` | `<network_id>/<subnet_id>` | `029a.../35df...` |
+| `airtelcloudgcc_public_ip` | `<uuid>` | `a1b2c3d4-...` |
+| `airtelcloudgcc_public_ip_policy_rule` | `<public_ip_id>/<target_vip>/<public_ip>/<rule_id>` | `uuid/10.1.1.5/203.0.113.5/uuid` |
+| `airtelcloudgcc_vm` | `<compute-id>` | `b603ccb5-...` |
+| `airtelcloudgcc_asg` | `<asg-uuid>` | `a1b2c3d4-...` |
+| `airtelcloudgcc_storage_bucket` | `<bucket-name>` | `my-bucket` |
+| `airtelcloudgcc_volume` | `<uuid>` | `a1b2c3d4-...` |
+| `airtelcloudgcc_file_storage` | `<id>` | `fs-abc123` |
+| `airtelcloudgcc_postgres` | `<cluster-uuid>` | `e9953b5d-...` |
+| `airtelcloudgcc_file_storage_export_path` | `<path-id>` | `exp-xyz789` |
+| `airtelcloudgcc_dns_zone` | `<zone-uuid>` | `a1b2c3d4-...` |
+| `airtelcloudgcc_dns_record` | `<zone_id>/<record_id>` | `zone-uuid/record-uuid` |
+| `airtelcloudgcc_lb_service` | `<lb-service-id>` | `lb-svc-1` |
+| `airtelcloudgcc_lb_vip` | `<lb_service_id>/<vip_id>` | `lb-svc-1/vip-1` |
+| `airtelcloudgcc_lb_virtual_server` | `<lb_service_id>/<vs_id>` | `lb-svc-1/vs-1` |
+| `airtelcloudgcc_lb_certificate` | `<lb_service_id>/<cert_id>` | `lb-svc-1/cert-1` |
+| `airtelcloudgcc_protection_plan` | `<plan-id>` | `1` |
+| `airtelcloudgcc_protection` | `<protection-id>` | `5` |
+| `airtelcloudgcc_vpc_peering` | `<peering-id>` | `peer-abc123` |
+| `airtelcloudgcc_compute_snapshot` | `<snapshot-uuid>` | `snap-uuid-1234` |
 
 ---
 

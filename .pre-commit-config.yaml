@@ -1,4 +1,4 @@
-# Local guardrails for terraform-provider-airtelcloud.
+# Local guardrails for terraform-provider-airtelcloudgcc.
 #
 # One-time setup per clone:
 #   brew install pre-commit trufflehog trivy     (or pipx install pre-commit; see SECURITY-PIPELINE.md)

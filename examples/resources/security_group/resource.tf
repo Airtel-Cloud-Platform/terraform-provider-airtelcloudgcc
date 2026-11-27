@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://north.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-north.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "north"
@@ -45,18 +45,18 @@ variable "resource_prefix" {
 }
 
 # Create a security group
-# resource "airtelcloud_security_group" "web" {
+# resource "airtelcloudgcc_security_group" "web" {
 #   security_group_name = "${var.resource_prefix}-sg-http-servers-2"
 #   availability_zone   = "N2"
 # }
 
-resource "airtelcloud_security_group" "web" {
+resource "airtelcloudgcc_security_group" "web" {
   security_group_name = "${var.resource_prefix}-sg-http-servers"
   availability_zone   = "N1"
 }
 
-resource "airtelcloud_security_group_rule" "http" {
-  security_group_id = airtelcloud_security_group.web.id
+resource "airtelcloudgcc_security_group_rule" "http" {
+  security_group_id = airtelcloudgcc_security_group.web.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "80"
@@ -68,15 +68,15 @@ resource "airtelcloud_security_group_rule" "http" {
 # Output security group details
 output "security_group_id" {
   description = "ID of the security group"
-  value       = airtelcloud_security_group.web.id
+  value       = airtelcloudgcc_security_group.web.id
 }
 
 output "security_group_uuid" {
   description = "UUID of the security group"
-  value       = airtelcloud_security_group.web.uuid
+  value       = airtelcloudgcc_security_group.web.uuid
 }
 
 output "security_group_status" {
   description = "Status of the security group"
-  value       = airtelcloud_security_group.web.status
+  value       = airtelcloudgcc_security_group.web.status
 }

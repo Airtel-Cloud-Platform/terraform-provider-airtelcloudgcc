@@ -3,7 +3,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
 )
 
 func TestPublicIPAttachmentResourceTypes(t *testing.T) {

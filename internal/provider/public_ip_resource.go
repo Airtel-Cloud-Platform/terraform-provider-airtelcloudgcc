@@ -15,8 +15,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 var _ resource.Resource = &PublicIPResource{}
@@ -89,7 +89,7 @@ func (r *PublicIPResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *PublicIPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manages an Airtel Cloud Public IP reservation. Create allocates a public IP in `reserved` state. Attach it to a VM or load balancer with `airtelcloud_public_ip_attachment`, then add traffic rules with `airtelcloud_public_ip_policy_rule`.",
+		MarkdownDescription: "Manages an Airtel Cloud Public IP reservation. Create allocates a public IP in `reserved` state. Attach it to a VM or load balancer with `airtelcloudgcc_public_ip_attachment`, then add traffic rules with `airtelcloudgcc_public_ip_policy_rule`.",
 
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{

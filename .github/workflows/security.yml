@@ -1,4 +1,4 @@
-# Security gate for terraform-provider-airtelcloud
+# Security gate for terraform-provider-airtelcloudgcc
 #
 # Runs on:   every PR to main, every push to main, weekly full sweep, manual run,
 #            and as a reusable workflow called by release.yml before GoReleaser publishes.

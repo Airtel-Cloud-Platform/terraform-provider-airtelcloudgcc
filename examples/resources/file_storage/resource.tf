@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,14 +45,14 @@ variable "resource_prefix" {
 }
 
 # Create NFS volume
-resource "airtelcloud_file_storage" "basic" {
+resource "airtelcloudgcc_file_storage" "basic" {
   name              = "${var.resource_prefix}-basic-nfs"
   size              = "300"
   availability_zone = "S2"
 }
 
 # NFS volume with description
-#resource "airtelcloud_file_storage" "with_description" {
+#resource "airtelcloudgcc_file_storage" "with_description" {
 #  name              = "${var.resource_prefix}-app-data"
 #  description       = "Shared storage for application data"
 #  size              = "250"
@@ -62,15 +62,15 @@ resource "airtelcloud_file_storage" "basic" {
 # Output basic volume details
 output "basic_volume_id" {
   description = "ID of the basic NFS volume"
-  value       = airtelcloud_file_storage.basic.id
+  value       = airtelcloudgcc_file_storage.basic.id
 }
 
 output "basic_volume_state" {
   description = "State of the basic NFS volume"
-  value       = airtelcloud_file_storage.basic.state
+  value       = airtelcloudgcc_file_storage.basic.state
 }
 
 #output "app_data_volume_id" {
 #  description = "ID of the app data NFS volume"
-#  value       = airtelcloud_file_storage.with_description.id
+#  value       = airtelcloudgcc_file_storage.with_description.id
 #}

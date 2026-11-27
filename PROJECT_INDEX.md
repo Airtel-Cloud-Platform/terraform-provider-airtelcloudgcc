@@ -30,7 +30,7 @@ terraform-provider/
 - **Go source files**: 57 (excl. tests)
 - **Test files**: 31 (13 unit, 10 integration, 7 acceptance, 1 helper)
 - **Total source lines**: ~13,200 (excl. tests)
-- **Provider version**: 2.0.1
+- **Provider version**: 1.0.0
 
 ## Entry Points
 
@@ -43,28 +43,28 @@ terraform-provider/
 
 | Resource | File | Lines |
 |----------|------|-------|
-| `airtelcloud_vm` | `vm_resource.go` | 842 |
-| `airtelcloud_volume` | `volume_resource.go` | 761 |
-| `airtelcloud_lb_virtual_server` | `lb_virtual_server_resource.go` | 604 |
-| `airtelcloud_object_storage_bucket` | `object_storage_bucket_resource.go` | 419 |
-| `airtelcloud_compute_snapshot` | `compute_snapshot_resource.go` | 418 |
-| `airtelcloud_protection` | `protection_resource.go` | 417 |
-| `airtelcloud_dns_record` | `dns_record_resource.go` | 416 |
-| `airtelcloud_vpc_peering` | `vpc_peering_resource.go` | 410 |
-| `airtelcloud_security_group_rule` | `security_group_rule_resource.go` | 374 |
-| `airtelcloud_lb_service` | `lb_service_resource.go` | 374 |
-| `airtelcloud_public_ip_policy_rule` | `public_ip_policy_rule_resource.go` | 364 |
-| `airtelcloud_subnet` | `subnet_resource.go` | 333 |
-| `airtelcloud_file_storage_export_path` | `file_storage_export_path_resource.go` | 331 |
-| `airtelcloud_dns_zone` | `dns_zone_resource.go` | 297 |
-| `airtelcloud_file_storage` | `file_storage_resource.go` | 296 |
-| `airtelcloud_protection_plan` | `protection_plan_resource.go` | 295 |
-| `airtelcloud_lb_vip` | `lb_vip_resource.go` | 284 |
-| `airtelcloud_public_ip` | `public_ip_resource.go` | 280 |
-| `airtelcloud_lb_certificate` | `lb_certificate_resource.go` | 270 |
-| `airtelcloud_object_storage_access_key` | `object_storage_access_key_resource.go` | 268 |
-| `airtelcloud_vpc` | `vpc_resource.go` | 265 |
-| `airtelcloud_security_group` | `security_group_resource.go` | 235 |
+| `airtelcloudgcc_vm` | `vm_resource.go` | 842 |
+| `airtelcloudgcc_volume` | `volume_resource.go` | 761 |
+| `airtelcloudgcc_lb_virtual_server` | `lb_virtual_server_resource.go` | 604 |
+| `airtelcloudgcc_object_storage_bucket` | `object_storage_bucket_resource.go` | 419 |
+| `airtelcloudgcc_compute_snapshot` | `compute_snapshot_resource.go` | 418 |
+| `airtelcloudgcc_protection` | `protection_resource.go` | 417 |
+| `airtelcloudgcc_dns_record` | `dns_record_resource.go` | 416 |
+| `airtelcloudgcc_vpc_peering` | `vpc_peering_resource.go` | 410 |
+| `airtelcloudgcc_security_group_rule` | `security_group_rule_resource.go` | 374 |
+| `airtelcloudgcc_lb_service` | `lb_service_resource.go` | 374 |
+| `airtelcloudgcc_public_ip_policy_rule` | `public_ip_policy_rule_resource.go` | 364 |
+| `airtelcloudgcc_subnet` | `subnet_resource.go` | 333 |
+| `airtelcloudgcc_file_storage_export_path` | `file_storage_export_path_resource.go` | 331 |
+| `airtelcloudgcc_dns_zone` | `dns_zone_resource.go` | 297 |
+| `airtelcloudgcc_file_storage` | `file_storage_resource.go` | 296 |
+| `airtelcloudgcc_protection_plan` | `protection_plan_resource.go` | 295 |
+| `airtelcloudgcc_lb_vip` | `lb_vip_resource.go` | 284 |
+| `airtelcloudgcc_public_ip` | `public_ip_resource.go` | 280 |
+| `airtelcloudgcc_lb_certificate` | `lb_certificate_resource.go` | 270 |
+| `airtelcloudgcc_object_storage_access_key` | `object_storage_access_key_resource.go` | 268 |
+| `airtelcloudgcc_vpc` | `vpc_resource.go` | 265 |
+| `airtelcloudgcc_security_group` | `security_group_resource.go` | 235 |
 
 ## Client Layer (`internal/client/`)
 
@@ -180,8 +180,8 @@ make docs-generate             # Generate resource docs
 ## Provider Configuration
 
 ```hcl
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"  # optional
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"  # optional
   api_key      = var.api_key                       # required
   api_secret   = var.api_secret                    # required
   region       = "south"                           # optional

@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -44,7 +44,7 @@ variable "resource_prefix" {
   default     = "tft"
 }
 
-resource "airtelcloud_asg" "example" {
+resource "airtelcloudgcc_asg" "example" {
   name              = "${var.resource_prefix}-asg"
   vpc_name          = "copper-vpc1"
   subnet            = "subnet1213"
@@ -85,7 +85,7 @@ resource "airtelcloud_asg" "example" {
 # enables vs_config on create; the VIP is resolved from the LB service network,
 # not the ASG subnet. Uncomment this block (and comment the resource above) to
 # create the LB-backed group instead.
-# resource "airtelcloud_asg" "with_lb" {
+# resource "airtelcloudgcc_asg" "with_lb" {
 #   name              = "${var.resource_prefix}-asg-lb"
 #   vpc_name          = "copper-vpc1"
 #   subnet            = "subnet1213"
@@ -135,20 +135,20 @@ resource "airtelcloud_asg" "example" {
 
 output "asg_id" {
   description = "ID of the autoscaling group"
-  value       = airtelcloud_asg.example.id
+  value       = airtelcloudgcc_asg.example.id
 }
 
 output "asg_name" {
   description = "Name of the autoscaling group"
-  value       = airtelcloud_asg.example.name
+  value       = airtelcloudgcc_asg.example.name
 }
 
 output "asg_vpc_id" {
   description = "Resolved VPC ID of the autoscaling group"
-  value       = airtelcloud_asg.example.vpc_id
+  value       = airtelcloudgcc_asg.example.vpc_id
 }
 
 output "asg_network_id" {
   description = "Resolved subnet network ID of the autoscaling group"
-  value       = airtelcloud_asg.example.network_id
+  value       = airtelcloudgcc_asg.example.network_id
 }

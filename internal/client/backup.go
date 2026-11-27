@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 

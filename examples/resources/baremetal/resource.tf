@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -93,7 +93,7 @@ variable "tags" {
   default     = ["South-AZ1"]
 }
 
-resource "airtelcloud_baremetal" "app" {
+resource "airtelcloudgcc_baremetal" "app" {
   name                    = "${var.resource_prefix}-bm-app-01"
   flavor                  = "metal-c56-m1024"
   os_image                = var.os_image
@@ -138,25 +138,25 @@ resource "airtelcloud_baremetal" "app" {
 
 output "baremetal_name" {
   description = "Baremetal server name"
-  value       = airtelcloud_baremetal.app.name
+  value       = airtelcloudgcc_baremetal.app.name
 }
 
 output "baremetal_uuid" {
   description = "Baremetal server UUID"
-  value       = airtelcloud_baremetal.app.uuid
+  value       = airtelcloudgcc_baremetal.app.uuid
 }
 
 output "baremetal_state" {
   description = "Baremetal server state"
-  value       = airtelcloud_baremetal.app.state
+  value       = airtelcloudgcc_baremetal.app.state
 }
 
 output "baremetal_ip_addresses" {
   description = "Baremetal IP addresses"
-  value       = airtelcloud_baremetal.app.ip_addresses
+  value       = airtelcloudgcc_baremetal.app.ip_addresses
 }
 
 output "baremetal_backend_port_id" {
   description = "Baremetal backend port id"
-  value       = airtelcloud_baremetal.app.backend_port_id
+  value       = airtelcloudgcc_baremetal.app.backend_port_id
 }

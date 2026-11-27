@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // BillingUnitHourly is the billing unit the API expects for compute snapshots.

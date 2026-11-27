@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_baremetal Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_baremetal Resource - Airtel Cloud"
 subcategory: "Compute"
 description: |-
   Allocates and manages an Airtel Cloud baremetal server.
 ---
 
-# airtelcloud_baremetal (Resource)
+# airtelcloudgcc_baremetal (Resource)
 
 Allocates and manages an Airtel Cloud baremetal server.
 
@@ -26,7 +26,7 @@ The resource supports:
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_baremetal" "app" {
+resource "airtelcloudgcc_baremetal" "app" {
   name              = "tft-bm-app-01"
   flavor            = "metal-c56-m1024"
   os_image          = "ubuntu22_Aug2026"
@@ -471,7 +471,7 @@ In addition to all arguments above, the following attributes are exported:
 An existing baremetal server can be imported using its server name:
 
 ```shell
-terraform import airtelcloud_baremetal.app <baremetal-name>
+terraform import airtelcloudgcc_baremetal.app <baremetal-name>
 ```
 
 After importing the resource, run:

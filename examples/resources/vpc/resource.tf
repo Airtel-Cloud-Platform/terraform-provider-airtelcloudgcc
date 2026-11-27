@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,7 +45,7 @@ variable "resource_prefix" {
 }
 
 # Create a VPC with DNS support
-resource "airtelcloud_vpc" "main" {
+resource "airtelcloudgcc_vpc" "main" {
   name                 = "example-vpc"
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
@@ -59,7 +59,7 @@ resource "airtelcloud_vpc" "main" {
 }
 
 # Create a second VPC for multi-vpc scenarios
-resource "airtelcloud_vpc" "secondary" {
+resource "airtelcloudgcc_vpc" "secondary" {
   name                 = "secondary-vpc"
   cidr_block           = "172.16.0.0/16"
   enable_dns_support   = true
@@ -75,20 +75,20 @@ resource "airtelcloud_vpc" "secondary" {
 # Output VPC details
 output "main_vpc_id" {
   description = "ID of the main VPC"
-  value       = airtelcloud_vpc.main.id
+  value       = airtelcloudgcc_vpc.main.id
 }
 
 output "main_vpc_state" {
   description = "State of the main VPC"
-  value       = airtelcloud_vpc.main.state
+  value       = airtelcloudgcc_vpc.main.state
 }
 
 output "main_vpc_cidr" {
   description = "CIDR block of the main VPC"
-  value       = airtelcloud_vpc.main.cidr_block
+  value       = airtelcloudgcc_vpc.main.cidr_block
 }
 
 output "secondary_vpc_id" {
   description = "ID of the secondary VPC"
-  value       = airtelcloud_vpc.secondary.id
+  value       = airtelcloudgcc_vpc.secondary.id
 }

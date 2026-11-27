@@ -16,8 +16,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 var _ resource.Resource = &ProtectionResource{}
@@ -113,7 +113,7 @@ func (r *ProtectionResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"protection_plan": schema.StringAttribute{
-				MarkdownDescription: "Protection plan UUID or console name. Names are resolved to UUID at apply. Prefer `airtelcloud_protection_plan.example.id`.",
+				MarkdownDescription: "Protection plan UUID or console name. Names are resolved to UUID at apply. Prefer `airtelcloudgcc_protection_plan.example.id`.",
 				Required:            true,
 			},
 			"enable_scheduler": schema.StringAttribute{

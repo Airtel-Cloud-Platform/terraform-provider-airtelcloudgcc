@@ -1,17 +1,17 @@
 ---
-page_title: "airtelcloud_protection_plan Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_protection_plan Resource - Airtel Cloud"
 subcategory: "Backup"
 description: |-
   Manages an Airtel Cloud Protection Plan (backup schedule and retention). Destroying this resource only removes it from Terraform state; the API does not delete plans.
 ---
 
-# airtelcloud_protection_plan (Resource)
+# airtelcloudgcc_protection_plan (Resource)
 
 Creates a backup **protection plan**: how often backups run and how long they are kept.
 
 You only set a name, description, schedule, retention, and an existing VM name. The provider looks up that VM, uses its availability zone (`S1`, `S2`, …) as the plan selector, and uses its subnet on create. You do not set AZ or subnet yourself.
 
-Use the exported `id` when you attach the plan to a VM with [`airtelcloud_protection`](protection.md) or `airtelcloud_vm.protection_plan`.
+Use the exported `id` when you attach the plan to a VM with [`airtelcloudgcc_protection`](protection.md) or `airtelcloudgcc_vm.protection_plan`.
 
 | You set | Provider fills |
 | --- | --- |
@@ -29,14 +29,14 @@ Copy this into a working directory. Put secrets in `terraform.tfvars` or environ
 ```terraform
 terraform {
   required_providers {
-    airtelcloud = {
-      source = "Airtel-Cloud-Platform/airtelcloud"
+    airtelcloudgcc = {
+      source = "Airtel-Cloud-Platform/airtelcloudgcc"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -67,7 +67,7 @@ variable "vm_name" {
   type = string
 }
 
-resource "airtelcloud_protection_plan" "weekly" {
+resource "airtelcloudgcc_protection_plan" "weekly" {
   name              = "app-backup"
   description       = "Weekly backup, 30-day retention"
   vm_name           = var.vm_name
@@ -77,8 +77,8 @@ resource "airtelcloud_protection_plan" "weekly" {
 }
 
 output "protection_plan_id" {
-  description = "UUID to pass to airtelcloud_protection or a VM backup block"
-  value       = airtelcloud_protection_plan.weekly.id
+  description = "UUID to pass to airtelcloudgcc_protection or a VM backup block"
+  value       = airtelcloudgcc_protection_plan.weekly.id
 }
 ```
 
@@ -95,7 +95,7 @@ vm_name       = "your-existing-vm"
 ### Daily plan
 
 ```terraform
-resource "airtelcloud_protection_plan" "daily" {
+resource "airtelcloudgcc_protection_plan" "daily" {
   name              = "app-backup"
   description       = "Daily backup, 30-day retention"
   vm_name           = var.vm_name
@@ -110,18 +110,18 @@ With `name = "app-backup"`, the console/API name is `app-backup-daily` or `app-b
 ### Use the plan on a protection policy
 
 ```terraform
-resource "airtelcloud_protection" "web" {
+resource "airtelcloudgcc_protection" "web" {
   name             = "web-backup"
   description      = "Attach weekly plan to the VM"
   compute_name     = var.vm_name
-  protection_plan  = airtelcloud_protection_plan.weekly.id
+  protection_plan  = airtelcloudgcc_protection_plan.weekly.id
   enable_scheduler = "true"
   weekday          = "monday"
   start_time       = "02:00"
 }
 ```
 
-Pass **`id`**, not `name`. See [`airtelcloud_protection`](protection.md).
+Pass **`id`**, not `name`. See [`airtelcloudgcc_protection`](protection.md).
 
 ## Recurrence
 
@@ -164,7 +164,7 @@ All arguments force replacement if changed.
 Import by the plan UUID from the console (not the display name):
 
 ```shell
-terraform import airtelcloud_protection_plan.weekly 898a41cb-8ce0-48e2-861a-8370f6799819
+terraform import airtelcloudgcc_protection_plan.weekly 898a41cb-8ce0-48e2-861a-8370f6799819
 ```
 
 Import only restores `id`. Put the same `name`, `description`, `vm_name`, schedule, and retention in config so the next plan is empty.

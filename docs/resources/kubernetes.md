@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_kubernetes Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_kubernetes Resource - Airtel Cloud"
 subcategory: "Compute"
 description: |-
   Manages an Airtel Cloud Kubernetes (CKP) cluster.
 ---
 
-# airtelcloud_kubernetes (Resource)
+# airtelcloudgcc_kubernetes (Resource)
 
 Manages an Airtel Cloud Kubernetes cluster using the Cloud Compass Cluster Manager API.
 
@@ -25,14 +25,14 @@ Copy the block below into `main.tf`, replace the values marked `# <-- change`, a
 ```terraform
 terraform {
   required_providers {
-    airtelcloud = {
-      source = "Airtel-Cloud-Platform/airtelcloud"
+    airtelcloudgcc = {
+      source = "Airtel-Cloud-Platform/airtelcloudgcc"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -58,7 +58,7 @@ variable "project_name" {
   type = string
 }
 
-resource "airtelcloud_kubernetes" "cluster" {
+resource "airtelcloudgcc_kubernetes" "cluster" {
   # 1. Basic Information
   name        = "my-cluster"            # <-- change (lowercase letters, numbers, hyphens)
   description = "My first cluster"      # <-- change (optional)
@@ -84,11 +84,11 @@ resource "airtelcloud_kubernetes" "cluster" {
 }
 
 output "cluster_id" {
-  value = airtelcloud_kubernetes.cluster.id
+  value = airtelcloudgcc_kubernetes.cluster.id
 }
 
 output "cluster_state" {
-  value = airtelcloud_kubernetes.cluster.state
+  value = airtelcloudgcc_kubernetes.cluster.state
 }
 ```
 
@@ -122,7 +122,7 @@ Provide credentials with `terraform.tfvars` or environment variables (`TF_VAR_ai
 ### Fixed-size node pool
 
 ```terraform
-resource "airtelcloud_kubernetes" "fixed" {
+resource "airtelcloudgcc_kubernetes" "fixed" {
   name        = "fixed-cluster"
   description = "Cluster with a fixed number of workers"
 
@@ -150,7 +150,7 @@ resource "airtelcloud_kubernetes" "fixed" {
 With auto scaling enabled, `desired_nodes` may be `0` and `max_nodes` is the upper limit.
 
 ```terraform
-resource "airtelcloud_kubernetes" "autoscaled" {
+resource "airtelcloudgcc_kubernetes" "autoscaled" {
   name        = "autoscaled-cluster"
   description = "Cluster with an auto scaled pool"
 
@@ -181,7 +181,7 @@ resource "airtelcloud_kubernetes" "autoscaled" {
 ### Node pool with advanced options (labels, annotations, taints)
 
 ```terraform
-resource "airtelcloud_kubernetes" "advanced" {
+resource "airtelcloudgcc_kubernetes" "advanced" {
   name        = "advanced-cluster"
   description = "Cluster with labels, annotations and taints"
 
@@ -231,7 +231,7 @@ resource "airtelcloud_kubernetes" "advanced" {
 Add one object to `node_pools` for each pool. Each pool has its own flavor, subnet, size, and advanced options.
 
 ```terraform
-resource "airtelcloud_kubernetes" "multi_pool" {
+resource "airtelcloudgcc_kubernetes" "multi_pool" {
   name        = "multi-pool-cluster"
   description = "Cluster with two node pools"
 
@@ -356,5 +356,5 @@ In addition to the arguments above, these attributes are exported:
 Import an existing cluster by its name:
 
 ```shell
-terraform import airtelcloud_kubernetes.cluster my-cluster
+terraform import airtelcloudgcc_kubernetes.cluster my-cluster
 ```

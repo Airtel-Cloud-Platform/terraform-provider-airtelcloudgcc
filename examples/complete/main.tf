@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://north.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-north.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "north"
@@ -50,13 +50,13 @@ variable "vm_admin_password" {
   sensitive   = true
 }
 
-resource "airtelcloud_security_group" "web" {
+resource "airtelcloudgcc_security_group" "web" {
   security_group_name = "${var.resource_prefix}-sg-http-servers"
   availability_zone   = "S2"
 }
 
 # Create a private bucket with versioning
-#resource "airtelcloud_storage_bucket" "private_bucket" {
+#resource "airtelcloudgcc_storage_bucket" "private_bucket" {
 #  name              = "${var.resource_prefix}-obj-bucket"
 #  replication_type  = "Local"
 #  replication_tag   = "south_S1"
@@ -66,7 +66,7 @@ resource "airtelcloud_security_group" "web" {
 #}
 
 # Create a private subnet
-resource "airtelcloud_subnet" "tf_private" {
+resource "airtelcloudgcc_subnet" "tf_private" {
   #network_id       = "66f0fd26-9362-4f52-8d41-10de059e88fb"
   network_name       = "copper-vpc01"
   name               = "${var.resource_prefix}-tf1-subnet"
@@ -82,15 +82,15 @@ resource "airtelcloud_subnet" "tf_private" {
 }
 
 # Create NFS volume
-#resource "airtelcloud_file_storage" "basic" {
+#resource "airtelcloudgcc_file_storage" "basic" {
 #  name              = "${var.resource_prefix}-basic-nfs"
 #  size              = "300"
 #  availability_zone = "N2"
 #}
 
 # Create an NFS export path with NFSv4 protocol
-#resource "airtelcloud_file_storage_export_path" "nfsv4_export" {
-#  volume            = airtelcloud_file_storage.basic.name
+#resource "airtelcloudgcc_file_storage_export_path" "nfsv4_export" {
+#  volume            = airtelcloudgcc_file_storage.basic.name
 #  description       = "NFSv4 export for application servers"
 #  protocol          = "NFSv4"
 #  availability_zone = "S2"
@@ -101,12 +101,12 @@ resource "airtelcloud_subnet" "tf_private" {
 #}
 
 # Create a block storage volume with all common attributes
-#resource "airtelcloud_volume" "data_volume" {
+#resource "airtelcloudgcc_volume" "data_volume" {
 # name              = "${var.resource_prefix}-storage-volume"
 # size              = 50
 # type              = "s1_wkld_ntp02_4iops_backend"
 # availability_zone = "S1"
-# compute_name      = airtelcloud_vm.web1.instance_name
+# compute_name      = airtelcloudgcc_vm.web1.instance_name
 
 # Networking
 # vpc_name    = "copper-vpc01"
@@ -114,26 +114,26 @@ resource "airtelcloud_subnet" "tf_private" {
 
 # is_encrypted  = false
 # bootable      = false
-# depends_on = [airtelcloud_vm.web1]
+# depends_on = [airtelcloudgcc_vm.web1]
 #}
 
 # Create a forward DNS zone
-#resource "airtelcloud_dns_zone" "tfas" {
+#resource "airtelcloudgcc_dns_zone" "tfas" {
 #  zone_name   = "${var.resource_prefix}-domain.com"
 #  zone_type   = "forward"
 #  description = "Example DNS zone for demonstration"
 #}
 
 # Create another DNS zone for internal services
-#resource "airtelcloud_dns_zone" "internal" {
+#resource "airtelcloudgcc_dns_zone" "internal" {
 #  zone_name   = "internal.${var.resource_prefix}-domain.com"
 #  zone_type   = "forward"
 #  description = "Internal services DNS zone"
 #}
 
 # Create an A record pointing to web server
-#resource "airtelcloud_dns_record" "web" {
-#  zone_id     = airtelcloud_dns_zone.tfas.id
+#resource "airtelcloudgcc_dns_record" "web" {
+#  zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #  owner       = "www"
 # record_type = "A"
 #  data        = "192.168.1.10"
@@ -142,8 +142,8 @@ resource "airtelcloud_subnet" "tf_private" {
 #}
 
 # Create an A record for the apex domain
-#resource "airtelcloud_dns_record" "apex" {
-#  zone_id     = airtelcloud_dns_zone.tfas.id
+#resource "airtelcloudgcc_dns_record" "apex" {
+#  zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #  owner       = "apex"
 #  record_type = "A"
 #  data        = "192.168.1.10"
@@ -152,8 +152,8 @@ resource "airtelcloud_subnet" "tf_private" {
 #}
 
 #Create a CNAME record
-# resource "airtelcloud_dns_record" "blog" {
-#   zone_id     = airtelcloud_dns_zone.tfas.id
+# resource "airtelcloudgcc_dns_record" "blog" {
+#   zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #   owner       = "blog"
 #   record_type = "CNAME"
 #   data        = "www.tfas.com."
@@ -162,8 +162,8 @@ resource "airtelcloud_subnet" "tf_private" {
 # }
 
 # Create an MX record for email
-# resource "airtelcloud_dns_record" "mail" {
-#   zone_id     = airtelcloud_dns_zone.tfas.id
+# resource "airtelcloudgcc_dns_record" "mail" {
+#   zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #   owner       = "@"
 #   record_type = "MX"
 #   data        = "mail.tfas.com."
@@ -173,8 +173,8 @@ resource "airtelcloud_subnet" "tf_private" {
 # }
 
 # Create a TXT record for SPF
-#resource "airtelcloud_dns_record" "spf" {
-#  zone_id     = airtelcloud_dns_zone.tfas.id
+#resource "airtelcloudgcc_dns_record" "spf" {
+#  zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #  owner       = "spf"
 #  record_type = "TXT"
 #  data        = "v=spf1 include:_spf.tfas.com ~all"
@@ -183,8 +183,8 @@ resource "airtelcloud_subnet" "tf_private" {
 #}
 
 # Create an AAAA record for IPv6
-#resource "airtelcloud_dns_record" "ipv6" {
-#  zone_id     = airtelcloud_dns_zone.tfas.id
+#resource "airtelcloudgcc_dns_record" "ipv6" {
+#  zone_id     = airtelcloudgcc_dns_zone.tfas.id
 #  owner       = "www"
 #  record_type = "AAAA"
 #  data        = "2001:db8::1"
@@ -192,8 +192,8 @@ resource "airtelcloud_subnet" "tf_private" {
 #  description = "IPv6 address for www"
 #}
 
-#resource "airtelcloud_security_group_rule" "ssh" {
-#  security_group_id = airtelcloud_security_group.web.id
+#resource "airtelcloudgcc_security_group_rule" "ssh" {
+#  security_group_id = airtelcloudgcc_security_group.web.id
 #  direction         = "ingress"
 #  protocol          = "tcp"
 #  port_range_min    = "22"
@@ -204,7 +204,7 @@ resource "airtelcloud_subnet" "tf_private" {
 #}
 
 # Create a VPC peering connection
-# resource "airtelcloud_vpc_peering" "example" {
+# resource "airtelcloudgcc_vpc_peering" "example" {
 #   name          = "${var.resource_prefix}-vpc-peering"
 #   description   = "VPC peering between two networks"
 #   vpc_source_name = "perftest-cell1-vpc1"
@@ -226,8 +226,8 @@ resource "airtelcloud_subnet" "tf_private" {
 #     }
 # }
 
-#resource "airtelcloud_security_group_rule" "http" {
-#  security_group_id = airtelcloud_security_group.web.id
+#resource "airtelcloudgcc_security_group_rule" "http" {
+#  security_group_id = airtelcloudgcc_security_group.web.id
 #  direction         = "ingress"
 #  protocol          = "tcp"
 #  port_range_min    = "8080"
@@ -242,7 +242,7 @@ resource "airtelcloud_subnet" "tf_private" {
 # =============================================================================
 
 # Create web server 1 — flavor and image validated by API (ResolveFlavorID / ResolveImageID)
-resource "airtelcloud_vm" "web1" {
+resource "airtelcloudgcc_vm" "web1" {
   instance_name     = "${var.resource_prefix}-server-1"
   os_type           = "linux"
   flavor_name       = "ccd.Large"
@@ -258,7 +258,7 @@ resource "airtelcloud_vm" "web1" {
 }
 
 # Create web server 2
-#resource "airtelcloud_vm" "web2" {
+#resource "airtelcloudgcc_vm" "web2" {
 #  instance_name     = "${var.resource_prefix}-server-2"
 #  os_type           = "linux"
 #  flavor_name       = "ccd.Large"
@@ -278,8 +278,8 @@ resource "airtelcloud_vm" "web1" {
 # =============================================================================
 
 # Create a snapshot of web server 1
-# resource "airtelcloud_compute_snapshot" "web_snapshot" {
-#   compute_id    = airtelcloud_vm.web1.id
+# resource "airtelcloudgcc_compute_snapshot" "web_snapshot" {
+#   compute_id    = airtelcloudgcc_vm.web1.id
 #   snapshot_name = "web1-snapshot"
 
 #   timeouts {
@@ -293,20 +293,20 @@ resource "airtelcloud_vm" "web1" {
 # =============================================================================
 
 # Create a protection plan with daily schedule and 30-day retention
-resource "airtelcloud_protection_plan" "daily" {
+resource "airtelcloudgcc_protection_plan" "daily" {
   name              = "${var.resource_prefix}-backup-plan"
   description       = "Daily backup with 30-day retention"
-  vm_name           = airtelcloud_vm.web1.instance_name
+  vm_name           = airtelcloudgcc_vm.web1.instance_name
   recurrence        = 1
   recurrence_period = "daily"
   retention         = 1
 }
 
 #Create a protection policy for web server 1
-resource "airtelcloud_protection" "web_server" {
+resource "airtelcloudgcc_protection" "web_server" {
   description     = "Backup policy for web server"
-  vm_name         = airtelcloud_vm.web1.instance_name
-  protection_plan = airtelcloud_protection_plan.daily.id
+  vm_name         = airtelcloudgcc_vm.web1.instance_name
+  protection_plan = airtelcloudgcc_protection_plan.daily.id
   start_date      = "2026-04-01"
   start_time      = "02:00"
 }
@@ -316,7 +316,7 @@ resource "airtelcloud_protection" "web_server" {
 # =============================================================================
 
 # Create an LB service
-#resource "airtelcloud_lb_service" "web_lb" {
+#resource "airtelcloudgcc_lb_service" "web_lb" {
 #  name        = "${var.resource_prefix}-web-lb"
 #  description = "Load balancer for web tier"
 #  network_id  = "862f1f29-f4d2-4bcb-afdd-3bd96c0ef66e"
@@ -331,24 +331,24 @@ resource "airtelcloud_protection" "web_server" {
 #}
 
 # Allocate a VIP for the load balancer
-#resource "airtelcloud_lb_vip" "web_vip" {
-#  lb_service_id = airtelcloud_lb_service.web_lb.id
+#resource "airtelcloudgcc_lb_vip" "web_vip" {
+#  lb_service_id = airtelcloudgcc_lb_service.web_lb.id
 #}
 
 # Upload an SSL certificate for HTTPS termination
-# resource "airtelcloud_lb_certificate" "web_cert" {
-#   lb_service_id   = airtelcloud_lb_service.web_lb.id
+# resource "airtelcloudgcc_lb_certificate" "web_cert" {
+#   lb_service_id   = airtelcloudgcc_lb_service.web_lb.id
 #   name            = "${var.resource_prefix}-web-cert"
 #   ssl_cert        = file("${path.module}/certs/server.pem")
 #   ssl_private_key = file("${path.module}/certs/server-key.pem")
 # }
 
 # Create an HTTP virtual server with two backend nodes
-resource "airtelcloud_lb_virtual_server" "http" {
-  lb_service_id = airtelcloud_lb_service.web_lb.id
+resource "airtelcloudgcc_lb_virtual_server" "http" {
+  lb_service_id = airtelcloudgcc_lb_service.web_lb.id
   name          = "${var.resource_prefix}-http-vs"
   # vip_port_id is computed from the VIP fixed IP below.
-  vip               = airtelcloud_lb_vip.web_vip.fixed_ips
+  vip               = airtelcloudgcc_lb_vip.web_vip.fixed_ips
   protocol          = "HTTP"
   port              = 80
   routing_algorithm = "ROUND_ROBIN"
@@ -360,14 +360,14 @@ resource "airtelcloud_lb_virtual_server" "http" {
   # (compute_name and compute_id are mutually exclusive per node).
   nodes = [
     {
-      compute_name = airtelcloud_vm.web1.instance_name
-      compute_ip   = airtelcloud_vm.web1.private_ip
+      compute_name = airtelcloudgcc_vm.web1.instance_name
+      compute_ip   = airtelcloudgcc_vm.web1.private_ip
       port         = 8080
       weight       = 50
     },
     {
-      compute_name = airtelcloud_vm.web2.instance_name
-      compute_ip   = airtelcloud_vm.web2.private_ip
+      compute_name = airtelcloudgcc_vm.web2.instance_name
+      compute_ip   = airtelcloudgcc_vm.web2.private_ip
       port         = 8080
       weight       = 50
     },
@@ -381,7 +381,7 @@ resource "airtelcloud_lb_virtual_server" "http" {
     create = "5m"
     delete = "5m"
   }
-  depends_on = [airtelcloud_vm.web1, airtelcloud_vm.web2]
+  depends_on = [airtelcloudgcc_vm.web1, airtelcloudgcc_vm.web2]
 }
 
 # =============================================================================
@@ -389,7 +389,7 @@ resource "airtelcloud_lb_virtual_server" "http" {
 # =============================================================================
 
 # Allocate a public IP NATted against web server 1's private IP
-resource "airtelcloud_public_ip" "web1_public" {
+resource "airtelcloudgcc_public_ip" "web1_public" {
   object_name       = "${var.resource_prefix}-web1-public-ip"
   description       = "web1 public IP"
   availability_zone = "S1"
@@ -398,17 +398,17 @@ resource "airtelcloud_public_ip" "web1_public" {
     create = "10m"
     delete = "5m"
   }
-  depends_on = [airtelcloud_vm.web1]
+  depends_on = [airtelcloudgcc_vm.web1]
 }
 
-resource "airtelcloud_public_ip_attachment" "web1_public" {
-  public_ip_name = airtelcloud_public_ip.web1_public.object_name
+resource "airtelcloudgcc_public_ip_attachment" "web1_public" {
+  public_ip_name = airtelcloudgcc_public_ip.web1_public.object_name
   resource_type  = "vm"
-  resource_name  = airtelcloud_vm.web1.instance_name
+  resource_name  = airtelcloudgcc_vm.web1.instance_name
 }
 
-resource "airtelcloud_public_ip_policy_rule" "web1_http_https" {
-  public_ip_name = airtelcloud_public_ip_attachment.web1_public.public_ip_name
+resource "airtelcloudgcc_public_ip_policy_rule" "web1_http_https" {
+  public_ip_name = airtelcloudgcc_public_ip_attachment.web1_public.public_ip_name
   rule_name      = "${var.resource_prefix}-web1-allow-http-https"
   source         = "any"
   services       = ["HTTP", "HTTPS"]
@@ -418,128 +418,128 @@ resource "airtelcloud_public_ip_policy_rule" "web1_http_https" {
 # Output basic volume details
 output "basic_volume_id" {
   description = "ID of the basic NFS volume"
-  value       = airtelcloud_file_storage.basic.id
+  value       = airtelcloudgcc_file_storage.basic.id
 }
 
 output "basic_volume_state" {
   description = "State of the basic NFS volume"
-  value       = airtelcloud_file_storage.basic.state
+  value       = airtelcloudgcc_file_storage.basic.state
 }
 
 output "private_subnet_id" {
   description = "ID of the private subnet"
-  value       = airtelcloud_subnet.tf_private.id
+  value       = airtelcloudgcc_subnet.tf_private.id
 }
 
 # Output bucket details
 output "private_bucket_id" {
   description = "ID of the private bucket"
-  value       = airtelcloud_storage_bucket.private_bucket.id
+  value       = airtelcloudgcc_storage_bucket.private_bucket.id
 }
 
 # Output DNS zone details
 output "example_zone_id" {
   description = "ID of the tfas DNS zone"
-  value       = airtelcloud_dns_zone.tfas.id
+  value       = airtelcloudgcc_dns_zone.tfas.id
 }
 
 output "example_zone_name" {
   description = "Name of the tfas DNS zone"
-  value       = airtelcloud_dns_zone.tfas.zone_name
+  value       = airtelcloudgcc_dns_zone.tfas.zone_name
 }
 
 output "internal_zone_id" {
   description = "ID of the internal DNS zone"
-  value       = airtelcloud_dns_zone.internal.id
+  value       = airtelcloudgcc_dns_zone.internal.id
 }
 
 # Output volume details
 output "data_volume_uuid" {
   description = "UUID of the data volume"
-  value       = airtelcloud_volume.data_volume.uuid
+  value       = airtelcloudgcc_volume.data_volume.uuid
 }
 
 # Output compute snapshot details
 # output "web_snapshot_id" {
 #   description = "ID of the web server snapshot"
-#   value       = airtelcloud_compute_snapshot.web_snapshot.id
+#   value       = airtelcloudgcc_compute_snapshot.web_snapshot.id
 # }
 
 # output "web_snapshot_status" {
 #   description = "Status of the web server snapshot"
-#   value       = airtelcloud_compute_snapshot.web_snapshot.status
+#   value       = airtelcloudgcc_compute_snapshot.web_snapshot.status
 # }
 
 # Output protection details
 output "protection_plan_id" {
   description = "ID of the daily protection plan"
-  value       = airtelcloud_protection_plan.daily.id
+  value       = airtelcloudgcc_protection_plan.daily.id
 }
 
 output "web_protection_id" {
   description = "ID of the web server protection policy"
-  value       = airtelcloud_protection.web_server.id
+  value       = airtelcloudgcc_protection.web_server.id
 }
 
 # Output load balancer details
 output "web_lb_id" {
   description = "ID of the web load balancer service"
-  value       = airtelcloud_lb_service.web_lb.id
+  value       = airtelcloudgcc_lb_service.web_lb.id
 }
 
 output "web_lb_status" {
   description = "Status of the web load balancer"
-  value       = airtelcloud_lb_service.web_lb.status
+  value       = airtelcloudgcc_lb_service.web_lb.status
 }
 
 output "web_vip_id" {
   description = "ID of the web VIP"
-  value       = airtelcloud_lb_vip.web_vip.id
+  value       = airtelcloudgcc_lb_vip.web_vip.id
 }
 
 output "web_vip_fixed_ips" {
   description = "Fixed IPs of the web VIP"
-  value       = airtelcloud_lb_vip.web_vip.fixed_ips
+  value       = airtelcloudgcc_lb_vip.web_vip.fixed_ips
 }
 
 output "http_virtual_server_id" {
   description = "ID of the HTTP virtual server"
-  value       = airtelcloud_lb_virtual_server.http.id
+  value       = airtelcloudgcc_lb_virtual_server.http.id
 }
 
 output "http_virtual_server_vip" {
   description = "VIP address of the HTTP virtual server"
-  value       = airtelcloud_lb_virtual_server.http.vip
+  value       = airtelcloudgcc_lb_virtual_server.http.vip
 }
 
 # Output VM details
 output "web1_id" {
   description = "ID of web server 1"
-  value       = airtelcloud_vm.web1.id
+  value       = airtelcloudgcc_vm.web1.id
 }
 
 output "web1_private_ip" {
   description = "Private IP of web server 1"
-  value       = airtelcloud_vm.web1.private_ip
+  value       = airtelcloudgcc_vm.web1.private_ip
 }
 
 output "web2_id" {
   description = "ID of web server 2"
-  value       = airtelcloud_vm.web2.id
+  value       = airtelcloudgcc_vm.web2.id
 }
 
 output "web2_private_ip" {
   description = "Private IP of web server 2"
-  value       = airtelcloud_vm.web2.private_ip
+  value       = airtelcloudgcc_vm.web2.private_ip
 }
 
 # Output public IP details
 output "web1_public_ip_id" {
   description = "ID of the public IP allocated for web server 1"
-  value       = airtelcloud_public_ip.web1_public.id
+  value       = airtelcloudgcc_public_ip.web1_public.id
 }
 
 output "web1_public_ip_address" {
   description = "Public IP address of web server 1"
-  value       = airtelcloud_public_ip.web1_public.public_ip
+  value       = airtelcloudgcc_public_ip.web1_public.public_ip
 }

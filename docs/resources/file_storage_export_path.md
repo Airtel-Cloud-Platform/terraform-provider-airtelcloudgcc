@@ -1,25 +1,25 @@
 ---
-page_title: "airtelcloud_file_storage_export_path Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_file_storage_export_path Resource - Airtel Cloud"
 subcategory: "Storage"
 description: |-
   Manages an Airtel Cloud NFS export path on a file storage volume.
 ---
 
-# airtelcloud_file_storage_export_path (Resource)
+# airtelcloudgcc_file_storage_export_path (Resource)
 
 Manages an NFS export path on an Airtel Cloud file storage volume. An export path defines how NFS clients can access the file storage volume.
 
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_file_storage" "data" {
+resource "airtelcloudgcc_file_storage" "data" {
   name              = "app-data"
   size              = "300"
   availability_zone = "S2"
 }
 
-resource "airtelcloud_file_storage_export_path" "app_export" {
-  volume              = airtelcloud_file_storage.data.name
+resource "airtelcloudgcc_file_storage_export_path" "app_export" {
+  volume              = airtelcloudgcc_file_storage.data.name
   description         = "NFSv4 export for application servers"
   protocol            = "NFSv4"
   availability_zone   = "S2"
@@ -59,5 +59,5 @@ In addition to all arguments above, the following attributes are exported:
 Export paths can be imported using the `id`:
 
 ```shell
-terraform import airtelcloud_file_storage_export_path.app_export <path-id>
+terraform import airtelcloudgcc_file_storage_export_path.app_export <path-id>
 ```

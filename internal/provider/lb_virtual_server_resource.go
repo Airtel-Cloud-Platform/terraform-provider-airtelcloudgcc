@@ -18,8 +18,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 var _ resource.Resource = &LBVirtualServerResource{}
@@ -95,7 +95,7 @@ func (r *LBVirtualServerResource) Schema(ctx context.Context, req resource.Schem
 				Optional:            true,
 			},
 			"vip": schema.StringAttribute{
-				MarkdownDescription: "The VIP fixed IP address to bind this virtual server to (e.g. airtelcloud_lb_vip.example.fixed_ips). The provider resolves it to vip_port_id.",
+				MarkdownDescription: "The VIP fixed IP address to bind this virtual server to (e.g. airtelcloudgcc_lb_vip.example.fixed_ips). The provider resolves it to vip_port_id.",
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),

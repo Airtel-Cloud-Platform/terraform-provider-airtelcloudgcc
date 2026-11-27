@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_vm Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_vm Resource - Airtel Cloud"
 subcategory: "Compute"
 description: |-
   Manages an Airtel Cloud virtual machine (compute instance).
 ---
 
-# airtelcloud_vm (Resource)
+# airtelcloudgcc_vm (Resource)
 
 Manages an Airtel Cloud virtual machine (compute instance).
 
@@ -23,7 +23,7 @@ variable "vm_admin_password" {
 }
 
 
-resource "airtelcloud_vm" "web_server" {
+resource "airtelcloudgcc_vm" "web_server" {
   instance_name     = "web-server"
   flavor_name       = "ccd.Large"
   image_name        = "Ubuntu22_04_Jul2026"
@@ -55,7 +55,7 @@ plain labels exactly as written.
 ### Linux VM with SSH Keypair
 
 ```terraform
-resource "airtelcloud_vm" "web_server_keypair" {
+resource "airtelcloudgcc_vm" "web_server_keypair" {
   instance_name       = "web-server-keypair"
   flavor_name         = "ccd.Large"
   image_name          = "Ubuntu22_04_Jul2026"
@@ -76,7 +76,7 @@ resource "airtelcloud_vm" "web_server_keypair" {
 ### Linux VM Using image_name With Multiple Security Groups
 
 ```terraform
-resource "airtelcloud_vm" "web_server_multi_sg" {
+resource "airtelcloudgcc_vm" "web_server_multi_sg" {
   instance_name       = "web-server-multi-sg"
   flavor_name         = "ccd.Large"
   image_name          = "Ubuntu22_04_Jul2026"
@@ -96,7 +96,7 @@ resource "airtelcloud_vm" "web_server_multi_sg" {
 ### Linux VM Using snapshot_name
 
 ```terraform
-resource "airtelcloud_vm" "web_server_from_snapshot" {
+resource "airtelcloudgcc_vm" "web_server_from_snapshot" {
   instance_name         = "web-server-from-snapshot"
   flavor_name           = "ccd.Large"
   snapshot_name         = "snap-test-snap"
@@ -113,7 +113,7 @@ resource "airtelcloud_vm" "web_server_from_snapshot" {
 }
 ```
 
-Replace the name placeholders with real values from your environment. Prefer name-based fields (`vpc_name`, `subnet_name`, `security_group_names`) for readability. If needed, you can still use IDs via references, for example: `vpc_id = airtelcloud_vpc.main.id`, `subnet_id = airtelcloud_subnet.main.id`, and `security_group_ids = [airtelcloud_security_group.main.id]`.
+Replace the name placeholders with real values from your environment. Prefer name-based fields (`vpc_name`, `subnet_name`, `security_group_names`) for readability. If needed, you can still use IDs via references, for example: `vpc_id = airtelcloudgcc_vpc.main.id`, `subnet_id = airtelcloudgcc_subnet.main.id`, and `security_group_ids = [airtelcloudgcc_security_group.main.id]`.
 
 You can attach one or more security groups during provisioning by setting either `security_group_ids` or `security_group_names`. These inputs are mutually exclusive. If security groups are managed in the same Terraform configuration, prefer IDs.
 
@@ -126,7 +126,7 @@ Do not combine username/password with keypair fields.
 ### Windows VM with Backup
 
 ```terraform
-resource "airtelcloud_vm" "windows_server" {
+resource "airtelcloudgcc_vm" "windows_server" {
   instance_name       = "win-server"
   flavor_name         = "ccd.Large"
   image_name          = "WIN2K19_PREACT_Jul2026"
@@ -201,7 +201,7 @@ In addition to all arguments above, the following attributes are exported:
 VMs can be imported using the `id`:
 
 ```shell
-terraform import airtelcloud_vm.web_server <compute-id>
+terraform import airtelcloudgcc_vm.web_server <compute-id>
 ```
 
 The API does not return credentials, so `admin_username` and `admin_password` are

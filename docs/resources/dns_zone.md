@@ -1,20 +1,20 @@
 ---
-page_title: "airtelcloud_dns_zone Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_dns_zone Resource - Airtel Cloud"
 subcategory: "DNS"
 description: |-
   Manages an Airtel Cloud DNS zone (DNSaaS).
 ---
 
-# airtelcloud_dns_zone (Resource)
+# airtelcloudgcc_dns_zone (Resource)
 
-Manages an Airtel Cloud DNS zone. DNS zones are the foundation for managing DNS records (see `airtelcloud_dns_record`).
+Manages an Airtel Cloud DNS zone. DNS zones are the foundation for managing DNS records (see `airtelcloudgcc_dns_record`).
 
 ## Example Usage
 
 ### Forward zone
 
 ```terraform
-resource "airtelcloud_dns_zone" "example" {
+resource "airtelcloudgcc_dns_zone" "example" {
   zone_name   = "example.com"
   zone_type   = "forward"
   description = "Primary DNS zone for example.com"
@@ -24,13 +24,13 @@ resource "airtelcloud_dns_zone" "example" {
 ### Multiple zones
 
 ```terraform
-resource "airtelcloud_dns_zone" "internal" {
+resource "airtelcloudgcc_dns_zone" "internal" {
   zone_name   = "internal.example.com"
   zone_type   = "forward"
   description = "Internal services DNS zone"
 }
 
-resource "airtelcloud_dns_zone" "public" {
+resource "airtelcloudgcc_dns_zone" "public" {
   zone_name   = "public.example.com"
   description = "Public services DNS zone"
 }
@@ -40,17 +40,17 @@ resource "airtelcloud_dns_zone" "public" {
 
 ```terraform
 output "zone_id" {
-  value = airtelcloud_dns_zone.example.id
+  value = airtelcloudgcc_dns_zone.example.id
 }
 
 output "zone_details" {
   value = {
-    template   = airtelcloud_dns_zone.example.dns_zone_template
-    org_name   = airtelcloud_dns_zone.example.org_name
-    org_id     = airtelcloud_dns_zone.example.org_id
-    created_by = airtelcloud_dns_zone.example.created_by
-    created_at = airtelcloud_dns_zone.example.created_at
-    updated_at = airtelcloud_dns_zone.example.updated_at
+    template   = airtelcloudgcc_dns_zone.example.dns_zone_template
+    org_name   = airtelcloudgcc_dns_zone.example.org_name
+    org_id     = airtelcloudgcc_dns_zone.example.org_id
+    created_by = airtelcloudgcc_dns_zone.example.created_by
+    created_at = airtelcloudgcc_dns_zone.example.created_at
+    updated_at = airtelcloudgcc_dns_zone.example.updated_at
   }
 }
 ```
@@ -83,5 +83,5 @@ In addition to all arguments above, the following attributes are exported:
 DNS zones can be imported using the zone `id` (UUID):
 
 ```shell
-terraform import airtelcloud_dns_zone.example <zone-id>
+terraform import airtelcloudgcc_dns_zone.example <zone-id>
 ```

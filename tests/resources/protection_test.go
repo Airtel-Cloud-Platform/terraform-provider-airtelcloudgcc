@@ -15,16 +15,16 @@ func TestAccProtectionPlanResource(t *testing.T) {
 			{
 				Config: testAccProtectionPlanResourceConfig("test-plan"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_protection_plan.test", "id"),
-					resource.TestCheckResourceAttr("airtelcloud_protection_plan.test", "name", "test-plan"),
-					resource.TestCheckResourceAttr("airtelcloud_protection_plan.test", "vm_name", "test-vm"),
-					resource.TestCheckResourceAttr("airtelcloud_protection_plan.test", "recurrence", "1"),
-					resource.TestCheckResourceAttr("airtelcloud_protection_plan.test", "recurrence_period", "daily"),
-					resource.TestCheckResourceAttr("airtelcloud_protection_plan.test", "retention", "1"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_protection_plan.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection_plan.test", "name", "test-plan"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection_plan.test", "vm_name", "test-vm"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection_plan.test", "recurrence", "1"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection_plan.test", "recurrence_period", "daily"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection_plan.test", "retention", "1"),
 				),
 			},
 			{
-				ResourceName:            "airtelcloud_protection_plan.test",
+				ResourceName:            "airtelcloudgcc_protection_plan.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"name", "description", "recurrence", "recurrence_period", "retention", "vm_name", "selector_value", "subnet_id"},
@@ -35,7 +35,7 @@ func TestAccProtectionPlanResource(t *testing.T) {
 
 func testAccProtectionPlanResourceConfig(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_protection_plan" "test" {
+resource "airtelcloudgcc_protection_plan" "test" {
   name              = %[1]q
   description       = "Test plan"
   vm_name           = "test-vm"
@@ -54,15 +54,15 @@ func TestAccProtectionResource(t *testing.T) {
 			{
 				Config: testAccProtectionResourceConfig(),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_protection.test", "id"),
-					resource.TestCheckResourceAttr("airtelcloud_protection.test", "vm_name", "test-vm"),
-					resource.TestCheckResourceAttrSet("airtelcloud_protection.test", "compute_id"),
-					resource.TestCheckResourceAttr("airtelcloud_protection.test", "protection_plan", "daily-plan"),
-					resource.TestCheckResourceAttrSet("airtelcloud_protection.test", "status"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_protection.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection.test", "vm_name", "test-vm"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_protection.test", "compute_id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection.test", "protection_plan", "daily-plan"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_protection.test", "status"),
 				),
 			},
 			{
-				ResourceName:      "airtelcloud_protection.test",
+				ResourceName:      "airtelcloudgcc_protection.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -77,7 +77,7 @@ func TestAccProtectionResource(t *testing.T) {
 			{
 				Config: testAccProtectionResourceConfigUpdated(),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_protection.test", "description", "Updated description"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection.test", "description", "Updated description"),
 				),
 			},
 		},
@@ -86,7 +86,7 @@ func TestAccProtectionResource(t *testing.T) {
 
 func testAccProtectionResourceConfig() string {
 	return `
-resource "airtelcloud_protection" "test" {
+resource "airtelcloudgcc_protection" "test" {
   description      = "Test protection"
   vm_name          = "test-vm"
   protection_plan  = "daily-plan"
@@ -98,7 +98,7 @@ resource "airtelcloud_protection" "test" {
 
 func testAccProtectionResourceConfigUpdated() string {
 	return `
-resource "airtelcloud_protection" "test" {
+resource "airtelcloudgcc_protection" "test" {
   description      = "Updated description"
   vm_name          = "test-vm"
   protection_plan  = "daily-plan"

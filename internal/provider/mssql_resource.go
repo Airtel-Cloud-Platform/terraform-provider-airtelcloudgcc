@@ -29,8 +29,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 const mssqlDefaultTimeout = 30 * time.Minute
@@ -48,7 +48,7 @@ func NewMSSQLResource() resource.Resource {
 	return &MSSQLResource{}
 }
 
-// MSSQLResource defines the airtelcloud_mssql resource.
+// MSSQLResource defines the airtelcloudgcc_mssql resource.
 type MSSQLResource struct {
 	client *client.Client
 }
@@ -421,7 +421,7 @@ func (r *MSSQLResource) Read(ctx context.Context, req resource.ReadRequest, resp
 func (r *MSSQLResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	resp.Diagnostics.AddError(
 		"Update Not Supported",
-		"airtelcloud_mssql does not support in-place updates. Changing configuration forces a new instance.",
+		"airtelcloudgcc_mssql does not support in-place updates. Changing configuration forces a new instance.",
 	)
 }
 

@@ -43,8 +43,8 @@ If you run commands as `root`, `go env GOPATH` is typically `/root/go`, so your 
 Clone the repository and use the Makefile:
 
 ```shell
-git clone https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud.git
-cd terraform-provider-airtelcloud
+git clone https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc.git
+cd terraform-provider-airtelcloudgcc
 
 # Compile the provider binary
 make build
@@ -56,7 +56,7 @@ make install
 `make install` places the binary at:
 
 ```
-~/.terraform.d/plugins/registry.terraform.io/Airtel-Cloud-Platform/airtelcloud/2.0.1/<OS_ARCH>/
+~/.terraform.d/plugins/registry.terraform.io/Airtel-Cloud-Platform/airtelcloudgcc/1.0.0/<OS_ARCH>/
 ```
 
 where `<OS_ARCH>` defaults to your current Go platform (`$(go env GOOS)_$(go env GOARCH)`) and can be overridden in the Makefile.
@@ -70,7 +70,7 @@ Create or update `~/.terraformrc`:
 ```hcl
 provider_installation {
   dev_overrides {
-      "Airtel-Cloud-Platform/airtelcloud" = "<GOPATH>/bin"
+      "Airtel-Cloud-Platform/airtelcloudgcc" = "<GOPATH>/bin"
   }
   direct {}
 }
@@ -98,15 +98,15 @@ Then commit the changes to `go.mod` and `go.sum`.
 ```hcl
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"

@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,7 +45,7 @@ variable "resource_prefix" {
 }
 
 # Create a private bucket with versioning
-resource "airtelcloud_storage_bucket" "private_bucket" {
+resource "airtelcloudgcc_storage_bucket" "private_bucket" {
   name              = "${var.resource_prefix}-obj-bucket"
   replication_type  = "Local"
   replication_tag   = "south_S1"
@@ -63,25 +63,25 @@ resource "airtelcloud_storage_bucket" "private_bucket" {
 # Output bucket details
 output "private_bucket_id" {
   description = "ID of the private bucket"
-  value       = airtelcloud_storage_bucket.private_bucket.id
+  value       = airtelcloudgcc_storage_bucket.private_bucket.id
 }
 
 output "private_bucket_name" {
   description = "Name of the private bucket"
-  value       = airtelcloud_storage_bucket.private_bucket.name
+  value       = airtelcloudgcc_storage_bucket.private_bucket.name
 }
 
 output "private_bucket_s3_endpoint" {
   description = "S3 endpoint for the private bucket"
-  value       = airtelcloud_storage_bucket.private_bucket.s3_endpoint
+  value       = airtelcloudgcc_storage_bucket.private_bucket.s3_endpoint
 }
 
 output "private_bucket_public_endpoint" {
   description = "Public endpoint for the private bucket"
-  value       = airtelcloud_storage_bucket.private_bucket.public_endpoint
+  value       = airtelcloudgcc_storage_bucket.private_bucket.public_endpoint
 }
 
 output "private_bucket_state" {
   description = "State of the private bucket"
-  value       = airtelcloud_storage_bucket.private_bucket.state
+  value       = airtelcloudgcc_storage_bucket.private_bucket.state
 }

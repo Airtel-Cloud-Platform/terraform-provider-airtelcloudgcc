@@ -35,8 +35,8 @@ The Airtel Cloud provider uses a multi-header authentication scheme including HM
 ## Provider Configuration
 
 ```hcl
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key      # Required
   api_secret   = var.airtel_api_secret   # Required
   region       = "south-1"               # Optional, defaults to "south-1"
@@ -53,7 +53,7 @@ AIRTEL_API_KEY=your-api-key-here
 AIRTEL_API_SECRET=your-api-secret-here
 
 # Optional
-AIRTEL_API_ENDPOINT=https://south.cloud.airtel.in
+AIRTEL_API_ENDPOINT=https://gcc-south.cloud.airtel.in
 AIRTEL_REGION=south-1
 AIRTEL_ORGANIZATION=your-organization-name
 AIRTEL_PROJECT_NAME=your-project-name
@@ -63,10 +63,10 @@ AIRTEL_PROJECT_NAME=your-project-name
 
 ```http
 POST /api/v1/volumes/ HTTP/1.1
-Host: south.cloud.airtel.in
+Host: gcc-south.cloud.airtel.in
 Content-Type: multipart/form-data; boundary=...
 Accept: application/json
-User-Agent: terraform-provider-airtelcloud/2.0.1
+User-Agent: terraform-provider-airtelcloudgcc/1.0.0
 Ce-Auth: 4a15ebf5-68ee-417f-99cf-482f4f5273a9.1730030000.a1b2c3d4e5f6...
 ce-region: south-1
 organisation-name: my-company

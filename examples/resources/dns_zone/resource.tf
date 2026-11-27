@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,14 +45,14 @@ variable "resource_prefix" {
 }
 
 # Create a forward DNS zone
-resource "airtelcloud_dns_zone" "tfas" {
+resource "airtelcloudgcc_dns_zone" "tfas" {
   zone_name   = "${var.resource_prefix}-domain.com"
   zone_type   = "forward"
   description = "Example DNS zone for demonstration"
 }
 
 # Create another DNS zone for internal services
-resource "airtelcloud_dns_zone" "internal" {
+resource "airtelcloudgcc_dns_zone" "internal" {
   zone_name   = "internal.${var.resource_prefix}-domain.com"
   zone_type   = "forward"
   description = "Internal services DNS zone"
@@ -61,15 +61,15 @@ resource "airtelcloud_dns_zone" "internal" {
 # Output DNS zone details
 output "example_zone_id" {
   description = "ID of the tfas DNS zone"
-  value       = airtelcloud_dns_zone.tfas.id
+  value       = airtelcloudgcc_dns_zone.tfas.id
 }
 
 output "example_zone_name" {
   description = "Name of the tfas DNS zone"
-  value       = airtelcloud_dns_zone.tfas.zone_name
+  value       = airtelcloudgcc_dns_zone.tfas.zone_name
 }
 
 output "internal_zone_id" {
   description = "ID of the internal DNS zone"
-  value       = airtelcloud_dns_zone.internal.id
+  value       = airtelcloudgcc_dns_zone.internal.id
 }

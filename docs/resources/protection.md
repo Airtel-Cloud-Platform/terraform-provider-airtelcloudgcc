@@ -1,10 +1,10 @@
 ---
-page_title: "airtelcloud_protection Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_protection Resource - Airtel Cloud"
 subcategory: "Backup"
 description: |-
   Manages an Airtel Cloud backup protection policy for a VM.
 
-# airtelcloud_protection (Resource)
+# airtelcloudgcc_protection (Resource)
 
 Manages a backup protection policy for an existing Airtel Cloud VM.
 
@@ -17,7 +17,7 @@ The VM and protection plan must already exist before creating the protection pol
 ### Using a Start Date
 
 ```terraform
-resource "airtelcloud_protection" "web" {
+resource "airtelcloudgcc_protection" "web" {
   vm_name         = "my-app-vm"
   protection_plan = "my-weekly-backup"
   start_date      = "10/06/2026"
@@ -28,7 +28,7 @@ resource "airtelcloud_protection" "web" {
 ### Using a Weekday
 
 ```terraform
-resource "airtelcloud_protection" "web" {
+resource "airtelcloudgcc_protection" "web" {
   vm_name         = "my-app-vm"
   protection_plan = "my-weekly-backup"
   weekday         = "monday"
@@ -174,7 +174,7 @@ You can configure the schedule using either a specific date or a weekday.
 Use `start_date` when the policy should begin on a specific date.
 
 ```terraform
-resource "airtelcloud_protection" "web" {
+resource "airtelcloudgcc_protection" "web" {
   vm_name         = "my-app-vm"
   protection_plan = "my-weekly-backup"
   start_date      = "10/06/2026"
@@ -187,7 +187,7 @@ resource "airtelcloud_protection" "web" {
 Use `weekday` when the policy should begin on a specific day of the week.
 
 ```terraform
-resource "airtelcloud_protection" "web" {
+resource "airtelcloudgcc_protection" "web" {
   vm_name         = "my-app-vm"
   protection_plan = "my-weekly-backup"
   weekday         = "monday"
@@ -236,7 +236,7 @@ Creation timestamp of the protection policy.
 An existing protection policy can be imported using its ID.
 
 ```shell
-terraform import airtelcloud_protection.web <protection-id>
+terraform import airtelcloudgcc_protection.web <protection-id>
 ```
 
 After importing the resource, configure `vm_name`, `protection_plan`, and the scheduling arguments to match the existing protection policy.

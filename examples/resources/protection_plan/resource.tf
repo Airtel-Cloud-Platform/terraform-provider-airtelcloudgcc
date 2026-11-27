@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -52,7 +52,7 @@ variable "vm_name" {
 # Create a daily backup protection plan with 30-day retention.
 # Note: the API does not support deletion of protection plans.
 # Destroying this resource only removes it from Terraform state.
-resource "airtelcloud_protection_plan" "daily" {
+resource "airtelcloudgcc_protection_plan" "daily" {
   name              = "${var.resource_prefix}-backup"
   description       = "Daily backup with 30-day retention"
   vm_name           = var.vm_name
@@ -62,7 +62,7 @@ resource "airtelcloud_protection_plan" "daily" {
 }
 
 # Weekly backup plan
-resource "airtelcloud_protection_plan" "weekly" {
+resource "airtelcloudgcc_protection_plan" "weekly" {
   name              = "${var.resource_prefix}-backup"
   description       = "Weekly backup with 84-day retention"
   vm_name           = var.vm_name
@@ -73,10 +73,10 @@ resource "airtelcloud_protection_plan" "weekly" {
 
 output "daily_plan_id" {
   description = "ID of the daily protection plan"
-  value       = airtelcloud_protection_plan.daily.id
+  value       = airtelcloudgcc_protection_plan.daily.id
 }
 
 output "weekly_plan_id" {
   description = "ID of the weekly protection plan"
-  value       = airtelcloud_protection_plan.weekly.id
+  value       = airtelcloudgcc_protection_plan.weekly.id
 }

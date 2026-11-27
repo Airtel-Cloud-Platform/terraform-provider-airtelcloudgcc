@@ -17,18 +17,18 @@ func TestAccLBServiceResource(t *testing.T) {
 			{
 				Config: testAccLBServiceResourceConfig("test-lb"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_service.test", "id"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_service.test", "name", "test-lb"),
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_service.test", "flavor_id"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_service.test", "vpc_id", "vpc-test-123"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_service.test", "subnet_id", "subnet-test-456"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_service.test", "ha", "false"),
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_service.test", "status"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_service.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_service.test", "name", "test-lb"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_service.test", "flavor_id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_service.test", "vpc_id", "vpc-test-123"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_service.test", "subnet_id", "subnet-test-456"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_service.test", "ha", "false"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_service.test", "status"),
 				),
 			},
 			// ImportState testing
 			{
-				ResourceName:      "airtelcloud_lb_service.test",
+				ResourceName:      "airtelcloudgcc_lb_service.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -49,7 +49,7 @@ func TestAccLBServiceResourceValidation(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name      = "tf-acc-lb"
   subnet_id = "subnet-test-456"
   vpc_id    = "vpc-test-123"
@@ -60,7 +60,7 @@ resource "airtelcloud_lb_service" "test" {
 			},
 			{
 				Config: `
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name      = "tf-acc-lb"
   subnet_id = "subnet-test-456"
 }
@@ -69,7 +69,7 @@ resource "airtelcloud_lb_service" "test" {
 			},
 			{
 				Config: `
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name        = "tf-acc-lb"
   vpc_id      = "vpc-test-123"
   subnet_id   = "subnet-test-456"
@@ -80,7 +80,7 @@ resource "airtelcloud_lb_service" "test" {
 			},
 			{
 				Config: `
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name   = "tf-acc-lb"
   vpc_id = "vpc-test-123"
 }
@@ -93,7 +93,7 @@ resource "airtelcloud_lb_service" "test" {
 
 func testAccLBServiceResourceConfig(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name        = %[1]q
   description = "Test LB service"
   subnet_id   = "subnet-test-456"
@@ -116,9 +116,9 @@ func TestAccLBVipResource(t *testing.T) {
 			{
 				Config: testAccLBVipResourceConfig(),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_vip.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_vip.test", "lb_service_id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_vip.test", "status"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_vip.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_vip.test", "lb_service_id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_vip.test", "status"),
 				),
 			},
 		},
@@ -127,7 +127,7 @@ func TestAccLBVipResource(t *testing.T) {
 
 func testAccLBVipResourceConfig() string {
 	return `
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name        = "test-lb-for-vip"
   subnet_id   = "subnet-test-456"
   vpc_id      = "vpc-test-123"
@@ -138,8 +138,8 @@ resource "airtelcloud_lb_service" "test" {
   }
 }
 
-resource "airtelcloud_lb_vip" "test" {
-  lb_service_id = airtelcloud_lb_service.test.id
+resource "airtelcloudgcc_lb_vip" "test" {
+  lb_service_id = airtelcloudgcc_lb_service.test.id
 }
 `
 }
@@ -152,9 +152,9 @@ func TestAccLBCertificateResource(t *testing.T) {
 			{
 				Config: testAccLBCertificateResourceConfig("test-cert"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_certificate.test", "id"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_certificate.test", "name", "test-cert"),
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_certificate.test", "lb_service_id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_certificate.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_certificate.test", "name", "test-cert"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_certificate.test", "lb_service_id"),
 				),
 			},
 		},
@@ -163,7 +163,7 @@ func TestAccLBCertificateResource(t *testing.T) {
 
 func testAccLBCertificateResourceConfig(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name        = "test-lb-for-cert"
   subnet_id   = "subnet-test-456"
   vpc_id      = "vpc-test-123"
@@ -174,8 +174,8 @@ resource "airtelcloud_lb_service" "test" {
   }
 }
 
-resource "airtelcloud_lb_certificate" "test" {
-  lb_service_id   = airtelcloud_lb_service.test.id
+resource "airtelcloudgcc_lb_certificate" "test" {
+  lb_service_id   = airtelcloudgcc_lb_service.test.id
   name            = %[1]q
   ssl_cert        = "-----BEGIN CERTIFICATE-----\nMIIBxTCCAW...\n-----END CERTIFICATE-----"
   ssl_private_key = "-----BEGIN PRIVATE KEY-----\nMIIEvwIBAD...\n-----END PRIVATE KEY-----"
@@ -191,14 +191,14 @@ func TestAccLBVirtualServerResource(t *testing.T) {
 			{
 				Config: testAccLBVirtualServerResourceConfig("test-vs"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_virtual_server.test", "id"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_virtual_server.test", "name", "test-vs"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_virtual_server.test", "protocol", "HTTP"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_virtual_server.test", "port", "80"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_virtual_server.test", "routing_algorithm", "ROUND_ROBIN"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_virtual_server.test", "interval", "30"),
-					resource.TestCheckResourceAttr("airtelcloud_lb_virtual_server.test", "x_forwarded_for", "true"),
-					resource.TestCheckResourceAttrSet("airtelcloud_lb_virtual_server.test", "status"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_virtual_server.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_virtual_server.test", "name", "test-vs"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_virtual_server.test", "protocol", "HTTP"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_virtual_server.test", "port", "80"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_virtual_server.test", "routing_algorithm", "ROUND_ROBIN"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_virtual_server.test", "interval", "30"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_lb_virtual_server.test", "x_forwarded_for", "true"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_lb_virtual_server.test", "status"),
 				),
 			},
 		},
@@ -207,7 +207,7 @@ func TestAccLBVirtualServerResource(t *testing.T) {
 
 func testAccLBVirtualServerResourceConfig(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_lb_service" "test" {
+resource "airtelcloudgcc_lb_service" "test" {
   name        = "test-lb-for-vs"
   subnet_id   = "subnet-test-456"
   vpc_id      = "vpc-test-123"
@@ -218,14 +218,14 @@ resource "airtelcloud_lb_service" "test" {
   }
 }
 
-resource "airtelcloud_lb_vip" "test" {
-  lb_service_id = airtelcloud_lb_service.test.id
+resource "airtelcloudgcc_lb_vip" "test" {
+  lb_service_id = airtelcloudgcc_lb_service.test.id
 }
 
-resource "airtelcloud_lb_virtual_server" "test" {
-  lb_service_id     = airtelcloud_lb_service.test.id
+resource "airtelcloudgcc_lb_virtual_server" "test" {
+  lb_service_id     = airtelcloudgcc_lb_service.test.id
   name              = %[1]q
-  vip_port_id       = tonumber(airtelcloud_lb_vip.test.id)
+  vip_port_id       = tonumber(airtelcloudgcc_lb_vip.test.id)
   protocol          = "HTTP"
   port              = 80
   routing_algorithm = "ROUND_ROBIN"

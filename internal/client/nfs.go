@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // GetFileStorageVolume retrieves a file storage volume by name

@@ -57,12 +57,12 @@ find . -type f -name "*.md" | while read -r file; do
 
     # Provider download path
     sed -i.bak -E \
-    "s|terraform-provider-airtelcloud/[0-9]+\.[0-9]+\.[0-9]+|terraform-provider-airtelcloud/${VERSION}|g" \
+    "s|terraform-provider-airtelcloudgcc/[0-9]+\.[0-9]+\.[0-9]+|terraform-provider-airtelcloudgcc/${VERSION}|g" \
     "$file"
 
     # Registry path
     sed -i.bak -E \
-    "s|airtelcloud/[0-9]+\.[0-9]+\.[0-9]+/|airtelcloud/${VERSION}/|g" \
+    "s|airtelcloudgcc/[0-9]+\.[0-9]+\.[0-9]+/|airtelcloudgcc/${VERSION}/|g" \
     "$file"
 
     # Terraform provider version blocks

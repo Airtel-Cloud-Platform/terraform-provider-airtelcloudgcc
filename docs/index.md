@@ -17,15 +17,15 @@ The Airtel Cloud provider allows Terraform to manage Airtel Cloud infrastructure
 ```terraform
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,8 +45,8 @@ The provider authenticates using an HMAC-SHA256 scheme that requires both an API
 ### Provider Configuration
 
 ```terraform
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = "your-api-key-here"
   api_secret   = "your-api-secret-here"
   region       = "south"
@@ -60,7 +60,7 @@ export AIRTEL_API_KEY="your-api-key-here"
 export AIRTEL_API_SECRET="your-api-secret-here"
 
 # Optional provider setting fallbacks
-export AIRTEL_API_ENDPOINT="https://south.cloud.airtel.in"
+export AIRTEL_API_ENDPOINT="https://gcc-south.cloud.airtel.in"
 export AIRTEL_REGION="south"
 export AIRTEL_ORGANIZATION="your-organization"
 export AIRTEL_PROJECT_NAME="your-project"
@@ -82,8 +82,8 @@ variable "airtel_api_secret" {
   sensitive   = true
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -94,7 +94,7 @@ provider "airtelcloud" {
 
 The following arguments are supported in the provider configuration:
 
-- `api_endpoint` (Optional) - The Airtel Cloud API endpoint URL. Defaults to `https://south.cloud.airtel.in`.
+- `api_endpoint` (Optional) - The Airtel Cloud API endpoint URL. Defaults to `https://gcc-south.cloud.airtel.in`.
 - `api_key` (Required) - The API key for authenticating with Airtel Cloud API. Can also be set via the `AIRTEL_API_KEY` environment variable.
 - `api_secret` (Required) - The API secret for HMAC authentication. Can also be set via the `AIRTEL_API_SECRET` environment variable.
 - `region` (Optional) - The default region for resources. Defaults to `south`.
@@ -107,51 +107,51 @@ The following arguments are supported in the provider configuration:
 The provider supports the following 31 resources:
 
 **Compute:**
-- [`airtelcloud_vm`](resources/vm) - Virtual Machine
-- [`airtelcloud_asg`](resources/asg) - Autoscaling Group
-- [`airtelcloud_baremetal`](resources/baremetal) - Baremetal Server
-- [`airtelcloud_kubernetes`](resources/kubernetes) - Kubernetes Cluster (CKP)
-- [`airtelcloud_compute_snapshot`](resources/compute_snapshot) - Compute Snapshot
+- [`airtelcloudgcc_vm`](resources/vm) - Virtual Machine
+- [`airtelcloudgcc_asg`](resources/asg) - Autoscaling Group
+- [`airtelcloudgcc_baremetal`](resources/baremetal) - Baremetal Server
+- [`airtelcloudgcc_kubernetes`](resources/kubernetes) - Kubernetes Cluster (CKP)
+- [`airtelcloudgcc_compute_snapshot`](resources/compute_snapshot) - Compute Snapshot
 
 **Storage:**
-- [`airtelcloud_volume`](resources/volume) - Block Storage Volume
-- [`airtelcloud_storage_bucket`](resources/storage_bucket) - Object Storage Bucket
-- [`airtelcloud_storage_access_key`](resources/storage_access_key) - Object Storage Access Key
-- [`airtelcloud_file_storage`](resources/file_storage) - File Storage (NFS Volume)
-- [`airtelcloud_file_storage_export_path`](resources/file_storage_export_path) - File Storage Export Path
-- [`airtelcloud_baremetal_storage`](resources/baremetal_storage) - Baremetal Block Storage
+- [`airtelcloudgcc_volume`](resources/volume) - Block Storage Volume
+- [`airtelcloudgcc_storage_bucket`](resources/storage_bucket) - Object Storage Bucket
+- [`airtelcloudgcc_storage_access_key`](resources/storage_access_key) - Object Storage Access Key
+- [`airtelcloudgcc_file_storage`](resources/file_storage) - File Storage (NFS Volume)
+- [`airtelcloudgcc_file_storage_export_path`](resources/file_storage_export_path) - File Storage Export Path
+- [`airtelcloudgcc_baremetal_storage`](resources/baremetal_storage) - Baremetal Block Storage
 
 **Database:**
-- [`airtelcloud_postgres`](resources/postgres) - PostgreSQL Cluster
-- [`airtelcloud_mssql`](resources/mssql) - Microsoft SQL Server Instance
-- [`airtelcloud_mariadb`](resources/mariadb) - MariaDB Cluster
+- [`airtelcloudgcc_postgres`](resources/postgres) - PostgreSQL Cluster
+- [`airtelcloudgcc_mssql`](resources/mssql) - Microsoft SQL Server Instance
+- [`airtelcloudgcc_mariadb`](resources/mariadb) - MariaDB Cluster
 
 **Networking:**
-- [`airtelcloud_vpc`](resources/vpc) - Virtual Private Cloud
-- [`airtelcloud_subnet`](resources/subnet) - VPC Subnet
-- [`airtelcloud_security_group`](resources/security_group) - Security Group
-- [`airtelcloud_security_group_rule`](resources/security_group_rule) - Security Group Rule
-- [`airtelcloud_vpc_peering`](resources/vpc_peering) - VPC Peering
-- [`airtelcloud_lb_service`](resources/lb_service) - Load Balancer Service
-- [`airtelcloud_lb_vip`](resources/lb_vip) - Load Balancer VIP
-- [`airtelcloud_lb_certificate`](resources/lb_certificate) - Load Balancer Certificate
-- [`airtelcloud_lb_virtual_server`](resources/lb_virtual_server) - Load Balancer Virtual Server
+- [`airtelcloudgcc_vpc`](resources/vpc) - Virtual Private Cloud
+- [`airtelcloudgcc_subnet`](resources/subnet) - VPC Subnet
+- [`airtelcloudgcc_security_group`](resources/security_group) - Security Group
+- [`airtelcloudgcc_security_group_rule`](resources/security_group_rule) - Security Group Rule
+- [`airtelcloudgcc_vpc_peering`](resources/vpc_peering) - VPC Peering
+- [`airtelcloudgcc_lb_service`](resources/lb_service) - Load Balancer Service
+- [`airtelcloudgcc_lb_vip`](resources/lb_vip) - Load Balancer VIP
+- [`airtelcloudgcc_lb_certificate`](resources/lb_certificate) - Load Balancer Certificate
+- [`airtelcloudgcc_lb_virtual_server`](resources/lb_virtual_server) - Load Balancer Virtual Server
 
 **Security:**
-- [`airtelcloud_public_ip`](resources/public_ip) - Public IP reservation
-- [`airtelcloud_public_ip_attachment`](resources/public_ip_attachment) - Public IP attach to VM or LB
-- [`airtelcloud_public_ip_policy_rule`](resources/public_ip_policy_rule) - Public IP Policy Rule
+- [`airtelcloudgcc_public_ip`](resources/public_ip) - Public IP reservation
+- [`airtelcloudgcc_public_ip_attachment`](resources/public_ip_attachment) - Public IP attach to VM or LB
+- [`airtelcloudgcc_public_ip_policy_rule`](resources/public_ip_policy_rule) - Public IP Policy Rule
 
 **DNS:**
-- [`airtelcloud_dns_zone`](resources/dns_zone) - DNS Zone
-- [`airtelcloud_dns_record`](resources/dns_record) - DNS Record
+- [`airtelcloudgcc_dns_zone`](resources/dns_zone) - DNS Zone
+- [`airtelcloudgcc_dns_record`](resources/dns_record) - DNS Record
 
 **Alerting:**
-- [`airtelcloud_alert`](resources/alert) - Metric Alert
+- [`airtelcloudgcc_alert`](resources/alert) - Metric Alert
 
 **Backup:**
-- [`airtelcloud_protection_plan`](resources/protection_plan) - Protection Plan
-- [`airtelcloud_protection`](resources/protection) - Protection Policy
+- [`airtelcloudgcc_protection_plan`](resources/protection_plan) - Protection Plan
+- [`airtelcloudgcc_protection`](resources/protection) - Protection Policy
 
 ## Example Infrastructure
 
@@ -159,7 +159,7 @@ Here's an example that creates an object storage bucket and an NFS volume with a
 
 ```terraform
 # Create a private bucket with versioning
-resource "airtelcloud_storage_bucket" "private_bucket" {
+resource "airtelcloudgcc_storage_bucket" "private_bucket" {
   name              = "tf-private-bucket"
   replication_type  = "Local"
   replication_tag   = "south_S1"
@@ -169,15 +169,15 @@ resource "airtelcloud_storage_bucket" "private_bucket" {
 }
 
 # Create an NFS volume
-resource "airtelcloud_file_storage" "basic" {
+resource "airtelcloudgcc_file_storage" "basic" {
   name              = "basic-nfs"
   size              = "300"
   availability_zone = "S2"
 }
 
 # Create an NFS export path
-resource "airtelcloud_file_storage_export_path" "nfsv4_export" {
-  volume              = airtelcloud_file_storage.basic.name
+resource "airtelcloudgcc_file_storage_export_path" "nfsv4_export" {
+  volume              = airtelcloudgcc_file_storage.basic.name
   description         = "NFSv4 export for application servers"
   protocol            = "NFSv4"
   availability_zone   = "S2"
@@ -187,10 +187,10 @@ resource "airtelcloud_file_storage_export_path" "nfsv4_export" {
 }
 ```
 
-For a more complete example, see [`examples/complete/main.tf`](https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/tree/main/examples/complete).
+For a more complete example, see [`examples/complete/main.tf`](https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/tree/main/examples/complete).
 
 ## Support and Contributing
 
-For support, please refer to the [GitHub repository](https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud) or open an issue.
+For support, please refer to the [GitHub repository](https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc) or open an issue.
 
 Contributions are welcome! Please read the contributing guidelines before submitting pull requests.

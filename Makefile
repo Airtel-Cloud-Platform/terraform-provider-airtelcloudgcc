@@ -1,6 +1,6 @@
 HOSTNAME=registry.terraform.io
 NAMESPACE=Airtel-Cloud-Platform
-NAME=airtelcloud
+NAME=airtelcloudgcc
 BINARY=terraform-provider-${NAME}
 OS_ARCH?=$(shell go env GOOS)_$(shell go env GOARCH)
 GOPATH_BIN?=$(shell go env GOPATH)/bin

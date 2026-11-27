@@ -1,18 +1,18 @@
 ---
-page_title: "airtelcloud_vpc Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_vpc Resource - Airtel Cloud"
 subcategory: "Networking"
 description: |-
   Manages an Airtel Cloud Virtual Private Cloud (VPC).
 ---
 
-# airtelcloud_vpc (Resource)
+# airtelcloudgcc_vpc (Resource)
 
 Manages an Airtel Cloud Virtual Private Cloud (VPC).
 
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_vpc" "main" {
+resource "airtelcloudgcc_vpc" "main" {
   name                 = "production-vpc"
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
@@ -51,5 +51,5 @@ In addition to all arguments above, the following attributes are exported:
 VPCs can be imported using the `id`:
 
 ```shell
-terraform import airtelcloud_vpc.main <vpc-id>
+terraform import airtelcloudgcc_vpc.main <vpc-id>
 ```

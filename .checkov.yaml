@@ -1,4 +1,4 @@
-# Checkov config for terraform-provider-airtelcloud
+# Checkov config for terraform-provider-airtelcloudgcc
 # The provider itself is Go; the .tf that ships publicly lives in examples/ and docs/,
 # and is what users copy-paste. The workflows are scanned too.
 directory:

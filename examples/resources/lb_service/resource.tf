@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,7 +45,7 @@ variable "resource_prefix" {
 }
 
 # Create a load balancer service
-resource "airtelcloud_lb_service" "example" {
+resource "airtelcloudgcc_lb_service" "example" {
   name        = "${var.resource_prefix}-lb-service"
   description = "Example load balancer service"
   vpc_name    = "copper-vpc01"
@@ -60,15 +60,15 @@ resource "airtelcloud_lb_service" "example" {
 }
 
 # Allocate a VIP for the load balancer
-resource "airtelcloud_lb_vip" "example" {
-  #lb_service_id = airtelcloud_lb_service.example.id
-  lb_service_name = airtelcloud_lb_service.example.name
+resource "airtelcloudgcc_lb_vip" "example" {
+  #lb_service_id = airtelcloudgcc_lb_service.example.id
+  lb_service_name = airtelcloudgcc_lb_service.example.name
 }
 
 # Upload an SSL certificate for HTTPS termination
 # Uncomment and provide cert/key file paths to use
-#resource "airtelcloud_lb_certificate" "example" {
-#  lb_service_id   = airtelcloud_lb_service.example.id
+#resource "airtelcloudgcc_lb_certificate" "example" {
+#  lb_service_id   = airtelcloudgcc_lb_service.example.id
 #  name            = "${var.resource_prefix}-ssl-cert"
 #  ssl_cert        = file("${path.module}/cert.pem")
 #  ssl_private_key = file("${path.module}/key.pem")
@@ -76,10 +76,10 @@ resource "airtelcloud_lb_vip" "example" {
 
 # Create an HTTP virtual server with backend nodes.
 # vip_port_id is computed by resolving the vip fixed IP against the LB VIP.
-resource "airtelcloud_lb_virtual_server" "http" {
-  lb_service_id     = airtelcloud_lb_service.example.id
+resource "airtelcloudgcc_lb_virtual_server" "http" {
+  lb_service_id     = airtelcloudgcc_lb_service.example.id
   name              = "${var.resource_prefix}-http-vs"
-  vip               = airtelcloud_lb_vip.example.fixed_ips
+  vip               = airtelcloudgcc_lb_vip.example.fixed_ips
   protocol          = "HTTP"
   port              = 80
   routing_algorithm = "ROUND_ROBIN"
@@ -126,30 +126,30 @@ resource "airtelcloud_lb_virtual_server" "http" {
 # Output load balancer details
 output "lb_service_id" {
   description = "ID of the load balancer service"
-  value       = airtelcloud_lb_service.example.id
+  value       = airtelcloudgcc_lb_service.example.id
 }
 
 output "lb_service_status" {
   description = "Status of the load balancer service"
-  value       = airtelcloud_lb_service.example.status
+  value       = airtelcloudgcc_lb_service.example.status
 }
 
 output "lb_vip_id" {
   description = "ID of the load balancer VIP"
-  value       = airtelcloud_lb_vip.example.id
+  value       = airtelcloudgcc_lb_vip.example.id
 }
 
 output "lb_vip_public_ip" {
   description = "Public IP of the load balancer VIP"
-  value       = airtelcloud_lb_vip.example.public_ip
+  value       = airtelcloudgcc_lb_vip.example.public_ip
 }
 
 output "http_virtual_server_id" {
   description = "ID of the HTTP virtual server"
-  value       = airtelcloud_lb_virtual_server.http.id
+  value       = airtelcloudgcc_lb_virtual_server.http.id
 }
 
 output "http_virtual_server_vip" {
   description = "VIP address of the HTTP virtual server"
-  value       = airtelcloud_lb_virtual_server.http.vip
+  value       = airtelcloudgcc_lb_virtual_server.http.vip
 }

@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_subnet Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_subnet Resource - Airtel Cloud"
 subcategory: "Networking"
 description: |-
   Manages an Airtel Cloud VPC subnet.
 ---
 
-# airtelcloud_subnet (Resource)
+# airtelcloudgcc_subnet (Resource)
 
 Manages an Airtel Cloud VPC subnet.
 
@@ -14,7 +14,7 @@ Uses the v2.1 API with domain/project URL paths. The provider's `organization` a
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_subnet" "private" {
+resource "airtelcloudgcc_subnet" "private" {
   network_id         = "029ac9b8-d93e-4691-a7cb-2f651c607cfe"
   name               = "app-private-subnet"
   ipv4_address_space = "10.1.14.0/24"
@@ -30,7 +30,7 @@ resource "airtelcloud_subnet" "private" {
 
 output "private_subnet_id" {
   description = "ID of the private subnet"
-  value       = airtelcloud_subnet.private.id
+  value       = airtelcloudgcc_subnet.private.id
 }
 ```
 
@@ -72,5 +72,5 @@ In addition to all arguments above, the following attributes are exported:
 Subnets can be imported using the `id`:
 
 ```shell
-terraform import airtelcloud_subnet.private <subnet-id>
+terraform import airtelcloudgcc_subnet.private <subnet-id>
 ```

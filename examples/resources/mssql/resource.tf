@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,7 +45,7 @@ variable "mssql_password" {
 }
 
 # Network access by VPC and subnet. The subnet CIDR is allowed to connect.
-resource "airtelcloud_mssql" "app" {
+resource "airtelcloudgcc_mssql" "app" {
   name              = "hello"
   description       = "Application MSSQL instance"
   database_edition  = "web"
@@ -68,7 +68,7 @@ resource "airtelcloud_mssql" "app" {
 
 # Network access by custom CIDR only. `vpc` and `subnet` are not needed.
 # Create and delete each default to 30 minutes; raise them if your instance is slow (create typically takes about 14 minutes).
-resource "airtelcloud_mssql" "cidr_only" {
+resource "airtelcloudgcc_mssql" "cidr_only" {
   name              = "hello-cidr"
   database_edition  = "web"
   collation         = "SQL_Latin1_General_CP1_CI_AS"
@@ -89,15 +89,15 @@ resource "airtelcloud_mssql" "cidr_only" {
 
 output "mssql_id" {
   description = "UUID of the MSSQL instance"
-  value       = airtelcloud_mssql.app.id
+  value       = airtelcloudgcc_mssql.app.id
 }
 
 output "mssql_status" {
   description = "Status of the MSSQL instance"
-  value       = airtelcloud_mssql.app.status
+  value       = airtelcloudgcc_mssql.app.status
 }
 
 output "mssql_version" {
   description = "Version resolved from the selected edition"
-  value       = airtelcloud_mssql.app.version
+  value       = airtelcloudgcc_mssql.app.version
 }

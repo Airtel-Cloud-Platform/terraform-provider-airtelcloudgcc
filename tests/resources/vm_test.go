@@ -24,23 +24,23 @@ func TestAccVMResource(t *testing.T) {
 			{
 				Config: testAccVMResourceConfig("test-vm"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "instance_name", "test-vm"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "os_type", "linux"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "boot_from_volume", "true"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "disk_size", "20"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "admin_username", testAccVMAdminUsername),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "status"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "flavor_id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "image_id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "vpc_id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "subnet_id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "private_ip"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "instance_name", "test-vm"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "os_type", "linux"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "boot_from_volume", "true"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "disk_size", "20"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "admin_username", testAccVMAdminUsername),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "status"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "flavor_id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "image_id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "vpc_id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "subnet_id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "private_ip"),
 				),
 			},
 			// ImportState testing
 			{
-				ResourceName:      "airtelcloud_vm.test",
+				ResourceName:      "airtelcloudgcc_vm.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -61,8 +61,8 @@ func TestAccVMResource(t *testing.T) {
 			{
 				Config: testAccVMResourceConfigUpdated("test-vm-updated"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "instance_name", "test-vm-updated"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "description", "Updated VM"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "instance_name", "test-vm-updated"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "description", "Updated VM"),
 				),
 			},
 			// Delete testing automatically occurs in TestCase
@@ -78,11 +78,11 @@ func TestAccVMResourceWithProtectionPlanName(t *testing.T) {
 			{
 				Config: testAccVMResourceConfigWithProtectionPlanName("test-vm-plan-name", "test-plan-for-vm-name-resolution"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "instance_name", "test-vm-plan-name"),
-					resource.TestCheckResourceAttr("airtelcloud_protection_plan.test", "name", "test-plan-for-vm-name-resolution"),
-					resource.TestCheckResourceAttr("airtelcloud_protection_plan.test", "vm_name", "test-vm-plan-name"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_protection_plan.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "instance_name", "test-vm-plan-name"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection_plan.test", "name", "test-plan-for-vm-name-resolution"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_protection_plan.test", "vm_name", "test-vm-plan-name"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_protection_plan.test", "id"),
 				),
 			},
 		},
@@ -91,7 +91,7 @@ func TestAccVMResourceWithProtectionPlanName(t *testing.T) {
 
 func testAccVMResourceConfig(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_vm" "test" {
+resource "airtelcloudgcc_vm" "test" {
   instance_name     = %[1]q
   os_type           = "linux"
   flavor_name       = "t2.micro"
@@ -110,7 +110,7 @@ resource "airtelcloud_vm" "test" {
 
 func testAccVMResourceConfigWithProtectionPlanName(vmName, planName string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_vm" "test" {
+resource "airtelcloudgcc_vm" "test" {
 	instance_name     = %[1]q
 	os_type           = "linux"
 	flavor_name       = "t2.micro"
@@ -124,10 +124,10 @@ resource "airtelcloud_vm" "test" {
 	admin_password    = %[4]q
 }
 
-resource "airtelcloud_protection_plan" "test" {
+resource "airtelcloudgcc_protection_plan" "test" {
 	name              = %[2]q
 	description       = "Acceptance test plan for VM by name"
-	vm_name           = airtelcloud_vm.test.instance_name
+	vm_name           = airtelcloudgcc_vm.test.instance_name
 	recurrence        = 1
 	recurrence_period = "daily"
 	retention         = 1
@@ -137,7 +137,7 @@ resource "airtelcloud_protection_plan" "test" {
 
 func testAccVMResourceConfigUpdated(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_vm" "test" {
+resource "airtelcloudgcc_vm" "test" {
   instance_name     = %[1]q
   os_type           = "linux"
   flavor_name       = "t2.micro"
@@ -162,10 +162,10 @@ func TestAccVMResourceWithFlavorID(t *testing.T) {
 			{
 				Config: testAccVMResourceConfigWithFlavorID("test-vm-flavor-id"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "instance_name", "test-vm-flavor-id"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "flavor_id", "1"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "image_id", "1"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "instance_name", "test-vm-flavor-id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "flavor_id", "1"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "image_id", "1"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "id"),
 				),
 			},
 		},
@@ -174,7 +174,7 @@ func TestAccVMResourceWithFlavorID(t *testing.T) {
 
 func testAccVMResourceConfigWithFlavorID(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_vm" "test" {
+resource "airtelcloudgcc_vm" "test" {
   instance_name     = %[1]q
   os_type           = "linux"
   flavor_id         = "1"
@@ -198,9 +198,9 @@ func TestAccVMResourceWithSecurityGroup(t *testing.T) {
 			{
 				Config: testAccVMResourceConfigWithSecurityGroup("test-vm-sg"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "instance_name", "test-vm-sg"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "security_group_id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "instance_name", "test-vm-sg"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "security_group_id"),
 				),
 			},
 		},
@@ -209,19 +209,19 @@ func TestAccVMResourceWithSecurityGroup(t *testing.T) {
 
 func testAccVMResourceConfigWithSecurityGroup(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_security_group" "test" {
+resource "airtelcloudgcc_security_group" "test" {
   security_group_name = "test-sg-for-vm"
   availability_zone   = "S2"
 }
 
-resource "airtelcloud_vm" "test" {
+resource "airtelcloudgcc_vm" "test" {
   instance_name     = %[1]q
   os_type           = "linux"
   flavor_name       = "t2.micro"
   image_name        = "ubuntu-20.04"
   vpc_id            = "029ac9b8-d93e-4691-a7cb-2f651c607cfe"
   subnet_id         = "35df162d-5211-4d58-84ed-6a499626949c"
-  security_group_id = airtelcloud_security_group.test.id
+  security_group_id = airtelcloudgcc_security_group.test.id
   boot_from_volume  = true
   disk_size         = 20
   availability_zone = "S2"
@@ -239,10 +239,10 @@ func TestAccVMResourceWithTags(t *testing.T) {
 			{
 				Config: testAccVMResourceConfigWithTags("test-vm-tags"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "instance_name", "test-vm-tags"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "tags.Environment", "test"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.test", "tags.Team", "platform"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "instance_name", "test-vm-tags"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "tags.Environment", "test"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.test", "tags.Team", "platform"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.test", "id"),
 				),
 			},
 		},
@@ -251,7 +251,7 @@ func TestAccVMResourceWithTags(t *testing.T) {
 
 func testAccVMResourceConfigWithTags(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_vm" "test" {
+resource "airtelcloudgcc_vm" "test" {
   instance_name     = %[1]q
   os_type           = "linux"
   flavor_name       = "t2.micro"
@@ -281,12 +281,12 @@ func TestAccVMResourceMultiple(t *testing.T) {
 			{
 				Config: testAccVMResourceConfigMultiple(),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_vm.web1", "instance_name", "web-server-1"),
-					resource.TestCheckResourceAttr("airtelcloud_vm.web2", "instance_name", "web-server-2"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.web1", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.web2", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.web1", "private_ip"),
-					resource.TestCheckResourceAttrSet("airtelcloud_vm.web2", "private_ip"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.web1", "instance_name", "web-server-1"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_vm.web2", "instance_name", "web-server-2"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.web1", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.web2", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.web1", "private_ip"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_vm.web2", "private_ip"),
 				),
 			},
 		},
@@ -295,7 +295,7 @@ func TestAccVMResourceMultiple(t *testing.T) {
 
 func testAccVMResourceConfigMultiple() string {
 	return fmt.Sprintf(`
-resource "airtelcloud_vm" "web1" {
+resource "airtelcloudgcc_vm" "web1" {
   instance_name     = "web-server-1"
   os_type           = "linux"
   flavor_name       = "t2.micro"
@@ -310,7 +310,7 @@ resource "airtelcloud_vm" "web1" {
   description       = "Web server 1"
 }
 
-resource "airtelcloud_vm" "web2" {
+resource "airtelcloudgcc_vm" "web2" {
   instance_name     = "web-server-2"
   os_type           = "linux"
   flavor_name       = "t2.micro"
@@ -398,7 +398,7 @@ func TestAccVMResourceCredentialValidation(t *testing.T) {
 // attributes are supplied verbatim by the caller.
 func testAccVMResourceConfigCredentials(authAttrs string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_vm" "test" {
+resource "airtelcloudgcc_vm" "test" {
   instance_name     = "test-vm-credentials"
   flavor_name       = "t2.micro"
   image_name        = "ubuntu-20.04"

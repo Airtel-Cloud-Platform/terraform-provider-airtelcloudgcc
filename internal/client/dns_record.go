@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // GetDNSRecord retrieves a DNS record by zone ID and record ID

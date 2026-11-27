@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://north.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-north.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "north"
@@ -50,9 +50,9 @@ variable "resource_prefix" {
 # compute_name). When compute_name is set it is resolved to compute_id at apply.
 #
 # Import an existing snapshot with either of:
-#   terraform import airtelcloud_compute_snapshot.example <snapshot_uuid>
-#   terraform import airtelcloud_compute_snapshot.example <compute_id>:<snapshot_uuid>
-resource "airtelcloud_compute_snapshot" "example" {
+#   terraform import airtelcloudgcc_compute_snapshot.example <snapshot_uuid>
+#   terraform import airtelcloudgcc_compute_snapshot.example <compute_id>:<snapshot_uuid>
+resource "airtelcloudgcc_compute_snapshot" "example" {
   #compute_id = "aa8ad6fc-5400-452f-95ee-8ecb95a7f3d4"
   # Or reference the compute by name instead of compute_id:
   compute_name  = "aakash"
@@ -67,25 +67,25 @@ resource "airtelcloud_compute_snapshot" "example" {
 # Output snapshot details
 output "snapshot_id" {
   description = "ID of the compute snapshot"
-  value       = airtelcloud_compute_snapshot.example.id
+  value       = airtelcloudgcc_compute_snapshot.example.id
 }
 
 output "snapshot_name" {
   description = "Name of the compute snapshot"
-  value       = airtelcloud_compute_snapshot.example.name
+  value       = airtelcloudgcc_compute_snapshot.example.name
 }
 
 output "snapshot_status" {
   description = "Status of the compute snapshot"
-  value       = airtelcloud_compute_snapshot.example.status
+  value       = airtelcloudgcc_compute_snapshot.example.status
 }
 
 output "snapshot_is_active" {
   description = "Whether the snapshot is active"
-  value       = airtelcloud_compute_snapshot.example.is_active
+  value       = airtelcloudgcc_compute_snapshot.example.is_active
 }
 
 output "snapshot_created" {
   description = "Creation timestamp of the snapshot"
-  value       = airtelcloud_compute_snapshot.example.created
+  value       = airtelcloudgcc_compute_snapshot.example.created
 }

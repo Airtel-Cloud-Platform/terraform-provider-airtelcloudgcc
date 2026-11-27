@@ -15,8 +15,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 var _ resource.Resource = &PublicIPPolicyRuleResource{}
@@ -292,7 +292,7 @@ func (r *PublicIPPolicyRuleResource) Create(ctx context.Context, req resource.Cr
 		if errors.Is(err, client.ErrPublicIPNotAttached) {
 			resp.Diagnostics.AddError(
 				"Public IP Not Attached",
-				fmt.Sprintf("Cannot add a policy on public IP %q until it is attached to a VM, load balancer, or baremetal server (current status %q). Create airtelcloud_public_ip_attachment first, then add the policy.", data.PublicIPName.ValueString(), status),
+				fmt.Sprintf("Cannot add a policy on public IP %q until it is attached to a VM, load balancer, or baremetal server (current status %q). Create airtelcloudgcc_public_ip_attachment first, then add the policy.", data.PublicIPName.ValueString(), status),
 			)
 			return
 		}

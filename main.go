@@ -5,7 +5,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/provider"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
@@ -20,7 +20,7 @@ func main() {
 	flag.Parse()
 
 	opts := providerserver.ServeOpts{
-		Address: "registry.terraform.io/Airtel-Cloud-Platform/airtelcloud",
+		Address: "registry.terraform.io/Airtel-Cloud-Platform/airtelcloudgcc",
 		Debug:   debug,
 	}
 

@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_security_group_rule Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_security_group_rule Resource - Airtel Cloud"
 subcategory: "Networking"
 description: |-
   Manages an Airtel Cloud security group rule.
 ---
 
-# airtelcloud_security_group_rule (Resource)
+# airtelcloudgcc_security_group_rule (Resource)
 
 Manages an Airtel Cloud security group rule.
 
@@ -18,13 +18,13 @@ variable "resource_prefix" {
   default     = "tft"
 }
 
-resource "airtelcloud_security_group" "web" {
+resource "airtelcloudgcc_security_group" "web" {
   security_group_name = "${var.resource_prefix}-sg-web-servers"
   availability_zone   = "S1"
 }
 
-resource "airtelcloud_security_group_rule" "ssh" {
-  security_group_id = airtelcloud_security_group.web.id
+resource "airtelcloudgcc_security_group_rule" "ssh" {
+  security_group_id = airtelcloudgcc_security_group.web.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "22"
@@ -66,5 +66,5 @@ resource "airtelcloud_security_group_rule" "ssh" {
 Security group rules can be imported using `<security_group_id>/<rule_uuid>`:
 
 ```shell
-terraform import airtelcloud_security_group_rule.ssh <security_group_id>/<rule_uuid>
+terraform import airtelcloudgcc_security_group_rule.ssh <security_group_id>/<rule_uuid>
 ```

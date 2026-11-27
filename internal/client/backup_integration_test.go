@@ -10,7 +10,7 @@ import (
 	"time"
 
 	//	"github.com/terraform-providers/terraform-provider-airtelcloud/internal/models"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // getProtectionTestSubnetID returns the subnet used to scope protection-plan

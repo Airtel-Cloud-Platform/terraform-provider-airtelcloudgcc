@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -50,7 +50,7 @@ variable "vm_name" {
 }
 
 # Create a protection plan with daily schedule and 30-day retention
-resource "airtelcloud_protection_plan" "daily" {
+resource "airtelcloudgcc_protection_plan" "daily" {
   name              = "${var.resource_prefix}-backup"
   description       = "Daily backup with 30-day retention"
   vm_name           = var.vm_name
@@ -60,16 +60,16 @@ resource "airtelcloud_protection_plan" "daily" {
 }
 
 # Create a protection policy for a compute instance
-resource "airtelcloud_protection" "web_server" {
+resource "airtelcloudgcc_protection" "web_server" {
   description     = "Backup policy for web server"
   vm_name         = var.vm_name
-  protection_plan = airtelcloud_protection_plan.daily.id
+  protection_plan = airtelcloudgcc_protection_plan.daily.id
   start_date      = "10/06/2026"
   start_time      = "02:00 AM"
 }
 
 # Weekly backup plan (alternative configuration)
-resource "airtelcloud_protection_plan" "weekly" {
+resource "airtelcloudgcc_protection_plan" "weekly" {
   name              = "${var.resource_prefix}-backup"
   description       = "Weekly backup with 84-day retention"
   vm_name           = var.vm_name
@@ -81,20 +81,20 @@ resource "airtelcloud_protection_plan" "weekly" {
 # Output protection details
 output "protection_plan_id" {
   description = "ID of the daily protection plan"
-  value       = airtelcloud_protection_plan.daily.id
+  value       = airtelcloudgcc_protection_plan.daily.id
 }
 
 output "protection_plan_name" {
   description = "Name of the daily protection plan"
-  value       = airtelcloud_protection_plan.daily.name
+  value       = airtelcloudgcc_protection_plan.daily.name
 }
 
 output "protection_id" {
   description = "ID of the web server protection policy"
-  value       = airtelcloud_protection.web_server.id
+  value       = airtelcloudgcc_protection.web_server.id
 }
 
 output "protection_status" {
   description = "Status of the web server protection policy"
-  value       = airtelcloud_protection.web_server.status
+  value       = airtelcloudgcc_protection.web_server.status
 }
