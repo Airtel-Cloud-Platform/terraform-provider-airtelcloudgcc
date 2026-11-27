@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,7 +45,7 @@ variable "resource_prefix" {
 }
 
 # Create a block storage volume with all common attributes
-resource "airtelcloud_volume" "data_volume" {
+resource "airtelcloudgcc_volume" "data_volume" {
   name              = "${var.resource_prefix}-storage-volume"
   size              = 50
   type              = "s1_wkld_ntp02_4iops_backend"
@@ -61,7 +61,7 @@ resource "airtelcloud_volume" "data_volume" {
 }
 
 # Create a secondary volume (alternative configuration)
-#resource "airtelcloud_volume" "backup_volume" {
+#resource "airtelcloudgcc_volume" "backup_volume" {
 #  name              = "${var.resource_prefix}-backup-volume"
 #  size              = 100
 #  type              = "s1_wkld_ntp02_4iops_backend"
@@ -78,15 +78,15 @@ resource "airtelcloud_volume" "data_volume" {
 # Output volume details
 output "data_volume_uuid" {
   description = "UUID of the data volume"
-  value       = airtelcloud_volume.data_volume.uuid
+  value       = airtelcloudgcc_volume.data_volume.uuid
 }
 
 output "data_volume_status" {
   description = "Status of the data volume"
-  value       = airtelcloud_volume.data_volume.status
+  value       = airtelcloudgcc_volume.data_volume.status
 }
 
 #output "backup_volume_uuid" {
 #  description = "UUID of the backup volume"
-#  value       = airtelcloud_volume.backup_volume.uuid
+#  value       = airtelcloudgcc_volume.backup_volume.uuid
 #}

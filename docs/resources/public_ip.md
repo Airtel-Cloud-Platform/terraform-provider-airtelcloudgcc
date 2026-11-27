@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_public_ip Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_public_ip Resource - Airtel Cloud"
 subcategory: "Security"
 description: |-
   Reserves an Airtel Cloud Public IP in a given availability zone.
 ---
 
-# airtelcloud_public_ip (Resource)
+# airtelcloudgcc_public_ip (Resource)
 
 Reserves an Airtel Cloud Public IP (NAT Gateway address) in a single availability zone.
 
@@ -13,16 +13,16 @@ This resource only reserves the address. Create calls the IPAM API with `port_id
 
 | Step | Resource | Purpose |
 | --- | --- | --- |
-| 1 | `airtelcloud_public_ip` | Reserve the address. |
-| 2 | [`airtelcloud_public_ip_attachment`](public_ip_attachment.md) | Bind it to a VM, load balancer, or baremetal server. |
-| 3 | [`airtelcloud_public_ip_policy_rule`](public_ip_policy_rule.md) | Allow or deny traffic on the attached address. |
+| 1 | `airtelcloudgcc_public_ip` | Reserve the address. |
+| 2 | [`airtelcloudgcc_public_ip_attachment`](public_ip_attachment.md) | Bind it to a VM, load balancer, or baremetal server. |
+| 3 | [`airtelcloudgcc_public_ip_policy_rule`](public_ip_policy_rule.md) | Allow or deny traffic on the attached address. |
 
 ## Example Usage
 
 ### Reserve a Public IP
 
 ```terraform
-resource "airtelcloud_public_ip" "web" {
+resource "airtelcloudgcc_public_ip" "web" {
   object_name       = "web-public-ip"
   description       = "public IP for the web tier"
   availability_zone = "S1"
@@ -34,7 +34,7 @@ resource "airtelcloud_public_ip" "web" {
 Reservation is asynchronous and commonly takes a few minutes.
 
 ```terraform
-resource "airtelcloud_public_ip" "web" {
+resource "airtelcloudgcc_public_ip" "web" {
   object_name       = "web-public-ip"
   description       = "public IP for the web tier"
   availability_zone = "S1"
@@ -51,7 +51,7 @@ resource "airtelcloud_public_ip" "web" {
 ```terraform
 output "web_public_ip" {
   description = "The address allocated by Airtel Cloud"
-  value       = airtelcloud_public_ip.web.public_ip
+  value       = airtelcloudgcc_public_ip.web.public_ip
 }
 ```
 
@@ -59,7 +59,7 @@ output "web_public_ip" {
 
 ### Required
 
-- `object_name` (String) - The name of the public IP reservation. Used by `airtelcloud_public_ip_attachment` and `airtelcloud_public_ip_policy_rule` to reference this address. Forces replacement if changed.
+- `object_name` (String) - The name of the public IP reservation. Used by `airtelcloudgcc_public_ip_attachment` and `airtelcloudgcc_public_ip_policy_rule` to reference this address. Forces replacement if changed.
 - `availability_zone` (String) - The availability zone the address is reserved in (for example `S1`, `S2`). Forces replacement if changed.
 
 ### Optional
@@ -90,12 +90,12 @@ In addition to all arguments above, the following attributes are exported:
 Public IPs can be imported using the UUID:
 
 ```shell
-terraform import airtelcloud_public_ip.web <public-ip-uuid>
+terraform import airtelcloudgcc_public_ip.web <public-ip-uuid>
 ```
 
 ## Important Notes
 
-- Create never takes a private IP or port ID. The reservation is unbound until you add an `airtelcloud_public_ip_attachment`.
+- Create never takes a private IP or port ID. The reservation is unbound until you add an `airtelcloudgcc_public_ip_attachment`.
 - `object_name`, `description`, and `availability_zone` all force replacement, because the API has no update endpoint for a reservation.
 - Destroying a reserved address releases it. If the address is still attached, the provider detaches it first, then releases it.
-- Policy rules cannot be created against a reservation. Attach the address first, otherwise `airtelcloud_public_ip_policy_rule` fails with a "Public IP Not Attached" error.
+- Policy rules cannot be created against a reservation. Attach the address first, otherwise `airtelcloudgcc_public_ip_policy_rule` fails with a "Public IP Not Attached" error.

@@ -1,4 +1,4 @@
-# Security pipeline: terraform-provider-airtelcloud
+# Security pipeline: terraform-provider-airtelcloudgcc
 
 Every change goes through four layers before it can reach registry.terraform.io:
 
@@ -16,7 +16,7 @@ Every change goes through four layers before it can reach registry.terraform.io:
 | `.github/workflows/security.yml` | The gate. Jobs: `secrets` (TruffleHog), `iac` (Checkov), `sast` (Semgrep), `deps` (govulncheck + Trivy), `workflows` (zizmor), and `gate`, which is the one required check. |
 | `.github/workflows/release.yml` | Release flow: `verify-tag` -> `security` -> `release` (GoReleaser sign + publish). Signing key is read from the `release` environment. |
 | `.pre-commit-config.yaml` | Local hooks: TruffleHog on staged files and on commits being pushed, Trivy Airtel key rules, Checkov, terraform fmt, golangci-lint. |
-| `.checkov.yaml`, `.checkov/checks/` | Checkov config plus custom check `CKV_ACP_1`: no literal credentials in `provider "airtelcloud"` blocks. |
+| `.checkov.yaml`, `.checkov/checks/` | Checkov config plus custom check `CKV_ACP_1`: no literal credentials in `provider "airtelcloudgcc"` blocks. |
 | `.semgrep/provider-rules.yml` | Provider rules: credential-like schema attributes must be `Sensitive: true` (framework and SDKv2), no credentials in `tflog`/`log`/`fmt`, no `InsecureSkipVerify`, no literal credentials in Go. |
 | `trivy.yaml`, `trivy-secret.yaml`, `.trivyignore` | Trivy config, plus custom rules for Airtel Cloud keys (TruffleHog has no detector for them). |
 | `.trufflehog-exclude.txt` | Paths TruffleHog skips. Keep it short. |
@@ -25,7 +25,7 @@ Every change goes through four layers before it can reach registry.terraform.io:
 
 ## Two things that would have let the recent leak through
 
-1. **TruffleHog cannot see Airtel Cloud keys.** It verifies 800+ third-party key types, but has no detector for our own cloud's keys. `trivy-secret.yaml` adds rules keyed on variable names (`airtelcloud_api_key = "..."`, `AIRTELCLOUD_SECRET_KEY=...`) and on literal values inside `provider "airtelcloud" {}`. Once the exact key format (prefix/length) is confirmed, add a format-only rule as noted in the file's TODO. That catches keys even when they aren't next to a recognisable name.
+1. **TruffleHog cannot see Airtel Cloud keys.** It verifies 800+ third-party key types, but has no detector for our own cloud's keys. `trivy-secret.yaml` adds rules keyed on variable names (`airtelcloudgcc_api_key = "..."`, `AIRTELCLOUD_SECRET_KEY=...`) and on literal values inside `provider "airtelcloudgcc" {}`. Once the exact key format (prefix/length) is confirmed, add a format-only rule as noted in the file's TODO. That catches keys even when they aren't next to a recognisable name.
 2. **Trivy skips examples, tests and Markdown by default.** Its built-in allow rules ignore any path containing `example`, any `*_test.go` and every `*.md` file, which covers `examples/`, acceptance tests and `docs/`. `trivy-secret.yaml` turns those allow rules off (`disable-allow-rules`).
 
 ## Rollout (in this order)
@@ -82,7 +82,7 @@ New tag ruleset, target `v*`:
 brew install pre-commit trufflehog trivy golangci-lint
 # Linux: pipx install pre-commit; install trufflehog and trivy from their GitHub releases
 
-cd terraform-provider-airtelcloud
+cd terraform-provider-airtelcloudgcc
 pre-commit install          # installs both pre-commit and pre-push hooks
 pre-commit run --all-files  # first run downloads hook environments
 ```

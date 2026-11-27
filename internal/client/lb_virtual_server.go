@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // CreateVirtualServer creates a virtual server on an LB service. The payload is

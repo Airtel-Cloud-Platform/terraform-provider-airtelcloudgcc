@@ -1,15 +1,15 @@
 ---
-page_title: "airtelcloud_public_ip_policy_rule Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_public_ip_policy_rule Resource - Airtel Cloud"
 subcategory: "Security"
 description: |-
   Manages a NAT Gateway policy rule on an attached Airtel Cloud Public IP.
 ---
 
-# airtelcloud_public_ip_policy_rule (Resource)
+# airtelcloudgcc_public_ip_policy_rule (Resource)
 
 Manages a policy rule on an Airtel Cloud Public IP (NAT Gateway). A rule decides which sources may reach which services through the public address.
 
-This is step 3 of 3. The parent public IP must already be attached to a VM, load balancer, or baremetal server. Reserve it with [`airtelcloud_public_ip`](public_ip.md) and attach it with [`airtelcloud_public_ip_attachment`](public_ip_attachment.md) first.
+This is step 3 of 3. The parent public IP must already be attached to a VM, load balancer, or baremetal server. Reserve it with [`airtelcloudgcc_public_ip`](public_ip.md) and attach it with [`airtelcloudgcc_public_ip_attachment`](public_ip_attachment.md) first.
 
 Sources and services can be declared in two ways:
 
@@ -25,8 +25,8 @@ You can mix one source form with one service form (for example `source_config` +
 ### Allow Web Traffic from Anywhere
 
 ```terraform
-resource "airtelcloud_public_ip_policy_rule" "web_traffic" {
-  public_ip_name = airtelcloud_public_ip_attachment.vm.public_ip_name
+resource "airtelcloudgcc_public_ip_policy_rule" "web_traffic" {
+  public_ip_name = airtelcloudgcc_public_ip_attachment.vm.public_ip_name
   rule_name      = "web-traffic"
   source         = "any"
   services       = ["HTTP", "HTTPS"]
@@ -37,8 +37,8 @@ resource "airtelcloud_public_ip_policy_rule" "web_traffic" {
 ### Allow SSH from a Single Management IP
 
 ```terraform
-resource "airtelcloud_public_ip_policy_rule" "ssh_mgmt" {
-  public_ip_name = airtelcloud_public_ip_attachment.vm.public_ip_name
+resource "airtelcloudgcc_public_ip_policy_rule" "ssh_mgmt" {
+  public_ip_name = airtelcloudgcc_public_ip_attachment.vm.public_ip_name
   rule_name      = "ssh-mgmt"
   source         = "192.168.100.5/32"
   services       = ["SSH"]
@@ -51,8 +51,8 @@ resource "airtelcloud_public_ip_policy_rule" "ssh_mgmt" {
 Use `source_config` when a rule has more than one source, or when a source is a country rather than a CIDR.
 
 ```terraform
-resource "airtelcloud_public_ip_policy_rule" "office_and_india" {
-  public_ip_name = airtelcloud_public_ip_attachment.vm.public_ip_name
+resource "airtelcloudgcc_public_ip_policy_rule" "office_and_india" {
+  public_ip_name = airtelcloudgcc_public_ip_attachment.vm.public_ip_name
   rule_name      = "office-and-india"
   action         = "accept"
 
@@ -94,8 +94,8 @@ resource "airtelcloud_public_ip_policy_rule" "office_and_india" {
 ### Deny a Country
 
 ```terraform
-resource "airtelcloud_public_ip_policy_rule" "block_country" {
-  public_ip_name = airtelcloud_public_ip_attachment.vm.public_ip_name
+resource "airtelcloudgcc_public_ip_policy_rule" "block_country" {
+  public_ip_name = airtelcloudgcc_public_ip_attachment.vm.public_ip_name
   rule_name      = "block-wf"
   action         = "deny"
 
@@ -116,7 +116,7 @@ resource "airtelcloud_public_ip_policy_rule" "block_country" {
 ### Multiple Rules with `for_each`
 
 ```terraform
-resource "airtelcloud_public_ip_policy_rule" "this" {
+resource "airtelcloudgcc_public_ip_policy_rule" "this" {
   for_each = var.public_ip_policy_rules
 
   public_ip_name = each.value.public_ip_name
@@ -186,12 +186,12 @@ In addition to all arguments above, the following attributes are exported:
 Policy rules are imported using `public_ip_id/target_vip/public_ip/rule_id`:
 
 ```shell
-terraform import airtelcloud_public_ip_policy_rule.web_traffic <public_ip_id>/<target_vip>/<public_ip>/<rule_id>
+terraform import airtelcloudgcc_public_ip_policy_rule.web_traffic <public_ip_id>/<target_vip>/<public_ip>/<rule_id>
 ```
 
 ## Important Notes
 
-- The parent public IP must be attached to a VM, load balancer, or baremetal server. Creating a rule against a `reserved` address fails with a "Public IP Not Attached" error. Point `public_ip_name` at `airtelcloud_public_ip_attachment.*.public_ip_name` so Terraform waits for attach without `depends_on`.
+- The parent public IP must be attached to a VM, load balancer, or baremetal server. Creating a rule against a `reserved` address fails with a "Public IP Not Attached" error. Point `public_ip_name` at `airtelcloudgcc_public_ip_attachment.*.public_ip_name` so Terraform waits for attach without `depends_on`.
 - This resource has no in-place update. Any change to a rule destroys and recreates it.
 - `public_ip`, `target_vip`, and `availability_zone` default to the values on the parent public IP, so you rarely set them.
 - When both forms are supplied, `source_config` and `service_config` win over `source` and `services`.

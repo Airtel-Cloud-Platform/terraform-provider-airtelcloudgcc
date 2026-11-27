@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_mariadb Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_mariadb Resource - Airtel Cloud"
 subcategory: "Database"
 description: |-
   Manages an Airtel Cloud MariaDB cluster.
 ---
 
-# airtelcloud_mariadb (Resource)
+# airtelcloudgcc_mariadb (Resource)
 
 Manages an Airtel Cloud MariaDB cluster.
 
@@ -19,7 +19,7 @@ variable "mariadb_password" {
   sensitive = true
 }
 
-resource "airtelcloud_mariadb" "app" {
+resource "airtelcloudgcc_mariadb" "app" {
   cluster_name       = "app-db"
   version            = "10.6"
   database_name      = "app"
@@ -102,5 +102,5 @@ In addition to all arguments above, the following attributes are exported:
 Clusters can be imported using the cluster UUID. The admin password is not returned by the API, so import cannot populate `password`.
 
 ```shell
-terraform import airtelcloud_mariadb.app <cluster-uuid>
+terraform import airtelcloudgcc_mariadb.app <cluster-uuid>
 ```

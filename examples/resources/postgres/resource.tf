@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -50,7 +50,7 @@ variable "resource_prefix" {
   default     = "tft"
 }
 
-resource "airtelcloud_postgres" "app" {
+resource "airtelcloudgcc_postgres" "app" {
   cluster_name      = "${var.resource_prefix}-pg"
   description       = "Application PostgreSQL cluster"
   version           = "17"
@@ -78,55 +78,55 @@ resource "airtelcloud_postgres" "app" {
 
 output "postgres_id" {
   description = "UUID of the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.id
+  value       = airtelcloudgcc_postgres.app.id
 }
 
 output "postgres_cluster_name" {
   description = "Cluster name of the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.cluster_name
+  value       = airtelcloudgcc_postgres.app.cluster_name
 }
 
 output "postgres_version" {
   description = "PostgreSQL major version"
-  value       = airtelcloud_postgres.app.version
+  value       = airtelcloudgcc_postgres.app.version
 }
 
 output "postgres_database_name" {
   description = "Initial database name"
-  value       = airtelcloud_postgres.app.database_name
+  value       = airtelcloudgcc_postgres.app.database_name
 }
 
 output "postgres_username" {
   description = "Admin username for the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.postgres_username
+  value       = airtelcloudgcc_postgres.app.postgres_username
 }
 
 output "postgres_status" {
   description = "Status of the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.status
+  value       = airtelcloudgcc_postgres.app.status
 }
 
 output "postgres_topology" {
   description = "Resolved topology of the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.topology
+  value       = airtelcloudgcc_postgres.app.topology
 }
 
 output "postgres_num_replicas" {
   description = "Number of standby replicas"
-  value       = airtelcloud_postgres.app.num_replicas
+  value       = airtelcloudgcc_postgres.app.num_replicas
 }
 
 output "postgres_availability_zone" {
   description = "Availability zone of the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.availability_zone
+  value       = airtelcloudgcc_postgres.app.availability_zone
 }
 
 output "postgres_created_at" {
   description = "Creation timestamp of the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.created_at
+  value       = airtelcloudgcc_postgres.app.created_at
 }
 
 output "postgres_connection_string" {
   description = "Connection string for the PostgreSQL cluster"
-  value       = airtelcloud_postgres.app.connection_string
+  value       = airtelcloudgcc_postgres.app.connection_string
 }

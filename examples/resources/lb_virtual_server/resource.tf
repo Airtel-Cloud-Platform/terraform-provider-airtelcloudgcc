@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -47,7 +47,7 @@ variable "resource_prefix" {
 # Create a Layer-7 HTTP virtual server with two backend nodes.
 # Each node can be referenced by compute_name (resolved at apply time) or
 # compute_id (the numeric compute instance ID). Set exactly one per node.
-resource "airtelcloud_lb_virtual_server" "http" {
+resource "airtelcloudgcc_lb_virtual_server" "http" {
   lb_service_id     = "ac238c5b-6334-49b9-b9c0-decc0aaf63d6"
   name              = "${var.resource_prefix}-http-vs"
   vip               = "10.1.1.100"
@@ -82,7 +82,7 @@ resource "airtelcloud_lb_virtual_server" "http" {
 }
 
 # Create an HTTPS virtual server with SSL termination
-# resource "airtelcloud_lb_virtual_server" "https" {
+# resource "airtelcloudgcc_lb_virtual_server" "https" {
 #   lb_service_id     = "35df162d-5211-4d58-84ed-6a499626949c"
 #   name              = "${var.resource_prefix}-https-vs"
 #   vip_port_id       = 12345
@@ -91,7 +91,7 @@ resource "airtelcloud_lb_virtual_server" "http" {
 #   routing_algorithm = "LEAST_CONNECTIONS"
 #   vpc_id            = "029ac9b8-d93e-4691-a7cb-2f651c607cfe"
 #   interval          = 30
-#   certificate_id    = airtelcloud_lb_certificate.example.id
+#   certificate_id    = airtelcloudgcc_lb_certificate.example.id
 #   redirect_https    = false
 #
 #   persistence_enabled = true
@@ -109,15 +109,15 @@ resource "airtelcloud_lb_virtual_server" "http" {
 
 output "virtual_server_id" {
   description = "ID of the virtual server"
-  value       = airtelcloud_lb_virtual_server.http.id
+  value       = airtelcloudgcc_lb_virtual_server.http.id
 }
 
 output "virtual_server_vip" {
   description = "VIP address of the virtual server"
-  value       = airtelcloud_lb_virtual_server.http.vip
+  value       = airtelcloudgcc_lb_virtual_server.http.vip
 }
 
 output "virtual_server_status" {
   description = "Status of the virtual server"
-  value       = airtelcloud_lb_virtual_server.http.status
+  value       = airtelcloudgcc_lb_virtual_server.http.status
 }

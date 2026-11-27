@@ -1,13 +1,13 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
+provider "airtelcloudgcc" {
   api_endpoint = var.api_endpoint
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
@@ -19,7 +19,7 @@ provider "airtelcloud" {
 variable "api_endpoint" {
   description = "Airtel Cloud API endpoint"
   type        = string
-  default     = "https://south.cloud.airtel.in"
+  default     = "https://gcc-south.cloud.airtel.in"
 }
 
 variable "region" {
@@ -125,16 +125,16 @@ variable "create_public_ip_and_policy" {
 # terraform destroy -auto-approve
 
 # Protection plan used by VM backup settings.
-#resource "airtelcloud_protection_plan" "windows_daily" {
+#resource "airtelcloudgcc_protection_plan" "windows_daily" {
 #  name              = "${var.resource_prefix}-windows-backup"
 #  description       = "Daily backup plan for Windows VM example"
-#  vm_name           = airtelcloud_vm.windows_server.instance_name
+#  vm_name           = airtelcloudgcc_vm.windows_server.instance_name
 #  recurrence        = 1
 #  recurrence_period = "daily"
 #  retention         = 7
 #}
 
-resource "airtelcloud_vm" "windows_server" {
+resource "airtelcloudgcc_vm" "windows_server" {
   instance_name       = "${var.resource_prefix}-win-server-41"
   os_type             = "windows"
   flavor_name         = var.flavor_name
@@ -156,13 +156,13 @@ resource "airtelcloud_vm" "windows_server" {
   labels = ["example", "windows", "backup"]
 }
 
-resource "airtelcloud_public_ip" "windows_vm_nat" {
+resource "airtelcloudgcc_public_ip" "windows_vm_nat" {
   count             = var.create_public_ip_and_policy ? 1 : 0
   object_name       = "${var.resource_prefix}-windows-public-ip-57"
   description       = "windows vm public IP"
   availability_zone = var.availability_zone
 
-  depends_on = [airtelcloud_vm.windows_server]
+  depends_on = [airtelcloudgcc_vm.windows_server]
 
   timeouts {
     create = "10m"
@@ -170,16 +170,16 @@ resource "airtelcloud_public_ip" "windows_vm_nat" {
   }
 }
 
-resource "airtelcloud_public_ip_attachment" "windows_vm_nat" {
+resource "airtelcloudgcc_public_ip_attachment" "windows_vm_nat" {
   count          = var.create_public_ip_and_policy ? 1 : 0
-  public_ip_name = airtelcloud_public_ip.windows_vm_nat[0].object_name
+  public_ip_name = airtelcloudgcc_public_ip.windows_vm_nat[0].object_name
   resource_type  = "vm"
-  resource_name  = airtelcloud_vm.windows_server.instance_name
+  resource_name  = airtelcloudgcc_vm.windows_server.instance_name
 }
 
-resource "airtelcloud_public_ip_policy_rule" "allow_rdp" {
+resource "airtelcloudgcc_public_ip_policy_rule" "allow_rdp" {
   count          = var.create_public_ip_and_policy ? 1 : 0
-  public_ip_name = airtelcloud_public_ip_attachment.windows_vm_nat[0].public_ip_name
+  public_ip_name = airtelcloudgcc_public_ip_attachment.windows_vm_nat[0].public_ip_name
   rule_name      = "allow-rdp"
 
   source_config = [
@@ -196,25 +196,25 @@ resource "airtelcloud_public_ip_policy_rule" "allow_rdp" {
 
 output "windows_vm_id" {
   description = "ID of the Windows VM"
-  value       = airtelcloud_vm.windows_server.id
+  value       = airtelcloudgcc_vm.windows_server.id
 }
 
 output "windows_vm_private_ip" {
   description = "Private IP of the Windows VM"
-  value       = airtelcloud_vm.windows_server.private_ip
+  value       = airtelcloudgcc_vm.windows_server.private_ip
 }
 
 output "windows_public_ip_id" {
   description = "ID of the allocated public IP"
-  value       = try(airtelcloud_public_ip.windows_vm_nat[0].id, null)
+  value       = try(airtelcloudgcc_public_ip.windows_vm_nat[0].id, null)
 }
 
 output "windows_public_ip_address" {
   description = "Public IP address allocated to the Windows VM"
-  value       = try(airtelcloud_public_ip.windows_vm_nat[0].public_ip, null)
+  value       = try(airtelcloudgcc_public_ip.windows_vm_nat[0].public_ip, null)
 }
 
 output "rdp_policy_rule_id" {
   description = "Policy rule ID for RDP access"
-  value       = try(airtelcloud_public_ip_policy_rule.allow_rdp[0].id, null)
+  value       = try(airtelcloudgcc_public_ip_policy_rule.allow_rdp[0].id, null)
 }

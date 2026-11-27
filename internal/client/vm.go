@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // computePollInterval is the delay between compute status polls. Tests shorten it.

@@ -13,8 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -150,7 +150,7 @@ func (r *DNSZoneResource) Create(ctx context.Context, req resource.CreateRequest
 			resp.Diagnostics.AddError(
 				"DNS Zone already exists",
 				fmt.Sprintf(
-					"A DNS zone with name %q already exists (UUID: %s). To manage this resource with Terraform, import it using:\n\n  terraform import airtelcloud_dns_zone.<resource_name> %s",
+					"A DNS zone with name %q already exists (UUID: %s). To manage this resource with Terraform, import it using:\n\n  terraform import airtelcloudgcc_dns_zone.<resource_name> %s",
 					zone.ZoneName, zone.UUID, zone.UUID,
 				),
 			)

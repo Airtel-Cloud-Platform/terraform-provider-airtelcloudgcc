@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // MockServer represents a mock HTTP server for testing

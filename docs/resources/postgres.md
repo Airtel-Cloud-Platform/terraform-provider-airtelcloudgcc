@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_postgres Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_postgres Resource - Airtel Cloud"
 subcategory: "Database"
 description: |-
   Manages an Airtel Cloud PostgreSQL cluster.
 ---
 
-# airtelcloud_postgres (Resource)
+# airtelcloudgcc_postgres (Resource)
 
 Manages an Airtel Cloud PostgreSQL cluster.
 
@@ -19,7 +19,7 @@ variable "postgres_password" {
   sensitive = true
 }
 
-resource "airtelcloud_postgres" "app" {
+resource "airtelcloudgcc_postgres" "app" {
   cluster_name       = "app-db"
   version            = "17"
   database_name      = "app"
@@ -95,5 +95,5 @@ In addition to all arguments above, the following attributes are exported:
 Clusters can be imported using the cluster UUID. The admin password, VPC, and subnet are not returned by the API, so a following plan will want to set them.
 
 ```shell
-terraform import airtelcloud_postgres.app <cluster-uuid>
+terraform import airtelcloudgcc_postgres.app <cluster-uuid>
 ```

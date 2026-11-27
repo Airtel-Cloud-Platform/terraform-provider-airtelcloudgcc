@@ -1,4 +1,4 @@
-# Trivy config for terraform-provider-airtelcloud (used by CI and pre-commit)
+# Trivy config for terraform-provider-airtelcloudgcc (used by CI and pre-commit)
 scan:
   scanners:
     - vuln     # go.mod / go.sum dependencies

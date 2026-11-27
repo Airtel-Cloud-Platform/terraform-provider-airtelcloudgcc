@@ -1,15 +1,15 @@
 ---
-page_title: "airtelcloud_security_group Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_security_group Resource - Airtel Cloud"
 subcategory: "Networking"
 description: |-
   Manages an Airtel Cloud security group.
 ---
 
-# airtelcloud_security_group (Resource)
+# airtelcloudgcc_security_group (Resource)
 
 Manages an Airtel Cloud security group.
 
-Security groups control inbound and outbound traffic for virtual machines. Attach rules via `airtelcloud_security_group_rule`.
+Security groups control inbound and outbound traffic for virtual machines. Attach rules via `airtelcloudgcc_security_group_rule`.
 
 ## Example Usage
 
@@ -20,13 +20,13 @@ variable "resource_prefix" {
   default     = "tft"
 }
 
-resource "airtelcloud_security_group" "web" {
+resource "airtelcloudgcc_security_group" "web" {
   security_group_name = "${var.resource_prefix}-sg-http-servers"
   availability_zone   = "S1"
 }
 
-resource "airtelcloud_security_group_rule" "http" {
-  security_group_id = airtelcloud_security_group.web.id
+resource "airtelcloudgcc_security_group_rule" "http" {
+  security_group_id = airtelcloudgcc_security_group.web.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "80"

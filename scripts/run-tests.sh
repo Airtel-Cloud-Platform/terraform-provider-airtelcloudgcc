@@ -12,7 +12,7 @@ if [[ -f .env ]]; then
     set +a
 fi
 
-export AIRTEL_API_ENDPOINT="${AIRTEL_API_ENDPOINT:-https://south.cloud.airtel.in}"
+export AIRTEL_API_ENDPOINT="${AIRTEL_API_ENDPOINT:-https://gcc-south.cloud.airtel.in}"
 export AIRTEL_API_KEY="${AIRTEL_API_KEY:-}"
 export AIRTEL_API_SECRET="${AIRTEL_API_SECRET:-}"
 export AIRTEL_REGION="${AIRTEL_REGION:-south}"

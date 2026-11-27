@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_compute_snapshot Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_compute_snapshot Resource - Airtel Cloud"
 subcategory: "Compute"
 description: |-
   Manages an Airtel Cloud compute (VM) snapshot.
 ---
 
-# airtelcloud_compute_snapshot (Resource)
+# airtelcloudgcc_compute_snapshot (Resource)
 
 Manages an immutable point-in-time snapshot of an Airtel Cloud compute instance.
 
@@ -17,8 +17,8 @@ Uses the v2.1 Compute API with domain/project URL paths. Snapshots are created u
 
 ```terraform
 # Reference the compute by ID
-resource "airtelcloud_compute_snapshot" "web_snapshot" {
-  compute_id    = airtelcloud_vm.web1.id
+resource "airtelcloudgcc_compute_snapshot" "web_snapshot" {
+  compute_id    = airtelcloudgcc_vm.web1.id
   snapshot_name = "web1-snapshot"
 
   timeouts {
@@ -28,7 +28,7 @@ resource "airtelcloud_compute_snapshot" "web_snapshot" {
 }
 
 # Or reference the compute by name (resolved to compute_id at apply)
-resource "airtelcloud_compute_snapshot" "web_snapshot_by_name" {
+resource "airtelcloudgcc_compute_snapshot" "web_snapshot_by_name" {
   compute_name  = "web1"
   snapshot_name = "web1-snapshot"
 }
@@ -67,6 +67,6 @@ The composite form skips a project-wide lookup that the provider otherwise uses 
 owning compute instance:
 
 ```shell
-terraform import airtelcloud_compute_snapshot.web_snapshot <snapshot_uuid>
-terraform import airtelcloud_compute_snapshot.web_snapshot <compute_id>:<snapshot_uuid>
+terraform import airtelcloudgcc_compute_snapshot.web_snapshot <snapshot_uuid>
+terraform import airtelcloudgcc_compute_snapshot.web_snapshot <compute_id>:<snapshot_uuid>
 ```

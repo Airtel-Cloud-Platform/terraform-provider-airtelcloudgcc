@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -38,7 +38,7 @@ variable "project_name" {
   type        = string
 }
 
-resource "airtelcloud_baremetal_storage" "data" {
+resource "airtelcloudgcc_baremetal_storage" "data" {
   name              = "ak-store"
   availability_zone = "S1"
   size              = 10
@@ -46,9 +46,9 @@ resource "airtelcloud_baremetal_storage" "data" {
 }
 
 output "volume_id" {
-  value = airtelcloud_baremetal_storage.data.id
+  value = airtelcloudgcc_baremetal_storage.data.id
 }
 
 output "volume_state" {
-  value = airtelcloud_baremetal_storage.data.state
+  value = airtelcloudgcc_baremetal_storage.data.state
 }

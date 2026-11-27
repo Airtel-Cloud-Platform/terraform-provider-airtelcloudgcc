@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -50,7 +50,7 @@ variable "resource_prefix" {
   default     = "tft"
 }
 
-resource "airtelcloud_mariadb" "app" {
+resource "airtelcloudgcc_mariadb" "app" {
   cluster_name      = "${var.resource_prefix}-maria"
   description       = "Application MariaDB cluster"
   version           = "10.6"
@@ -77,61 +77,61 @@ resource "airtelcloud_mariadb" "app" {
 
 output "mariadb_id" {
   description = "UUID of the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.id
+  value       = airtelcloudgcc_mariadb.app.id
 }
 
 output "mariadb_cluster_name" {
   description = "Cluster name of the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.cluster_name
+  value       = airtelcloudgcc_mariadb.app.cluster_name
 }
 
 output "mariadb_version" {
   description = "MariaDB engine version"
-  value       = airtelcloud_mariadb.app.version
+  value       = airtelcloudgcc_mariadb.app.version
 }
 
 output "mariadb_database_name" {
   description = "Initial database name"
-  value       = airtelcloud_mariadb.app.database_name
+  value       = airtelcloudgcc_mariadb.app.database_name
 }
 
 output "mariadb_username" {
   description = "Admin username for the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.mariadb_username
+  value       = airtelcloudgcc_mariadb.app.mariadb_username
 }
 
 output "mariadb_status" {
   description = "Status of the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.status
+  value       = airtelcloudgcc_mariadb.app.status
 }
 
 output "mariadb_topology" {
   description = "Resolved topology of the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.topology
+  value       = airtelcloudgcc_mariadb.app.topology
 }
 
 output "mariadb_num_replicas" {
   description = "Number of slave replicas"
-  value       = airtelcloud_mariadb.app.num_replicas
+  value       = airtelcloudgcc_mariadb.app.num_replicas
 }
 
 output "mariadb_availability_zone" {
   description = "Availability zone of the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.availability_zone
+  value       = airtelcloudgcc_mariadb.app.availability_zone
 }
 
 output "mariadb_port" {
   description = "Database port of the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.port
+  value       = airtelcloudgcc_mariadb.app.port
 }
 
 output "mariadb_created_at" {
   description = "Creation timestamp of the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.created_at
+  value       = airtelcloudgcc_mariadb.app.created_at
 }
 
 output "mariadb_connection_string" {
   description = "Connection string for the MariaDB cluster"
-  value       = airtelcloud_mariadb.app.connection_string
+  value       = airtelcloudgcc_mariadb.app.connection_string
   sensitive   = true
 }

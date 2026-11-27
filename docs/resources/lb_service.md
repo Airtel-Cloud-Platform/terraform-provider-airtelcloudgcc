@@ -1,6 +1,6 @@
 ---
 
-page_title: "airtelcloud_lb_service Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_lb_service Resource - Airtel Cloud"
 
 subcategory: "Load Balancer"
 
@@ -9,7 +9,7 @@ Manages an Airtel Cloud load balancer service.
 
 ---
 
-**# airtelcloud_lb_service (Resource)**
+**# airtelcloudgcc_lb_service (Resource)**
 
 Manages an Airtel Cloud load balancer service.
 
@@ -18,7 +18,7 @@ A load balancer service distributes incoming network traffic across backend reso
 **## Example Usage**
 
 ```terraform
-resource "airtelcloud_lb_service" "example" {
+resource "airtelcloudgcc_lb_service" "example" {
   name        = "my-lb-service"
   description = "Production load balancer"
 
@@ -147,7 +147,7 @@ The timeout values use Terraform duration syntax.
 **## Complete Example**
 
 ```terraform
-resource "airtelcloud_lb_service" "production" {
+resource "airtelcloudgcc_lb_service" "production" {
   name        = "production-lb"
   description = "Production application load balancer"
 
@@ -184,7 +184,7 @@ In addition to the arguments above, the following attributes are exported:
 An existing load balancer service can be imported using its resource ID:
 
 ```shell
-terraform import airtelcloud_lb_service.example <load-balancer-service-id>
+terraform import airtelcloudgcc_lb_service.example <load-balancer-service-id>
 ```
 
 After importing the resource, run:

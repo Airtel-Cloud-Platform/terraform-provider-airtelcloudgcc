@@ -1,4 +1,4 @@
-# Provider-specific Semgrep rules for terraform-provider-airtelcloud.
+# Provider-specific Semgrep rules for terraform-provider-airtelcloudgcc.
 # Run alongside the registry packs (p/golang, p/secrets, p/github-actions).
 # Severity ERROR blocks the PR; WARNING is reported in code scanning only.
 rules:

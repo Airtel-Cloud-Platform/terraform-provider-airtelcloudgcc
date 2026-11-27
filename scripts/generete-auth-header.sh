@@ -10,5 +10,5 @@ SIGNATURE=$(echo -n "$DATA" | openssl dgst -sha256 -hmac "$SECRET" | sed 's/^.* 
 # Combine data and signature 
 AUTH_HEADER="${DATA}.${SIGNATURE}" 
 # Example: curl request with Ce-Auth header 
-curl -X GET "https://north.cloud.airtel.in/api/v1/compute/" -H "Ce-Auth: ${AUTH_HEADER}" 
+curl -X GET "https://gcc-north.cloud.airtel.in/api/v1/compute/" -H "Ce-Auth: ${AUTH_HEADER}" 
 echo $AUTH_HEADER

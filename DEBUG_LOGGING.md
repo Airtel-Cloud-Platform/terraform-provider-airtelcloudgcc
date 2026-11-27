@@ -57,10 +57,10 @@ Form error response body - Form request errors
 ## Example Debug Output
 
 ```
-[DEBUG] provider.terraform-provider-airtelcloud: Making API request: method=POST url=https://south.cloud.airtel.in/api/v1/volumes/
-[DEBUG] provider.terraform-provider-airtelcloud: Request body: {"volume_name":"test","volume_size":10}
-[DEBUG] provider.terraform-provider-airtelcloud: Received API response: status_code=201 status="201 Created"
-[DEBUG] provider.terraform-provider-airtelcloud: POST response body: {"id":123,"status":"creating"}
+[DEBUG] provider.terraform-provider-airtelcloudgcc: Making API request: method=POST url=https://gcc-south.cloud.airtel.in/api/v1/volumes/
+[DEBUG] provider.terraform-provider-airtelcloudgcc: Request body: {"volume_name":"test","volume_size":10}
+[DEBUG] provider.terraform-provider-airtelcloudgcc: Received API response: status_code=201 status="201 Created"
+[DEBUG] provider.terraform-provider-airtelcloudgcc: POST response body: {"id":123,"status":"creating"}
 ```
 
 ## Troubleshooting

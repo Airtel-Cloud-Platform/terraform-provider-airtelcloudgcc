@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_public_ip_attachment Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_public_ip_attachment Resource - Airtel Cloud"
 subcategory: "Security"
 description: |-
   Attaches a reserved Airtel Cloud Public IP to a VM, load balancer, or baremetal server by name.
 ---
 
-# airtelcloud_public_ip_attachment (Resource)
+# airtelcloudgcc_public_ip_attachment (Resource)
 
 Attaches a reserved Airtel Cloud Public IP to a virtual machine, load balancer, or baremetal server.
 
@@ -16,24 +16,24 @@ You name the reserved address and the workload, and the provider resolves the re
 - For `lb`, set `target_vip` to the load balancer VIP to attach to. Load balancers can have more than one VIP, so this must be explicit.
 - That private IP is resolved to the port ID sent to `POST .../public-ip/{uuid}/attach`.
 
-This is step 2 of 3. Reserve the address with [`airtelcloud_public_ip`](public_ip.md) first, then allow traffic with [`airtelcloud_public_ip_policy_rule`](public_ip_policy_rule.md).
+This is step 2 of 3. Reserve the address with [`airtelcloudgcc_public_ip`](public_ip.md) first, then allow traffic with [`airtelcloudgcc_public_ip_policy_rule`](public_ip_policy_rule.md).
 
 ## Example Usage
 
 ### Attach to a Virtual Machine
 
 ```terraform
-resource "airtelcloud_public_ip_attachment" "vm" {
-  public_ip_name = airtelcloud_public_ip.web.object_name
+resource "airtelcloudgcc_public_ip_attachment" "vm" {
+  public_ip_name = airtelcloudgcc_public_ip.web.object_name
   resource_type  = "vm"
-  resource_name  = airtelcloud_vm.web.instance_name
+  resource_name  = airtelcloudgcc_vm.web.instance_name
 }
 ```
 
 ### Attach to a Load Balancer
 
 ```terraform
-resource "airtelcloud_public_ip_attachment" "lb" {
+resource "airtelcloudgcc_public_ip_attachment" "lb" {
   public_ip_name = "lb-public-ip"
   resource_type  = "lb"
   resource_name  = "edge-lb"
@@ -44,7 +44,7 @@ resource "airtelcloud_public_ip_attachment" "lb" {
 ### Attach to a Baremetal Server
 
 ```terraform
-resource "airtelcloud_public_ip_attachment" "baremetal" {
+resource "airtelcloudgcc_public_ip_attachment" "baremetal" {
   public_ip_name = "bm-public-ip"
   resource_type  = "baremetal"
   resource_name  = "db-node-1"
@@ -54,10 +54,10 @@ resource "airtelcloud_public_ip_attachment" "baremetal" {
 ### Attach with Custom Timeouts
 
 ```terraform
-resource "airtelcloud_public_ip_attachment" "vm" {
-  public_ip_name = airtelcloud_public_ip.web.object_name
+resource "airtelcloudgcc_public_ip_attachment" "vm" {
+  public_ip_name = airtelcloudgcc_public_ip.web.object_name
   resource_type  = "vm"
-  resource_name  = airtelcloud_vm.web.instance_name
+  resource_name  = airtelcloudgcc_vm.web.instance_name
 
   timeouts {
     create = "15m"
@@ -72,39 +72,39 @@ resource "airtelcloud_public_ip_attachment" "vm" {
 output "nat_mapping" {
   description = "Public address and the private IP it is NATed to"
   value = {
-    public_ip  = airtelcloud_public_ip_attachment.vm.public_ip
-    target_vip = airtelcloud_public_ip_attachment.vm.target_vip
+    public_ip  = airtelcloudgcc_public_ip_attachment.vm.public_ip
+    target_vip = airtelcloudgcc_public_ip_attachment.vm.target_vip
   }
 }
 ```
 
 ### Detach a Resource from a Public IP
 
-There is no separate detach resource. Destroy the attachment: Terraform calls detach and the public IP returns to `reserved`. The reservation (`airtelcloud_public_ip`) is kept.
+There is no separate detach resource. Destroy the attachment: Terraform calls detach and the public IP returns to `reserved`. The reservation (`airtelcloudgcc_public_ip`) is kept.
 
-Remove any `airtelcloud_public_ip_policy_rule` resources that use this address first, then remove the attachment from configuration:
+Remove any `airtelcloudgcc_public_ip_policy_rule` resources that use this address first, then remove the attachment from configuration:
 
 ```terraform
 # Keep the reservation. Delete (or comment out) the attachment block below.
-resource "airtelcloud_public_ip" "web" {
+resource "airtelcloudgcc_public_ip" "web" {
   object_name       = "web-public-ip"
   description       = "public IP for the web tier"
   availability_zone = "S1"
 }
 
 # Remove this resource to detach the VM, load balancer, or baremetal server.
-# resource "airtelcloud_public_ip_attachment" "vm" {
-#   public_ip_name = airtelcloud_public_ip.web.object_name
+# resource "airtelcloudgcc_public_ip_attachment" "vm" {
+#   public_ip_name = airtelcloudgcc_public_ip.web.object_name
 #   resource_type  = "vm"
-#   resource_name  = airtelcloud_vm.web.instance_name
+#   resource_name  = airtelcloudgcc_vm.web.instance_name
 # }
 ```
 
 Or destroy only the attachment:
 
 ```shell
-terraform destroy -target=airtelcloud_public_ip_policy_rule.web_traffic
-terraform destroy -target=airtelcloud_public_ip_attachment.vm
+terraform destroy -target=airtelcloudgcc_public_ip_policy_rule.web_traffic
+terraform destroy -target=airtelcloudgcc_public_ip_attachment.vm
 ```
 
 ## Argument Reference
@@ -150,12 +150,12 @@ If the named workload has no matching private IP, the apply fails with a "Missin
 Attachments are identified by the public IP UUID:
 
 ```shell
-terraform import airtelcloud_public_ip_attachment.vm <public-ip-uuid>
+terraform import airtelcloudgcc_public_ip_attachment.vm <public-ip-uuid>
 ```
 
 ## Important Notes
 
-- The public IP must already exist and be in `reserved` state. Reserve it with `airtelcloud_public_ip`.
+- The public IP must already exist and be in `reserved` state. Reserve it with `airtelcloudgcc_public_ip`.
 - `availability_zone` is never set in configuration. It is looked up from the public IP and exported as a read-only attribute.
 - `target_vip` is required only for `lb`. For `vm` and `baremetal` it is looked up and exported after attach.
 - There is no in-place update. Changing any argument destroys the attachment and creates a new one.

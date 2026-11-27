@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -45,7 +45,7 @@ variable "resource_prefix" {
 }
 
 # Create a private subnet
-resource "airtelcloud_subnet" "private" {
+resource "airtelcloudgcc_subnet" "private" {
   network_id         = "029ac9b8-d93e-4691-a7cb-2f651c607cfe"
   name               = "${var.resource_prefix}-tf1-subnet"
   ipv4_address_space = "10.1.19.0/24"
@@ -60,7 +60,7 @@ resource "airtelcloud_subnet" "private" {
 }
 
 # Create a VIP subnet
-#resource "airtelcloud_subnet" "vip" {
+#resource "airtelcloudgcc_subnet" "vip" {
 #  network_id         = "029ac9b8-d93e-4691-a7cb-2f651c607cfe"
 #  name               = "${var.resource_prefix}-vip-subnet"
 #  ipv4_address_space = "10.1.12.0/24"
@@ -78,10 +78,10 @@ resource "airtelcloud_subnet" "private" {
 # Output subnet details
 output "private_subnet_id" {
   description = "ID of the private subnet"
-  value       = airtelcloud_subnet.private.id
+  value       = airtelcloudgcc_subnet.private.id
 }
 
 #output "vip_subnet_id" {
 #  description = "ID of the VIP subnet"
-#  value       = airtelcloud_subnet.vip.id
+#  value       = airtelcloudgcc_subnet.vip.id
 #}

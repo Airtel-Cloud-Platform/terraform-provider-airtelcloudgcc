@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_asg Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_asg Resource - Airtel Cloud"
 subcategory: "Compute"
 description: |-
   Manages an Airtel Cloud autoscaling group.
 ---
 
-# airtelcloud_asg (Resource)
+# airtelcloudgcc_asg (Resource)
 
 Manages an autoscaling group.
 
@@ -14,7 +14,7 @@ Create, read, import, and delete are supported. Changing configuration forces a 
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_asg" "example" {
+resource "airtelcloudgcc_asg" "example" {
   name              = "${var.resource_prefix}-asg"
   vpc_name          = "copper-vpc1"
   subnet            = "subnet1213"
@@ -54,7 +54,7 @@ resource "airtelcloud_asg" "example" {
 Set `load_balancer_name` to attach a virtual server. The VIP is resolved from the load balancer service network, not the autoscaling-group subnet.
 
 ```terraform
-resource "airtelcloud_asg" "with_lb" {
+resource "airtelcloudgcc_asg" "with_lb" {
   name              = "${var.resource_prefix}-asg-lb"
   vpc_name          = "copper-vpc1"
   subnet            = "subnet1213"
@@ -188,7 +188,7 @@ A group that has a virtual server cannot be deleted while that virtual server ex
 ## Import
 
 ```shell
-terraform import airtelcloud_asg.example <asg-uuid>
+terraform import airtelcloudgcc_asg.example <asg-uuid>
 ```
 
 Write the configuration first, then import. After import Terraform recovers these arguments from the API, so they match your configuration and do not force a replacement:

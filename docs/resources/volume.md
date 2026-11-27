@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_volume Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_volume Resource - Airtel Cloud"
 subcategory: "Storage"
 description: |-
   Manages an Airtel Cloud block storage volume.
 ---
 
-# airtelcloud_volume (Resource)
+# airtelcloudgcc_volume (Resource)
 
 Manages an Airtel Cloud block storage volume.
 
@@ -16,7 +16,7 @@ Uses the v2.1 Volume API with domain/project URL paths. Volumes are created usin
 ### Basic Volume
 
 ```terraform
-resource "airtelcloud_volume" "data" {
+resource "airtelcloudgcc_volume" "data" {
   name              = "data-volume"
   size              = 100
   availability_zone = "S1"
@@ -29,12 +29,12 @@ resource "airtelcloud_volume" "data" {
 ### Volume with Encryption and Labels
 
 ```terraform
-resource "airtelcloud_volume" "encrypted" {
+resource "airtelcloudgcc_volume" "encrypted" {
   name              = "encrypted-volume"
   size              = 50
   availability_zone = "S1"
-  vpc_name          = airtelcloud_vpc.example.name
-  subnet_name       = airtelcloud_subnet.example.name
+  vpc_name          = airtelcloudgcc_vpc.example.name
+  subnet_name       = airtelcloudgcc_subnet.example.name
   type              = "Standard Performance"
   is_encrypted      = true
   enable_backup     = true
@@ -45,14 +45,14 @@ resource "airtelcloud_volume" "encrypted" {
 ### Volume Attached to Compute Instance
 
 ```terraform
-resource "airtelcloud_volume" "attached" {
+resource "airtelcloudgcc_volume" "attached" {
   name              = "attached-volume"
   size              = 50
   availability_zone = "S1"
-  vpc_name          = airtelcloud_vpc.example.name
-  subnet_name       = airtelcloud_subnet.example.name
+  vpc_name          = airtelcloudgcc_vpc.example.name
+  subnet_name       = airtelcloudgcc_subnet.example.name
   type              = "Standard Performance"
-  compute_name      = airtelcloud_vm.example.instance_name
+  compute_name      = airtelcloudgcc_vm.example.instance_name
   is_encrypted      = true
   bootable          = false
 }
@@ -63,15 +63,15 @@ resource "airtelcloud_volume" "attached" {
 Changing `compute_name` detaches the volume from the old instance and attaches it to the new one without destroying and recreating the volume.
 
 ```terraform
-resource "airtelcloud_volume" "data" {
+resource "airtelcloudgcc_volume" "data" {
   name              = "data-volume"
   size              = 100
   availability_zone = "S1"
-  vpc_name          = airtelcloud_vpc.example.name
-  subnet_name       = airtelcloud_subnet.example.name
+  vpc_name          = airtelcloudgcc_vpc.example.name
+  subnet_name       = airtelcloudgcc_subnet.example.name
   type              = "Standard Performance"
 
-  compute_name = airtelcloud_vm.new_instance.instance_name
+  compute_name = airtelcloudgcc_vm.new_instance.instance_name
 }
 ```
 
@@ -110,5 +110,5 @@ In addition to all arguments above, the following attributes are exported:
 Volumes can be imported using the `uuid`:
 
 ```shell
-terraform import airtelcloud_volume.data <volume-uuid>
+terraform import airtelcloudgcc_volume.data <volume-uuid>
 ```

@@ -1,20 +1,20 @@
 ---
-page_title: "airtelcloud_file_storage Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_file_storage Resource - Airtel Cloud"
 subcategory: "Storage"
 description: |-
   Manages an Airtel Cloud NFS file storage volume.
 ---
 
-# airtelcloud_file_storage (Resource)
+# airtelcloudgcc_file_storage (Resource)
 
 Manages an Airtel Cloud NFS file storage volume.
 
-After creating a file storage volume, use `airtelcloud_file_storage_export_path` to create NFS export paths for client access.
+After creating a file storage volume, use `airtelcloudgcc_file_storage_export_path` to create NFS export paths for client access.
 
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_file_storage" "shared" {
+resource "airtelcloudgcc_file_storage" "shared" {
   name              = "shared-nfs"
   description       = "Shared storage for application data"
   size              = "500"
@@ -51,5 +51,5 @@ In addition to all arguments above, the following attributes are exported:
 File storage volumes can be imported using the `id`:
 
 ```shell
-terraform import airtelcloud_file_storage.shared <volume-id>
+terraform import airtelcloudgcc_file_storage.shared <volume-id>
 ```

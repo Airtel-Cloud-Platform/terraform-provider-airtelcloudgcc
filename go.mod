@@ -1,4 +1,4 @@
-module github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud
+module github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc
 
 go 1.26.0
 

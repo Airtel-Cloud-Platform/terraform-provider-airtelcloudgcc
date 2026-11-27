@@ -16,15 +16,15 @@ func TestAccSecurityGroupResource(t *testing.T) {
 			{
 				Config: testAccSecurityGroupResourceConfig("test-sg"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("airtelcloud_security_group.test", "security_group_name", "test-sg"),
-					resource.TestCheckResourceAttrSet("airtelcloud_security_group.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_security_group.test", "uuid"),
-					resource.TestCheckResourceAttrSet("airtelcloud_security_group.test", "status"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group.test", "security_group_name", "test-sg"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_security_group.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_security_group.test", "uuid"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_security_group.test", "status"),
 				),
 			},
 			// ImportState testing
 			{
-				ResourceName:      "airtelcloud_security_group.test",
+				ResourceName:      "airtelcloudgcc_security_group.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
@@ -35,7 +35,7 @@ func TestAccSecurityGroupResource(t *testing.T) {
 
 func testAccSecurityGroupResourceConfig(name string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_security_group" "test" {
+resource "airtelcloudgcc_security_group" "test" {
   security_group_name = %[1]q
 }
 `, name)
@@ -51,23 +51,23 @@ func TestAccSecurityGroupRuleResource(t *testing.T) {
 				Config: testAccSecurityGroupRuleResourceConfig("ingress", "tcp", "22", "22", "0.0.0.0/0", "IPv4", "Allow SSH"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					// Verify security group
-					resource.TestCheckResourceAttr("airtelcloud_security_group.test", "security_group_name", "test-sg-for-rules"),
-					resource.TestCheckResourceAttrSet("airtelcloud_security_group.test", "id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group.test", "security_group_name", "test-sg-for-rules"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_security_group.test", "id"),
 					// Verify rule
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.test", "direction", "ingress"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.test", "protocol", "tcp"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.test", "port_range_min", "22"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.test", "port_range_max", "22"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.test", "remote_ip_prefix", "0.0.0.0/0"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.test", "ethertype", "IPv4"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.test", "description", "Allow SSH"),
-					resource.TestCheckResourceAttrSet("airtelcloud_security_group_rule.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_security_group_rule.test", "status"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.test", "direction", "ingress"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.test", "protocol", "tcp"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.test", "port_range_min", "22"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.test", "port_range_max", "22"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.test", "remote_ip_prefix", "0.0.0.0/0"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.test", "ethertype", "IPv4"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.test", "description", "Allow SSH"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_security_group_rule.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_security_group_rule.test", "status"),
 				),
 			},
 			// ImportState testing for rule (format: sg_id/rule_id)
 			{
-				ResourceName:      "airtelcloud_security_group_rule.test",
+				ResourceName:      "airtelcloudgcc_security_group_rule.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
@@ -78,12 +78,12 @@ func TestAccSecurityGroupRuleResource(t *testing.T) {
 
 func testAccSecurityGroupRuleResourceConfig(direction, protocol, portMin, portMax, remoteIP, ethertype, description string) string {
 	return fmt.Sprintf(`
-resource "airtelcloud_security_group" "test" {
+resource "airtelcloudgcc_security_group" "test" {
   security_group_name = "test-sg-for-rules"
 }
 
-resource "airtelcloud_security_group_rule" "test" {
-  security_group_id = airtelcloud_security_group.test.id
+resource "airtelcloudgcc_security_group_rule" "test" {
+  security_group_id = airtelcloudgcc_security_group.test.id
   direction         = %[1]q
   protocol          = %[2]q
   port_range_min    = %[3]q
@@ -104,24 +104,24 @@ func TestAccSecurityGroupWithMultipleRules(t *testing.T) {
 				Config: testAccSecurityGroupMultipleRulesConfig(),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					// Verify security group
-					resource.TestCheckResourceAttr("airtelcloud_security_group.test", "security_group_name", "web-servers"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group.test", "security_group_name", "web-servers"),
 					// Verify SSH rule
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.ssh", "direction", "ingress"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.ssh", "protocol", "tcp"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.ssh", "port_range_min", "22"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.ssh", "port_range_max", "22"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.ssh", "remote_ip_prefix", "10.0.0.0/8"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.ssh", "direction", "ingress"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.ssh", "protocol", "tcp"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.ssh", "port_range_min", "22"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.ssh", "port_range_max", "22"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.ssh", "remote_ip_prefix", "10.0.0.0/8"),
 					// Verify HTTP rule
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.http", "direction", "ingress"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.http", "protocol", "tcp"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.http", "port_range_min", "80"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.http", "port_range_max", "80"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.http", "remote_ip_prefix", "0.0.0.0/0"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.http", "direction", "ingress"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.http", "protocol", "tcp"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.http", "port_range_min", "80"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.http", "port_range_max", "80"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.http", "remote_ip_prefix", "0.0.0.0/0"),
 					// Verify HTTPS egress rule
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.https_out", "direction", "egress"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.https_out", "protocol", "tcp"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.https_out", "port_range_min", "443"),
-					resource.TestCheckResourceAttr("airtelcloud_security_group_rule.https_out", "port_range_max", "443"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.https_out", "direction", "egress"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.https_out", "protocol", "tcp"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.https_out", "port_range_min", "443"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_security_group_rule.https_out", "port_range_max", "443"),
 				),
 			},
 		},
@@ -130,12 +130,12 @@ func TestAccSecurityGroupWithMultipleRules(t *testing.T) {
 
 func testAccSecurityGroupMultipleRulesConfig() string {
 	return `
-resource "airtelcloud_security_group" "test" {
+resource "airtelcloudgcc_security_group" "test" {
   security_group_name = "web-servers"
 }
 
-resource "airtelcloud_security_group_rule" "ssh" {
-  security_group_id = airtelcloud_security_group.test.id
+resource "airtelcloudgcc_security_group_rule" "ssh" {
+  security_group_id = airtelcloudgcc_security_group.test.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "22"
@@ -145,8 +145,8 @@ resource "airtelcloud_security_group_rule" "ssh" {
   description       = "Allow SSH from internal network"
 }
 
-resource "airtelcloud_security_group_rule" "http" {
-  security_group_id = airtelcloud_security_group.test.id
+resource "airtelcloudgcc_security_group_rule" "http" {
+  security_group_id = airtelcloudgcc_security_group.test.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "80"
@@ -156,8 +156,8 @@ resource "airtelcloud_security_group_rule" "http" {
   description       = "Allow HTTP"
 }
 
-resource "airtelcloud_security_group_rule" "https_out" {
-  security_group_id = airtelcloud_security_group.test.id
+resource "airtelcloudgcc_security_group_rule" "https_out" {
+  security_group_id = airtelcloudgcc_security_group.test.id
   direction         = "egress"
   protocol          = "tcp"
   port_range_min    = "443"

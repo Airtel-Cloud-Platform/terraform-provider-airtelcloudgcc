@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -183,7 +183,7 @@ func (r *DNSRecordResource) Create(ctx context.Context, req resource.CreateReque
 			resp.Diagnostics.AddError(
 				"DNS Record already exists",
 				fmt.Sprintf(
-					"A DNS record with owner %q, type %q, and data %q already exists in zone %s (UUID: %s). To manage this resource with Terraform, import it using:\n\n  terraform import airtelcloud_dns_record.<resource_name> %s/%s",
+					"A DNS record with owner %q, type %q, and data %q already exists in zone %s (UUID: %s). To manage this resource with Terraform, import it using:\n\n  terraform import airtelcloudgcc_dns_record.<resource_name> %s/%s",
 					existingOwner, record.RecordType, record.Data, data.ZoneID.ValueString(), record.UUID,
 					data.ZoneID.ValueString(), record.UUID,
 				),

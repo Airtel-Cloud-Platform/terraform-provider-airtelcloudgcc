@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_lb_vip Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_lb_vip Resource - Airtel Cloud"
 subcategory: "Networking"
 description: |-
   Manages a VIP (Virtual IP) port for an Airtel Cloud Load Balancer Service.
 ---
 
-# airtelcloud_lb_vip (Resource)
+# airtelcloudgcc_lb_vip (Resource)
 
 Manages a VIP (Virtual IP) port for an Airtel Cloud Load Balancer Service.
 
@@ -14,12 +14,12 @@ A VIP is allocated from the LB service's network and provides the frontend IP ad
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_lb_vip" "example" {
-  lb_service_id = airtelcloud_lb_service.example.id
+resource "airtelcloudgcc_lb_vip" "example" {
+  lb_service_id = airtelcloudgcc_lb_service.example.id
 }
 
 output "vip_fixed_ips" {
-  value = airtelcloud_lb_vip.example.fixed_ips
+  value = airtelcloudgcc_lb_vip.example.fixed_ips
 }
 ```
 

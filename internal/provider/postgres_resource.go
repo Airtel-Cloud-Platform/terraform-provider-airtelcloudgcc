@@ -31,8 +31,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 const postgresDefaultTimeout = 30 * time.Minute
@@ -51,7 +51,7 @@ func NewPostgresResource() resource.Resource {
 	return &PostgresResource{}
 }
 
-// PostgresResource defines the airtelcloud_postgres resource.
+// PostgresResource defines the airtelcloudgcc_postgres resource.
 type PostgresResource struct {
 	client *client.Client
 }
@@ -709,7 +709,7 @@ func (r *PostgresResource) Read(ctx context.Context, req resource.ReadRequest, r
 func (r *PostgresResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	resp.Diagnostics.AddError(
 		"Update Not Supported",
-		"airtelcloud_postgres does not support in-place updates. Changing configuration forces a new cluster.",
+		"airtelcloudgcc_postgres does not support in-place updates. Changing configuration forces a new cluster.",
 	)
 }
 

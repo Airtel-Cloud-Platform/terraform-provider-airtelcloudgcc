@@ -12,17 +12,17 @@ This guide walks you through building the Airtel Cloud Terraform provider from s
 
 The Airtel Cloud Terraform provider lets you manage infrastructure on Airtel Cloud Platform using declarative HCL configuration. Supported resources include:
 
-- **Virtual Machines** (`airtelcloud_vm`)
-- **Autoscaling Groups** (`airtelcloud_asg`)
-- **PostgreSQL Clusters** (`airtelcloud_postgres`)
-- **Block Storage Volumes** (`airtelcloud_volume`)
-- **Virtual Private Clouds** (`airtelcloud_vpc`)
-- **Subnets** (`airtelcloud_subnet`)
-- **Object Storage Buckets** (`airtelcloud_storage_bucket`)
-- **File Storage / NFS Volumes** (`airtelcloud_file_storage`)
-- **File Storage Export Paths** (`airtelcloud_file_storage_export_path`)
-- **DNS Zones** (`airtelcloud_dns_zone`)
-- **DNS Records** (`airtelcloud_dns_record`)
+- **Virtual Machines** (`airtelcloudgcc_vm`)
+- **Autoscaling Groups** (`airtelcloudgcc_asg`)
+- **PostgreSQL Clusters** (`airtelcloudgcc_postgres`)
+- **Block Storage Volumes** (`airtelcloudgcc_volume`)
+- **Virtual Private Clouds** (`airtelcloudgcc_vpc`)
+- **Subnets** (`airtelcloudgcc_subnet`)
+- **Object Storage Buckets** (`airtelcloudgcc_storage_bucket`)
+- **File Storage / NFS Volumes** (`airtelcloudgcc_file_storage`)
+- **File Storage Export Paths** (`airtelcloudgcc_file_storage_export_path`)
+- **DNS Zones** (`airtelcloudgcc_dns_zone`)
+- **DNS Records** (`airtelcloudgcc_dns_record`)
 
 ## Prerequisites
 
@@ -49,8 +49,8 @@ If you run commands as `root`, `go env GOPATH` is typically `/root/go`, so your 
 Clone the repository and build using the Makefile:
 
 ```shell
-git clone https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud
-cd terraform-provider-airtelcloud
+git clone https://github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc
+cd terraform-provider-airtelcloudgcc
 
 # Compile the provider binary
 make build
@@ -61,13 +61,13 @@ make install
 
 `make install` copies the binary to both locations:
 
-- `~/.terraform.d/plugins/registry.terraform.io/Airtel-Cloud-Platform/airtelcloud/2.0.1/<GOOS>_<GOARCH>/`
+- `~/.terraform.d/plugins/registry.terraform.io/Airtel-Cloud-Platform/airtelcloudgcc/1.0.0/<GOOS>_<GOARCH>/`
 - `$(go env GOPATH)/bin/`
 
 You can verify installation with:
 
 ```shell
-ls -l "$(go env GOPATH)/bin/terraform-provider-airtelcloud"
+ls -l "$(go env GOPATH)/bin/terraform-provider-airtelcloudgcc"
 ```
 
 ## Local Development Setup
@@ -79,7 +79,7 @@ Create or update `~/.terraformrc`:
 ```hcl
 provider_installation {
   dev_overrides {
-   "Airtel-Cloud-Platform/airtelcloud" = "<GOPATH>/bin"
+   "Airtel-Cloud-Platform/airtelcloudgcc" = "<GOPATH>/bin"
   }
   direct {}
 }
@@ -96,15 +96,15 @@ Add the provider block to your Terraform configuration:
 ```terraform
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -117,7 +117,7 @@ provider "airtelcloud" {
 
 | Attribute | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `api_endpoint` | String | No | `https://south.cloud.airtel.in` | Airtel Cloud API endpoint URL |
+| `api_endpoint` | String | No | `https://gcc-south.cloud.airtel.in` | Airtel Cloud API endpoint URL |
 | `api_key` | String | Yes | — | API key for authentication (sensitive) |
 | `api_secret` | String | Yes | — | API secret for HMAC authentication (sensitive) |
 | `region` | String | No | `south` | Airtel Cloud region |
@@ -136,7 +136,7 @@ export AIRTEL_API_KEY="your-api-key"
 export AIRTEL_API_SECRET="your-api-secret"
 
 # Optional provider setting fallbacks
-export AIRTEL_API_ENDPOINT="https://south.cloud.airtel.in"
+export AIRTEL_API_ENDPOINT="https://gcc-south.cloud.airtel.in"
 export AIRTEL_REGION="south"
 export AIRTEL_ORGANIZATION="your-organization"
 export AIRTEL_PROJECT_NAME="your-project"
@@ -212,7 +212,7 @@ A working example is available at [`examples/complete/main.tf`](../../examples/c
 Creates a private bucket with versioning enabled and local replication:
 
 ```terraform
-resource "airtelcloud_storage_bucket" "private_bucket" {
+resource "airtelcloudgcc_storage_bucket" "private_bucket" {
   name              = "${var.bucket_prefix}-private-bucket"
   replication_type  = "Local"
   replication_tag   = "south_S1"
@@ -227,7 +227,7 @@ resource "airtelcloud_storage_bucket" "private_bucket" {
 Creates a private subnet within an existing VPC, with labels and custom timeouts:
 
 ```terraform
-resource "airtelcloud_subnet" "private" {
+resource "airtelcloudgcc_subnet" "private" {
   network_id         = "029ac9b8-d93e-4691-a7cb-2f651c607cfe"
   name               = "ashok-d-subnet"
   ipv4_address_space = "10.1.14.0/24"
@@ -247,7 +247,7 @@ resource "airtelcloud_subnet" "private" {
 Creates a 300 GB NFS volume:
 
 ```terraform
-resource "airtelcloud_file_storage" "basic" {
+resource "airtelcloudgcc_file_storage" "basic" {
   name              = "basic-nfs"
   size              = "300"
   availability_zone = "S2"
@@ -259,8 +259,8 @@ resource "airtelcloud_file_storage" "basic" {
 Creates an NFSv4 export path on the volume above:
 
 ```terraform
-resource "airtelcloud_file_storage_export_path" "nfsv4_export" {
-  volume              = airtelcloud_file_storage.basic.name
+resource "airtelcloudgcc_file_storage_export_path" "nfsv4_export" {
+  volume              = airtelcloudgcc_file_storage.basic.name
   description         = "NFSv4 export for application servers"
   protocol            = "NFSv4"
   availability_zone   = "S2"

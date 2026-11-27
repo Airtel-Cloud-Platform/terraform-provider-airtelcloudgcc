@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://north.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-north.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "north"
@@ -45,14 +45,14 @@ variable "resource_prefix" {
 }
 
 # Create a security group to attach rules to
-resource "airtelcloud_security_group" "web" {
+resource "airtelcloudgcc_security_group" "web" {
   security_group_name = "${var.resource_prefix}-sg1-http-servers"
   availability_zone   = "N2"
 }
 
 # Allow SSH from internal network
-resource "airtelcloud_security_group_rule" "ssh" {
-  security_group_id = airtelcloud_security_group.web.id
+resource "airtelcloudgcc_security_group_rule" "ssh" {
+  security_group_id = airtelcloudgcc_security_group.web.id
   direction         = "ingress"
   protocol          = "tcp"
   port_range_min    = "22"
@@ -63,8 +63,8 @@ resource "airtelcloud_security_group_rule" "ssh" {
 }
 
 # Allow HTTP traffic
-#resource "airtelcloud_security_group_rule" "http" {
-#  security_group_id = airtelcloud_security_group.web.id
+#resource "airtelcloudgcc_security_group_rule" "http" {
+#  security_group_id = airtelcloudgcc_security_group.web.id
 #  direction         = "ingress"
 #  protocol          = "tcp"
 #  port_range_min    = "8080"
@@ -77,21 +77,21 @@ resource "airtelcloud_security_group_rule" "ssh" {
 # Output rule details
 output "security_group_uuid" {
   description = "UUID of the security group"
-  value       = airtelcloud_security_group.web.uuid
+  value       = airtelcloudgcc_security_group.web.uuid
 }
 
 # Output rule details
 output "ssh_rule_id" {
   description = "ID of the SSH security group rule"
-  value       = airtelcloud_security_group_rule.ssh.id
+  value       = airtelcloudgcc_security_group_rule.ssh.id
 }
 
 output "ssh_rule_uuid" {
   description = "UUID of the SSH security group rule"
-  value       = airtelcloud_security_group_rule.ssh.uuid
+  value       = airtelcloudgcc_security_group_rule.ssh.uuid
 }
 
 #output "http_rule_id" {
 #  description = "ID of the HTTP security group rule"
-#  value       = airtelcloud_security_group_rule.http.id
+#  value       = airtelcloudgcc_security_group_rule.http.id
 #}

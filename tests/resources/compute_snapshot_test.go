@@ -17,20 +17,20 @@ func TestAccComputeSnapshotResource(t *testing.T) {
 			{
 				Config: testAccComputeSnapshotResourceConfig(),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_compute_snapshot.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_compute_snapshot.test", "status"),
-					resource.TestCheckResourceAttrSet("airtelcloud_compute_snapshot.test", "created"),
-					resource.TestCheckResourceAttr("airtelcloud_compute_snapshot.test", "compute_id", "test-compute-id"),
-					resource.TestCheckResourceAttr("airtelcloud_compute_snapshot.test", "snapshot_name", "tf-acc-snap"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_compute_snapshot.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_compute_snapshot.test", "status"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_compute_snapshot.test", "created"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_compute_snapshot.test", "compute_id", "test-compute-id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_compute_snapshot.test", "snapshot_name", "tf-acc-snap"),
 				),
 			},
 			// ImportState testing using the "<compute_id>:<snapshot_uuid>" form.
 			{
-				ResourceName:      "airtelcloud_compute_snapshot.test",
+				ResourceName:      "airtelcloudgcc_compute_snapshot.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					rs := s.RootModule().Resources["airtelcloud_compute_snapshot.test"]
+					rs := s.RootModule().Resources["airtelcloudgcc_compute_snapshot.test"]
 					return rs.Primary.Attributes["compute_id"] + ":" + rs.Primary.ID, nil
 				},
 				ImportStateVerifyIgnore: []string{
@@ -51,10 +51,10 @@ func TestAccComputeSnapshotResourceByName(t *testing.T) {
 			{
 				Config: testAccComputeSnapshotResourceConfigByName(),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("airtelcloud_compute_snapshot.test", "id"),
-					resource.TestCheckResourceAttrSet("airtelcloud_compute_snapshot.test", "compute_id"),
-					resource.TestCheckResourceAttr("airtelcloud_compute_snapshot.test", "compute_name", "test-instance"),
-					resource.TestCheckResourceAttr("airtelcloud_compute_snapshot.test", "snapshot_name", "tf-acc-snap-byname"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_compute_snapshot.test", "id"),
+					resource.TestCheckResourceAttrSet("airtelcloudgcc_compute_snapshot.test", "compute_id"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_compute_snapshot.test", "compute_name", "test-instance"),
+					resource.TestCheckResourceAttr("airtelcloudgcc_compute_snapshot.test", "snapshot_name", "tf-acc-snap-byname"),
 				),
 			},
 		},
@@ -70,7 +70,7 @@ func TestAccComputeSnapshotResourceValidation(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `
-resource "airtelcloud_compute_snapshot" "test" {
+resource "airtelcloudgcc_compute_snapshot" "test" {
   compute_id    = "test-compute-id"
   compute_name  = "test-instance"
   snapshot_name = "tf-acc-snap"
@@ -80,7 +80,7 @@ resource "airtelcloud_compute_snapshot" "test" {
 			},
 			{
 				Config: `
-resource "airtelcloud_compute_snapshot" "test" {
+resource "airtelcloudgcc_compute_snapshot" "test" {
   snapshot_name = "tf-acc-snap"
 }
 `,
@@ -92,7 +92,7 @@ resource "airtelcloud_compute_snapshot" "test" {
 
 func testAccComputeSnapshotResourceConfig() string {
 	return `
-resource "airtelcloud_compute_snapshot" "test" {
+resource "airtelcloudgcc_compute_snapshot" "test" {
   compute_id    = "test-compute-id"
   snapshot_name = "tf-acc-snap"
 
@@ -106,7 +106,7 @@ resource "airtelcloud_compute_snapshot" "test" {
 
 func testAccComputeSnapshotResourceConfigByName() string {
 	return `
-resource "airtelcloud_compute_snapshot" "test" {
+resource "airtelcloudgcc_compute_snapshot" "test" {
   compute_name  = "test-instance"
   snapshot_name = "tf-acc-snap-byname"
 

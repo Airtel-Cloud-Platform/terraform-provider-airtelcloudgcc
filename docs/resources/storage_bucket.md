@@ -1,18 +1,18 @@
 ---
-page_title: "airtelcloud_storage_bucket Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_storage_bucket Resource - Airtel Cloud"
 subcategory: "Storage"
 description: |-
   Manages an Airtel Cloud object storage bucket.
 ---
 
-# airtelcloud_storage_bucket (Resource)
+# airtelcloudgcc_storage_bucket (Resource)
 
 Manages an Airtel Cloud object storage bucket (S3-compatible).
 
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_storage_bucket" "private_bucket" {
+resource "airtelcloudgcc_storage_bucket" "private_bucket" {
   name              = "tf-private-bucket"
   replication_type  = "Local"
   replication_tag   = "south_S1"
@@ -147,5 +147,5 @@ In addition to all arguments above, the following attributes are exported:
 Storage buckets can be imported using the `id`:
 
 ```shell
-terraform import airtelcloud_storage_bucket.private_bucket <bucket-id>
+terraform import airtelcloudgcc_storage_bucket.private_bucket <bucket-id>
 ```

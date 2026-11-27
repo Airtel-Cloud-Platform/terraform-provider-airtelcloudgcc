@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_alert Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_alert Resource - Airtel Cloud"
 subcategory: "Alerting"
 description: |-
   Manages an Airtel Cloud metric alert.
 ---
 
-# airtelcloud_alert (Resource)
+# airtelcloudgcc_alert (Resource)
 
 Manages an Airtel Cloud metric alert via Alert Manager API v2.1.
 
@@ -93,7 +93,7 @@ Currently the catalog returns:
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_alert" "memory" {
+resource "airtelcloudgcc_alert" "memory" {
   name          = "high-memory"
   description   = "Memory above 80%"
   emails        = ["ops@example.com"]
@@ -143,7 +143,7 @@ In addition to all arguments above, the following attributes are exported:
 Import by alert UUID (`uuid_id`):
 
 ```shell
-terraform import airtelcloud_alert.memory <alert-uuid>
+terraform import airtelcloudgcc_alert.memory <alert-uuid>
 ```
 
 Import cannot reconstruct which VMs were attached; a following apply may recreate the alert if the resolved Active VM set differs from what the API stored.

@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
 )
 
 // Ensure AirtelCloudProvider satisfies various provider interfaces.
@@ -37,7 +37,7 @@ type AirtelCloudProviderModel struct {
 }
 
 func (p *AirtelCloudProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "airtelcloud"
+	resp.TypeName = "airtelcloudgcc"
 	resp.Version = p.version
 }
 
@@ -89,7 +89,7 @@ func (p *AirtelCloudProvider) Configure(ctx context.Context, req provider.Config
 
 	// Configuration values are now available.
 	// Each value falls back to an environment variable if not set in config.
-	apiEndpoint := stringValueOrEnv(data.APIEndpoint, "AIRTEL_API_ENDPOINT", "https://south.cloud.airtel.in")
+	apiEndpoint := stringValueOrEnv(data.APIEndpoint, "AIRTEL_API_ENDPOINT", "https://gcc-south.cloud.airtel.in")
 	region := stringValueOrEnv(data.Region, "AIRTEL_REGION", "south")
 	organization := stringValueOrEnv(data.Organization, "AIRTEL_ORGANIZATION", "")
 	projectName := stringValueOrEnv(data.ProjectName, "AIRTEL_PROJECT_NAME", "")

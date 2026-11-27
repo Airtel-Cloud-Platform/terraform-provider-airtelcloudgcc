@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // GetSubnet retrieves a subnet by ID

@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -58,7 +58,7 @@ variable "ca_cert_pem" {
 }
 
 # Upload an SSL certificate to a Load Balancer Service
-resource "airtelcloud_lb_certificate" "example" {
+resource "airtelcloudgcc_lb_certificate" "example" {
   lb_service_id   = "ac238c5b-6334-49b9-b9c0-decc0aaf63d6"
   name            = "my-ssl-cert"
   ssl_cert        = var.ssl_cert_pem
@@ -68,10 +68,10 @@ resource "airtelcloud_lb_certificate" "example" {
 
 output "certificate_id" {
   description = "ID of the uploaded certificate"
-  value       = airtelcloud_lb_certificate.example.id
+  value       = airtelcloudgcc_lb_certificate.example.id
 }
 
 output "certificate_status" {
   description = "Status of the certificate"
-  value       = airtelcloud_lb_certificate.example.status
+  value       = airtelcloudgcc_lb_certificate.example.status
 }

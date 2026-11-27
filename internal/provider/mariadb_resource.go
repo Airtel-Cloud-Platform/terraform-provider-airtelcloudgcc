@@ -31,8 +31,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 const mariadbDefaultTimeout = 15 * time.Minute
@@ -51,7 +51,7 @@ func NewMariaDBResource() resource.Resource {
 	return &MariaDBResource{}
 }
 
-// MariaDBResource defines the airtelcloud_mariadb resource.
+// MariaDBResource defines the airtelcloudgcc_mariadb resource.
 type MariaDBResource struct {
 	client *client.Client
 }
@@ -652,7 +652,7 @@ func (r *MariaDBResource) Read(ctx context.Context, req resource.ReadRequest, re
 func (r *MariaDBResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	resp.Diagnostics.AddError(
 		"Update Not Supported",
-		"airtelcloud_mariadb does not support in-place updates. Changing configuration forces a new cluster.",
+		"airtelcloudgcc_mariadb does not support in-place updates. Changing configuration forces a new cluster.",
 	)
 }
 

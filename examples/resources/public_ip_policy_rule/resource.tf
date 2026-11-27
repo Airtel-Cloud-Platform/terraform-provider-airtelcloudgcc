@@ -1,14 +1,14 @@
 terraform {
   required_providers {
-    airtelcloud = {
-      source  = "Airtel-Cloud-Platform/airtelcloud"
-      version = "2.0.1"
+    airtelcloudgcc = {
+      source  = "Airtel-Cloud-Platform/airtelcloudgcc"
+      version = "1.0.0"
     }
   }
 }
 
-provider "airtelcloud" {
-  api_endpoint = "https://south.cloud.airtel.in"
+provider "airtelcloudgcc" {
+  api_endpoint = "https://gcc-south.cloud.airtel.in"
   api_key      = var.airtel_api_key
   api_secret   = var.airtel_api_secret
   region       = "south"
@@ -42,7 +42,7 @@ variable "project_name" {
 # target_vip, public_ip, and availability_zone are read from public_ip_name.
 
 # Allow web traffic (HTTP + HTTPS) from any source
-resource "airtelcloud_public_ip_policy_rule" "web_traffic" {
+resource "airtelcloudgcc_public_ip_policy_rule" "web_traffic" {
   public_ip_name = "my-vm-public-ip"
   rule_name      = "web-traffic"
   source         = "any"
@@ -51,7 +51,7 @@ resource "airtelcloud_public_ip_policy_rule" "web_traffic" {
 }
 
 # Allow SSH access from a specific management IP only
-resource "airtelcloud_public_ip_policy_rule" "ssh_mgmt" {
+resource "airtelcloudgcc_public_ip_policy_rule" "ssh_mgmt" {
   public_ip_name = "my-vm-public-ip"
   rule_name      = "ssh-mgmt"
   source         = "192.168.100.5"
@@ -60,7 +60,7 @@ resource "airtelcloud_public_ip_policy_rule" "ssh_mgmt" {
 }
 
 # API-shaped example using source_config and service_config
-resource "airtelcloud_public_ip_policy_rule" "temporal_rule" {
+resource "airtelcloudgcc_public_ip_policy_rule" "temporal_rule" {
   public_ip_name = "my-vm-public-ip"
   rule_name      = "temporal-rule"
   action         = "accept"
@@ -118,15 +118,15 @@ resource "airtelcloud_public_ip_policy_rule" "temporal_rule" {
 
 output "web_rule_id" {
   description = "ID of the web traffic policy rule"
-  value       = airtelcloud_public_ip_policy_rule.web_traffic.id
+  value       = airtelcloudgcc_public_ip_policy_rule.web_traffic.id
 }
 
 output "web_rule_state" {
   description = "State of the web traffic policy rule"
-  value       = airtelcloud_public_ip_policy_rule.web_traffic.state
+  value       = airtelcloudgcc_public_ip_policy_rule.web_traffic.state
 }
 
 output "rdp_rule_id" {
   description = "ID of the CIDR + geographic policy rule"
-  value       = airtelcloud_public_ip_policy_rule.temporal_rule.id
+  value       = airtelcloudgcc_public_ip_policy_rule.temporal_rule.id
 }

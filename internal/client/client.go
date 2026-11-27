@@ -105,7 +105,7 @@ func NewClient(endpoint, apiKey, apiSecret, region, organization, projectName, s
 				return nil
 			},
 		},
-		UserAgent: "terraform-provider-airtelcloud/0.3.0",
+		UserAgent: "terraform-provider-airtelcloudgcc/1.0.0",
 	}, nil
 }
 

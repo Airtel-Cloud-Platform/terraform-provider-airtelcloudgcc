@@ -1,18 +1,18 @@
 ---
-page_title: "airtelcloud_vpc_peering Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_vpc_peering Resource - Airtel Cloud"
 subcategory: "Networking"
 description: |-
   Manages an Airtel Cloud VPC Peering connection.
 ---
 
-# airtelcloud_vpc_peering (Resource)
+# airtelcloudgcc_vpc_peering (Resource)
 
 Manages an Airtel Cloud VPC Peering connection.
 
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_vpc_peering" "example" {
+resource "airtelcloudgcc_vpc_peering" "example" {
   name            = "prod-staging-peering"
   description     = "VPC peering between prod and staging"
   vpc_source_name = "prod-vpc"

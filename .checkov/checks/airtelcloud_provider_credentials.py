@@ -1,9 +1,9 @@
-"""CKV_ACP_1: no hard-coded credentials in the airtelcloud provider block.
+"""CKV_ACP_1: no hard-coded credentials in the airtelcloudgcc provider block.
 
 Mirrors Checkov's built-in CKV_AWS_41, but for our provider. Catches the
 exact pattern that leaks keys through examples/ and docs:
 
-    provider "airtelcloud" {
+    provider "airtelcloudgcc" {
       api_key    = "<real key pasted here>"   # FAILS
       api_secret = var.airtel_api_secret      # passes (unresolved variable)
     }
@@ -33,10 +33,10 @@ _PLACEHOLDER_RE = re.compile(r"(?i)^(|\.\.\.|your[-_].*|<[^>]+>|replace[-_]?me|c
 class AirtelCloudProviderCredentials(BaseProviderCheck):
     def __init__(self) -> None:
         super().__init__(
-            name="Ensure no hard-coded credentials exist in the airtelcloud provider block",
+            name="Ensure no hard-coded credentials exist in the airtelcloudgcc provider block",
             id="CKV_ACP_1",
             categories=[CheckCategories.SECRETS],
-            supported_provider=["airtelcloud"],
+            supported_provider=["airtelcloudgcc"],
         )
 
     def scan_provider_conf(self, conf: Dict[str, List[Any]]) -> CheckResult:

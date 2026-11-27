@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 // volumeBasePath returns the v2.1 base path for volume endpoints

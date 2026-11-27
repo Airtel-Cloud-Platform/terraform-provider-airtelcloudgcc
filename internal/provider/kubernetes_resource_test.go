@@ -8,15 +8,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 func TestKubernetesMetadataTypeName(t *testing.T) {
 	t.Parallel()
 
 	var resp resource.MetadataResponse
-	(&KubernetesResource{}).Metadata(context.Background(), resource.MetadataRequest{ProviderTypeName: "airtelcloud"}, &resp)
-	if resp.TypeName != "airtelcloud_kubernetes" {
+	(&KubernetesResource{}).Metadata(context.Background(), resource.MetadataRequest{ProviderTypeName: "airtelcloudgcc"}, &resp)
+	if resp.TypeName != "airtelcloudgcc_kubernetes" {
 		t.Fatalf("TypeName = %q", resp.TypeName)
 	}
 }

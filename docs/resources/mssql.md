@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_mssql Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_mssql Resource - Airtel Cloud"
 subcategory: "Database"
 description: |-
   Manages an Airtel Cloud MSSQL instance.
 ---
 
-# airtelcloud_mssql (Resource)
+# airtelcloudgcc_mssql (Resource)
 
 Manages an Airtel Cloud MSSQL instance.
 
@@ -22,7 +22,7 @@ variable "mssql_password" {
 }
 
 # Network access by VPC and subnet. The subnet CIDR is allowed to connect.
-resource "airtelcloud_mssql" "app" {
+resource "airtelcloudgcc_mssql" "app" {
   name              = "hello"
   database_edition  = "web"
   collation         = "SQL_Latin1_General_CP1_CI_AS"
@@ -43,7 +43,7 @@ resource "airtelcloud_mssql" "app" {
 
 # Network access by custom CIDR only. `vpc` and `subnet` are not needed.
 # Create and delete each default to 30 minutes; raise them if your instance is slow (create typically takes about 14 minutes).
-resource "airtelcloud_mssql" "cidr_only" {
+resource "airtelcloudgcc_mssql" "cidr_only" {
   name              = "hello-cidr"
   database_edition  = "web"
   collation         = "SQL_Latin1_General_CP1_CI_AS"

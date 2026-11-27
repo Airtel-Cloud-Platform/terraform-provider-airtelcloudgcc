@@ -1,11 +1,11 @@
 ---
-page_title: "airtelcloud_baremetal_storage Resource - Airtel Cloud"
+page_title: "airtelcloudgcc_baremetal_storage Resource - Airtel Cloud"
 subcategory: "Storage"
 description: |-
   Manages an Airtel Cloud baremetal block storage volume.
 ---
 
-# airtelcloud_baremetal_storage (Resource)
+# airtelcloudgcc_baremetal_storage (Resource)
 
 Manages an Airtel Cloud baremetal block storage volume.
 
@@ -14,7 +14,7 @@ The resource creates a block storage volume that can be used with Airtel Cloud b
 ## Example Usage
 
 ```terraform
-resource "airtelcloud_baremetal_storage" "data" {
+resource "airtelcloudgcc_baremetal_storage" "data" {
   name              = "ak-store"
   availability_zone = "S1"
   size              = 10
@@ -108,7 +108,7 @@ In addition to all arguments above, the following attributes are exported:
 ## Complete Example
 
 ```terraform
-resource "airtelcloud_baremetal_storage" "application_data" {
+resource "airtelcloudgcc_baremetal_storage" "application_data" {
   name              = "application-data"
   availability_zone = "S1"
   size              = 100
@@ -122,7 +122,7 @@ resource "airtelcloud_baremetal_storage" "application_data" {
 An existing baremetal storage volume can be imported using its volume name:
 
 ```shell
-terraform import airtelcloud_baremetal_storage.data <volume-name>
+terraform import airtelcloudgcc_baremetal_storage.data <volume-name>
 ```
 
 After importing the resource, run:

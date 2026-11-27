@@ -18,8 +18,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
-	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloudgcc/internal/models"
 )
 
 var _ resource.Resource = &AlertResource{}
@@ -35,7 +35,7 @@ func NewAlertResource() resource.Resource {
 	return &AlertResource{}
 }
 
-// AlertResource manages airtelcloud_alert.
+// AlertResource manages airtelcloudgcc_alert.
 type AlertResource struct {
 	client *client.Client
 }
