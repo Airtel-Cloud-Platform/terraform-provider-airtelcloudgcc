@@ -1,0 +1,441 @@
+package provider
+
+import (
+	"context"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/client"
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+)
+
+var _ resource.Resource = &PublicIPResource{}
+var _ resource.ResourceWithImportState = &PublicIPResource{}
+
+const (
+	defaultPublicIPCreateTimeout = 20 * time.Minute
+	defaultPublicIPUpdateTimeout = 20 * time.Minute
+	defaultPublicIPDeleteTimeout = 20 * time.Minute
+)
+
+func NewPublicIPResource() resource.Resource {
+	return &PublicIPResource{}
+}
+
+type PublicIPResource struct {
+	client *client.Client
+}
+
+type PublicIPResourceModel struct {
+	ID               types.String   `tfsdk:"id"`
+	ObjectName       types.String   `tfsdk:"object_name"`
+	Description      types.String   `tfsdk:"description"`
+	VIP              types.String   `tfsdk:"vip"`
+	AvailabilityZone types.String   `tfsdk:"availability_zone"`
+	PublicIP         types.String   `tfsdk:"public_ip"`
+	Domain           types.String   `tfsdk:"domain"`
+	Status           types.String   `tfsdk:"status"`
+	AllocatedTime    types.String   `tfsdk:"allocated_time"`
+	AZName           types.String   `tfsdk:"az_name"`
+	Region           types.String   `tfsdk:"region"`
+	Timeouts         timeouts.Value `tfsdk:"timeouts"`
+}
+
+// getPublicIPAddr returns the public IP address field used by the provider.
+// It prefers the `public_ip` field returned by the API, falling back to `ip`.
+func getPublicIPAddr(p *models.PublicIP) string {
+	if p == nil {
+		return ""
+	}
+	if p.PublicIP != "" {
+		return p.PublicIP
+	}
+	return p.IP
+}
+
+func getPublicIPAllocatedTime(p *models.PublicIP) string {
+	if p == nil {
+		return ""
+	}
+	if p.AllocatedTime != "" {
+		return p.AllocatedTime
+	}
+	return p.CreatedAt
+}
+
+func getPublicIPAZName(p *models.PublicIP) string {
+	if p == nil {
+		return ""
+	}
+	if p.AZName != "" {
+		return p.AZName
+	}
+	return p.AZ
+}
+
+func (r *PublicIPResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_public_ip"
+}
+
+func (r *PublicIPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		MarkdownDescription: "Manages an Airtel Cloud Public IP reservation. Create allocates a public IP in `reserved` state. Attach it to a VM or load balancer with `airtelcloud_public_ip_attachment`, then add traffic rules with `airtelcloud_public_ip_policy_rule`.",
+
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "The unique identifier (UUID) of the public IP.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"object_name": schema.StringAttribute{
+				MarkdownDescription: "The name for the public IP reservation.",
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"description": schema.StringAttribute{
+				MarkdownDescription: "Optional description for the public IP reservation.",
+				Optional:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"vip": schema.StringAttribute{
+				MarkdownDescription: "The target private IP after attach. Empty while the public IP is reserved.",
+				Computed:            true,
+			},
+			"availability_zone": schema.StringAttribute{
+				MarkdownDescription: "The availability zone for the public IP (e.g., `S1`, `S2`).",
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"public_ip": schema.StringAttribute{
+				MarkdownDescription: "The allocated public IP address.",
+				Computed:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"domain": schema.StringAttribute{
+				MarkdownDescription: "The domain of the public IP.",
+				Computed:            true,
+			},
+			"status": schema.StringAttribute{
+				MarkdownDescription: "The current status of the public IP.",
+				Computed:            true,
+			},
+			"allocated_time": schema.StringAttribute{
+				MarkdownDescription: "The timestamp when the public IP was allocated.",
+				Computed:            true,
+			},
+			"az_name": schema.StringAttribute{
+				MarkdownDescription: "The availability zone name.",
+				Computed:            true,
+			},
+			"region": schema.StringAttribute{
+				MarkdownDescription: "The region of the public IP.",
+				Computed:            true,
+			},
+		},
+		Blocks: map[string]schema.Block{
+			"timeouts": timeouts.Block(ctx, timeouts.Opts{
+				Create: true,
+				Delete: true,
+			}),
+		},
+	}
+}
+
+func (r *PublicIPResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T.", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
+}
+
+func (r *PublicIPResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data PublicIPResourceModel
+
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	createTimeout, diags := data.Timeouts.Create(ctx, defaultPublicIPCreateTimeout)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	createReq := &models.CreatePublicIPRequest{
+		Name:        data.ObjectName.ValueString(),
+		Description: data.Description.ValueString(),
+		PortID:      nil,
+	}
+
+	tflog.Debug(ctx, "Reserving public IP", map[string]interface{}{
+		"name":              data.ObjectName.ValueString(),
+		"availability_zone": data.AvailabilityZone.ValueString(),
+	})
+
+	created, err := r.client.CreatePublicIP(ctx, createReq, data.AvailabilityZone.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create public IP, got error: %s", err))
+		return
+	}
+
+	// Create response only returns uuid and public_ip; poll until reserved.
+	uuid := created.UUID
+	readyIP, err := r.client.WaitForPublicIPReady(ctx, uuid, createTimeout)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Error waiting for public IP to be ready: %s", err))
+		return
+	}
+
+	publicIP := getPublicIPAddr(readyIP)
+
+	data.ID = types.StringValue(readyIP.UUID)
+	data.PublicIP = types.StringValue(publicIP)
+	data.Status = types.StringValue(readyIP.Status)
+	if readyIP.TargetVIP != "" {
+		data.VIP = types.StringValue(readyIP.TargetVIP)
+	} else {
+		data.VIP = types.StringValue("")
+	}
+	if readyIP.Domain != "" {
+		data.Domain = types.StringValue(readyIP.Domain)
+	}
+	if allocatedTime := getPublicIPAllocatedTime(readyIP); allocatedTime != "" {
+		data.AllocatedTime = types.StringValue(allocatedTime)
+	}
+	if azName := getPublicIPAZName(readyIP); azName != "" {
+		data.AZName = types.StringValue(azName)
+	}
+	if readyIP.Region != "" {
+		data.Region = types.StringValue(readyIP.Region)
+	}
+
+	tflog.Trace(ctx, "created public IP resource")
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+func (r *PublicIPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data PublicIPResourceModel
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	publicIP, err := r.client.GetPublicIP(ctx, data.ID.ValueString())
+	if err != nil {
+		if client.IsNotFoundError(err) {
+			resp.State.RemoveResource(ctx)
+			return
+		}
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read public IP, got error: %s", err))
+		return
+	}
+
+	data.ID = types.StringValue(publicIP.UUID)
+	if publicIP.ObjectName != "" {
+		data.ObjectName = types.StringValue(publicIP.ObjectName)
+	}
+	if publicIP.TargetVIP != "" {
+		data.VIP = types.StringValue(publicIP.TargetVIP)
+	}
+	publicIPAddr := getPublicIPAddr(publicIP)
+	if publicIPAddr != "" {
+		data.PublicIP = types.StringValue(publicIPAddr)
+	}
+	data.Status = types.StringValue(publicIP.Status)
+	if publicIP.Domain != "" {
+		data.Domain = types.StringValue(publicIP.Domain)
+	}
+	if allocatedTime := getPublicIPAllocatedTime(publicIP); allocatedTime != "" {
+		data.AllocatedTime = types.StringValue(allocatedTime)
+	}
+	if azName := getPublicIPAZName(publicIP); azName != "" {
+		data.AZName = types.StringValue(azName)
+	}
+	if publicIP.Region != "" {
+		data.Region = types.StringValue(publicIP.Region)
+	}
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+func (r *PublicIPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	resp.Diagnostics.AddError("Update Not Supported", "Public IPs cannot be updated in place. All changes require replacement.")
+}
+
+func (r *PublicIPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data PublicIPResourceModel
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	deleteClient := r.client
+	if az := data.AvailabilityZone.ValueString(); az != "" {
+		deleteClient = r.client.WithAvailabilityZone(az)
+	} else if azName := data.AZName.ValueString(); azName != "" {
+		// Fallback for legacy state entries where availability_zone may be absent.
+		deleteClient = r.client.WithAvailabilityZone(azName)
+	}
+
+	// Best-effort pre-cleanup for policies that may exist even when policy resources
+	// are not tracked in state (for example, interrupted applies/import gaps).
+	r.cleanupAttachedPublicIPPolicies(ctx, deleteClient, data)
+
+	az := data.AvailabilityZone.ValueString()
+	if az == "" {
+		az = data.AZName.ValueString()
+	}
+	if current, getErr := deleteClient.GetPublicIP(ctx, data.ID.ValueString()); getErr == nil && current != nil {
+		if strings.EqualFold(strings.TrimSpace(current.Status), "attached") && current.PortID != 0 {
+			if detachErr := deleteClient.DetachPublicIP(ctx, data.ID.ValueString(), current.PortID, az); detachErr != nil && !client.IsNotFoundError(detachErr) {
+				tflog.Warn(ctx, "PublicIP delete: detach before delete failed", map[string]interface{}{
+					"public_ip_id": data.ID.ValueString(),
+					"error":        detachErr.Error(),
+				})
+			}
+		}
+	}
+
+	err := deleteClient.DeletePublicIPWithWait(ctx, data.ID.ValueString(), defaultPublicIPDeleteTimeout)
+	if err != nil {
+		// If backend reports attached policies, perform one targeted cleanup attempt
+		// and retry the public IP delete once.
+		if isPublicIPPolicyConflictError(err) {
+			r.cleanupAttachedPublicIPPolicies(ctx, deleteClient, data)
+			if retryErr := deleteClient.DeletePublicIPWithWait(ctx, data.ID.ValueString(), defaultPublicIPDeleteTimeout); retryErr == nil {
+				return
+			} else {
+				err = retryErr
+			}
+		}
+
+		if client.IsNotFoundError(err) {
+			return
+		}
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete public IP, got error: %s", err))
+		return
+	}
+}
+
+func (r *PublicIPResource) cleanupAttachedPublicIPPolicies(ctx context.Context, c *client.Client, data PublicIPResourceModel) {
+	publicIPID := strings.TrimSpace(data.ID.ValueString())
+	if publicIPID == "" {
+		return
+	}
+
+	targetVIP := strings.TrimSpace(data.VIP.ValueString())
+	publicIPAddr := strings.TrimSpace(data.PublicIP.ValueString())
+
+	if targetVIP == "" || publicIPAddr == "" {
+		current, err := c.GetPublicIP(ctx, publicIPID)
+		if err == nil && current != nil {
+			if targetVIP == "" {
+				targetVIP = strings.TrimSpace(current.TargetVIP)
+			}
+			if publicIPAddr == "" {
+				publicIPAddr = strings.TrimSpace(getPublicIPAddr(current))
+			}
+		} else if err != nil {
+			tflog.Warn(ctx, "PublicIP delete: failed to refresh public IP details for policy cleanup", map[string]interface{}{
+				"public_ip_id": publicIPID,
+				"error":        err.Error(),
+			})
+		}
+	}
+
+	if targetVIP == "" || publicIPAddr == "" {
+		tflog.Warn(ctx, "PublicIP delete: skipping policy cleanup due missing lookup keys", map[string]interface{}{
+			"public_ip_id": publicIPID,
+			"target_vip":   targetVIP,
+			"public_ip":    publicIPAddr,
+		})
+		return
+	}
+
+	rules, err := c.ListPublicIPPolicyRules(ctx, publicIPID, targetVIP, publicIPAddr)
+	if err != nil {
+		tflog.Warn(ctx, "PublicIP delete: failed to list attached policy rules", map[string]interface{}{
+			"public_ip_id": publicIPID,
+			"target_vip":   targetVIP,
+			"public_ip":    publicIPAddr,
+			"error":        err.Error(),
+		})
+		return
+	}
+
+	for _, rule := range rules.Items {
+		ruleID := strings.TrimSpace(rule.UUID)
+		if ruleID == "" {
+			continue
+		}
+
+		if err := c.DeletePublicIPPolicyRule(ctx, publicIPID, ruleID); err != nil {
+			if client.IsNotFoundError(err) {
+				continue
+			}
+			tflog.Warn(ctx, "PublicIP delete: failed to delete attached policy rule", map[string]interface{}{
+				"public_ip_id": publicIPID,
+				"policy_id":    ruleID,
+				"error":        err.Error(),
+			})
+			continue
+		}
+
+		tflog.Debug(ctx, "PublicIP delete: deleted attached policy rule", map[string]interface{}{
+			"public_ip_id": publicIPID,
+			"policy_id":    ruleID,
+		})
+	}
+}
+
+func isPublicIPPolicyConflictError(err error) bool {
+	apiErr, ok := err.(*client.APIError)
+	if !ok {
+		return false
+	}
+
+	if apiErr.StatusCode != 409 {
+		return false
+	}
+
+	msg := strings.ToLower(strings.TrimSpace(apiErr.Message))
+	return strings.Contains(msg, "polic") || strings.Contains(msg, "policy")
+}
+
+func (r *PublicIPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}

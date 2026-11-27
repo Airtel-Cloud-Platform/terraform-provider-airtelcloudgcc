@@ -1,0 +1,70 @@
+---
+page_title: "airtelcloud_security_group_rule Resource - Airtel Cloud"
+subcategory: "Networking"
+description: |-
+  Manages an Airtel Cloud security group rule.
+---
+
+# airtelcloud_security_group_rule (Resource)
+
+Manages an Airtel Cloud security group rule.
+
+## Example Usage
+
+```terraform
+variable "resource_prefix" {
+  description = "Prefix for resource names"
+  type        = string
+  default     = "tft"
+}
+
+resource "airtelcloud_security_group" "web" {
+  security_group_name = "${var.resource_prefix}-sg-web-servers"
+  availability_zone   = "S1"
+}
+
+resource "airtelcloud_security_group_rule" "ssh" {
+  security_group_id = airtelcloud_security_group.web.id
+  direction         = "ingress"
+  protocol          = "tcp"
+  port_range_min    = "22"
+  port_range_max    = "22"
+  remote_ip_prefix  = "10.0.0.0/8"
+  ethertype         = "IPv4"
+  description       = "Allow SSH from internal network"
+}
+```
+
+## Schema
+
+### Required
+
+- `direction` (String) The direction of the rule (`ingress` or `egress`).
+
+### Optional
+
+- `security_group_id` (Number) The ID of the security group this rule belongs to. Either `security_group_id` or `security_group_name` must be specified. Mutually exclusive with `security_group_name`.
+- `security_group_name` (String) The name of the security group this rule belongs to. If set, it is resolved to `security_group_id`. Either `security_group_id` or `security_group_name` must be specified. Mutually exclusive with `security_group_id`.
+- `description` (String) A description of the security group rule.
+- `ethertype` (String) The ethertype (`IPv4` or `IPv6`).
+- `port_range_max` (String) The maximum port number.
+- `port_range_min` (String) The minimum port number.
+- `protocol` (String) The protocol (`tcp`, `udp`, `icmp`, etc.).
+- `remote_group_id` (String) The remote security group ID.
+- `remote_ip_prefix` (String) The remote IP prefix (CIDR notation).
+
+### Read-Only
+
+- `id` (Number) The unique identifier of the security group rule.
+- `provider_security_group_rule_id` (String) The provider-specific security group rule ID.
+- `security_group_uuid` (String) The UUID of the security group this rule belongs to.
+- `status` (String) The current status of the rule.
+- `uuid` (String) The UUID of the security group rule.
+
+## Import
+
+Security group rules can be imported using `<security_group_id>/<rule_uuid>`:
+
+```shell
+terraform import airtelcloud_security_group_rule.ssh <security_group_id>/<rule_uuid>
+```

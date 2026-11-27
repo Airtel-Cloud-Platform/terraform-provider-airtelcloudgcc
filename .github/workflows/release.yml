@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+# Read-only by default; only the release job below gets write access.
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------
+  # 1. Refuse tags that are not on main
+  #    (a tag pushed from a feature branch skips PR review and PR security checks)
+  # ---------------------------------------------------------
+  verify-tag:
+    name: Verify tag is on main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Tag commit must be reachable from main
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin main
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "::error::${GITHUB_REF_NAME} (${GITHUB_SHA::7}) is not on main. Release refused."
+            exit 1
+          fi
+
+  # ---------------------------------------------------------
+  # 2. Full security gate on the tagged commit
+  #    (TruffleHog over all history, Checkov, Semgrep, govulncheck, Trivy, zizmor)
+  # ---------------------------------------------------------
+  security:
+    name: Security gate
+    needs: verify-tag
+    uses: ./.github/workflows/security.yml
+    with:
+      full-history: true
+    permissions:
+      contents: read
+      security-events: write
+
+  # ---------------------------------------------------------
+  # 3. Build, sign, publish (only if 1 and 2 passed)
+  # ---------------------------------------------------------
+  release:
+    name: Release Provider
+    needs: [verify-tag, security]
+    runs-on: ubuntu-latest
+
+    # GPG_PRIVATE_KEY lives here as an *environment* secret, so no other workflow or job can read it.
+    environment: release
+
+    permissions:
+      contents: write # create the GitHub Release that registry.terraform.io reads
+
+    steps:
+      # ---------------------------------------------------------
+      # Checkout
+      # ---------------------------------------------------------
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # ---------------------------------------------------------
+      # Setup Go
+      # cache: false - a signing job must not restore a cache that a PR could have poisoned
+      # ---------------------------------------------------------
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: "1.26.11"
+          cache: false
+
+      # ---------------------------------------------------------
+      # Setup GPG
+      # ---------------------------------------------------------
+      - name: Install GPG
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg
+
+      # ---------------------------------------------------------
+      # Import Terraform Provider GPG private key
+      # ---------------------------------------------------------
+      - name: Import GPG Private Key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+
+      # ---------------------------------------------------------
+      # Verify GPG key
+      # ---------------------------------------------------------
+      - name: Verify GPG Key
+        run: |
+          gpg --list-secret-keys --keyid-format LONG
+
+      # ---------------------------------------------------------
+      # Verify GoReleaser configuration
+      # ---------------------------------------------------------
+      - name: Verify GoReleaser Config
+        uses: goreleaser/goreleaser-action@a4f02ab5355a589de60d917a659ce617ed19b3de # v7.3.0
+        with:
+          version: v2.17.1
+          args: check
+
+      # ---------------------------------------------------------
+      # Build and Release
+      # ---------------------------------------------------------
+      - name: Release
+        uses: goreleaser/goreleaser-action@a4f02ab5355a589de60d917a659ce617ed19b3de # v7.3.0
+        with:
+          version: v2.17.1
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,69 @@
+# Binaries
+terraform-provider-airtelcloud
+bin/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.log
+terraform-debug.log
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Coverage
+coverage.out
+coverage.html
+# GoReleaser
+dist/
+
+#script
+scripts/tf-local-dev.sh
+
+# Local temp workspaces
+.tmp/
+
+# Temporary files
+/api-specs
+/specs/*
+
+
+
+.github/copilot-instructions.md
+.cursor
+
+
+/docs/provider-architecture.md
+
+# AI Dev Toolkit
+.aidevtoolkit
+.aidevtoolkit/*.db
+.aidevtoolkit/*.db-shm
+.aidevtoolkit/*.db-wal
+.aidevtoolkit/git-events/
+AGENTS.md
+CLAUDE.md
+
+# Secrets: never commit credentials (pre-commit and CI also scan for these)
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.terraformrc
+terraform.rc
+credentials*.json

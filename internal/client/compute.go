@@ -1,0 +1,225 @@
+package client
+
+import (
+	"context"
+	"fmt"
+	"strconv"
+	"strings"
+
+	"github.com/Airtel-Cloud-Platform/terraform-provider-airtelcloud/internal/models"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+)
+
+// ListFlavors retrieves all compute flavors
+func (c *Client) ListFlavors(ctx context.Context) ([]models.Flavor, error) {
+	var flavors []models.Flavor
+	err := c.Get(ctx, fmt.Sprintf("%s/flavors/", c.computeBasePath()), &flavors)
+	if err != nil {
+		return nil, err
+	}
+	return flavors, nil
+}
+
+// ListImages retrieves all compute images
+func (c *Client) ListImages(ctx context.Context) ([]models.Image, error) {
+	var images []models.Image
+	err := c.Get(ctx, fmt.Sprintf("%s/images/", c.computeBasePath()), &images)
+	if err != nil {
+		return nil, err
+	}
+	return images, nil
+}
+
+// keypairBasePath returns the base path for keypair endpoints. Keypairs live on
+// the /ext service and are scoped by domain only — there is no project segment.
+func (c *Client) keypairBasePath() string {
+	return fmt.Sprintf("/ext/api/v1/keypairs/domain/%s/keypairs", c.Organization)
+}
+
+// ListKeypairs retrieves all SSH keypairs
+func (c *Client) ListKeypairs(ctx context.Context) ([]models.Keypair, error) {
+	var response models.KeypairListResponse
+	err := c.Get(ctx, fmt.Sprintf("%s?limit=30", c.keypairBasePath()), &response)
+	if err != nil {
+		return nil, err
+	}
+	return response.Data.Items, nil
+}
+
+// ResolveFlavorID resolves a flavor name to its ID
+func (c *Client) ResolveFlavorID(ctx context.Context, name string) (string, error) {
+	flavors, err := c.ListFlavors(ctx)
+	if err != nil {
+		return "", fmt.Errorf("failed to list flavors: %w", err)
+	}
+	for _, f := range flavors {
+		if f.Name == name {
+			return strconv.Itoa(f.ID), nil
+		}
+	}
+	return "", fmt.Errorf("flavor with name %q not found", name)
+}
+
+// ResolveImageID resolves an image name to its ID
+func (c *Client) ResolveImageID(ctx context.Context, name string) (string, error) {
+	img, err := c.ResolveImage(ctx, 0, name)
+	if err != nil {
+		return "", err
+	}
+	return strconv.Itoa(img.ID), nil
+}
+
+// ResolveImage finds an image by numeric ID or name.
+func (c *Client) ResolveImage(ctx context.Context, id int64, name string) (*models.Image, error) {
+	images, err := c.ListImages(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list images: %w", err)
+	}
+	for i := range images {
+		img := &images[i]
+		if id != 0 && int64(img.ID) == id {
+			return img, nil
+		}
+		if name != "" && img.Name == name {
+			return img, nil
+		}
+	}
+	if name != "" {
+		return nil, fmt.Errorf("image with name %q not found", name)
+	}
+	if id != 0 {
+		return nil, fmt.Errorf("image with id %d not found", id)
+	}
+	return nil, fmt.Errorf("image id or name is required")
+}
+
+// ResolveKeypairID resolves a keypair name to its ID
+func (c *Client) ResolveKeypairID(ctx context.Context, name string) (string, error) {
+	keypairs, err := c.ListKeypairs(ctx)
+	if err != nil {
+		return "", fmt.Errorf("failed to list keypairs: %w", err)
+	}
+	for _, kp := range keypairs {
+		if kp.Name == name {
+			if kp.ID == "" {
+				return "", fmt.Errorf("keypair %q found but has empty ID (API response field mismatch)", name)
+			}
+			tflog.Debug(ctx, "ResolveKeypairID: resolved keypair", map[string]interface{}{
+				"name": name,
+				"id":   kp.ID,
+			})
+			return kp.ID, nil
+		}
+	}
+	return "", fmt.Errorf("keypair with name %q not found", name)
+}
+
+// ResolveVPCID resolves a VPC name to its ID
+func (c *Client) ResolveVPCID(ctx context.Context, name string) (string, error) {
+	resp, err := c.ListVPCs(ctx)
+	if err != nil {
+		return "", fmt.Errorf("failed to list VPCs: %w", err)
+	}
+	tflog.Debug(ctx, "ResolveVPCID: listing VPCs", map[string]interface{}{
+		"vpc_count":     len(resp.Items),
+		"searched_name": name,
+	})
+	for _, vpc := range resp.Items {
+		if vpc.Name == name {
+			if vpc.ID == "" {
+				return "", fmt.Errorf("VPC %q found but has empty ID (API response field mismatch)", name)
+			}
+			tflog.Debug(ctx, "ResolveVPCID: resolved VPC", map[string]interface{}{
+				"name": name,
+				"id":   vpc.ID,
+			})
+			return vpc.ID, nil
+		}
+	}
+	return "", fmt.Errorf("VPC with name %q not found", name)
+}
+
+// ResolveSubnet finds a subnet by display name within a VPC.
+func (c *Client) ResolveSubnet(ctx context.Context, vpcID, name string) (*models.Subnet, error) {
+	resp, err := c.ListSubnets(ctx, vpcID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list subnets: %w", err)
+	}
+	for i := range resp.Items {
+		if resp.Items[i].Name == name {
+			return &resp.Items[i], nil
+		}
+	}
+	return nil, fmt.Errorf("subnet with name %q not found in VPC %s", name, vpcID)
+}
+
+// ResolveSubnetID resolves a subnet name to its ID within a given VPC (network)
+func (c *Client) ResolveSubnetID(ctx context.Context, vpcID, name string) (string, error) {
+	subnet, err := c.ResolveSubnet(ctx, vpcID, name)
+	if err != nil {
+		return "", err
+	}
+	return subnet.SubnetID, nil
+}
+
+// ResolveSubnetIDByName resolves a subnet name to its UUID. If vpcName is set,
+// the lookup is scoped to that VPC. Otherwise every VPC in the project is searched.
+func (c *Client) ResolveSubnetIDByName(ctx context.Context, subnetName, vpcName string) (string, error) {
+	if strings.TrimSpace(subnetName) == "" {
+		return "", fmt.Errorf("subnet name is required")
+	}
+	if vpcName = strings.TrimSpace(vpcName); vpcName != "" {
+		vpcID, err := c.ResolveVPCID(ctx, vpcName)
+		if err != nil {
+			return "", err
+		}
+		return c.ResolveSubnetID(ctx, vpcID, subnetName)
+	}
+
+	vpcs, err := c.ListVPCs(ctx)
+	if err != nil {
+		return "", fmt.Errorf("failed to list VPCs while resolving subnet %q: %w", subnetName, err)
+	}
+
+	var matches []string
+	for _, vpc := range vpcs.Items {
+		id, err := c.ResolveSubnetID(ctx, vpc.ID, subnetName)
+		if err != nil {
+			continue
+		}
+		matches = append(matches, id)
+	}
+	switch len(matches) {
+	case 1:
+		return matches[0], nil
+	case 0:
+		return "", fmt.Errorf("subnet with name %q not found", subnetName)
+	default:
+		return "", fmt.Errorf("subnet with name %q found in multiple VPCs; set vpc_name to disambiguate", subnetName)
+	}
+}
+
+// ResolveComputeID resolves a compute (VM) instance name to its ID
+func (c *Client) ResolveComputeID(ctx context.Context, name string) (string, error) {
+	computes, err := c.ListComputes(ctx)
+	if err != nil {
+		return "", fmt.Errorf("failed to list computes: %w", err)
+	}
+	tflog.Debug(ctx, "ResolveComputeID: listing computes", map[string]interface{}{
+		"compute_count": len(computes),
+		"searched_name": name,
+	})
+	for _, comp := range computes {
+		if comp.InstanceName == name {
+			if comp.ID == "" {
+				return "", fmt.Errorf("compute %q found but has empty ID (API response field mismatch)", name)
+			}
+			tflog.Debug(ctx, "ResolveComputeID: resolved compute", map[string]interface{}{
+				"name": name,
+				"id":   comp.ID,
+			})
+			return comp.ID, nil
+		}
+	}
+	return "", fmt.Errorf("compute with name %q not found", name)
+}
